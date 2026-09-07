@@ -2,6 +2,8 @@
 
 namespace JohnRivera7\FilamentMia;
 
+use BackedEnum;
+use Closure;
 use Filament\Contracts\Plugin;
 use Filament\FontProviders\BunnyFontProvider;
 use Filament\Panel;
@@ -12,9 +14,14 @@ use Illuminate\Foundation\Vite;
 use Illuminate\Support\HtmlString;
 use JohnRivera7\FilamentMia\Enums\Density;
 use JohnRivera7\FilamentMia\Enums\Roundness;
+use JohnRivera7\FilamentMia\Exceptions\InvalidThemeOption;
+use JohnRivera7\FilamentMia\Pages\ThemeCustomizer;
+use JohnRivera7\FilamentMia\Settings\Contracts\SettingsRepository;
+use JohnRivera7\FilamentMia\Settings\ThemeSettings;
 use JohnRivera7\FilamentMia\Support\ColorValidator;
 use JohnRivera7\FilamentMia\Support\Palette;
 use JohnRivera7\FilamentMia\Support\TokenSheet;
+use UnitEnum;
 
 /**
  * Mía — a warm editorial theme for Filament.
@@ -74,6 +81,17 @@ class MiaTheme implements Plugin
 
     protected ?string $viteBuildDirectory = null;
 
+    protected bool $customizer = false;
+
+    /** @var (Closure(): bool)|null */
+    protected ?Closure $customizerAuthorization = null;
+
+    protected string|UnitEnum|null $customizerNavigationGroup = null;
+
+    protected ?int $customizerNavigationSort = null;
+
+    protected string|BackedEnum|null $customizerNavigationIcon = null;
+
     public function __construct()
     {
         $config = config('filament-mia', []);
@@ -105,6 +123,10 @@ class MiaTheme implements Plugin
         $this->sidebarWidth = $config['sidebar_width'] ?? '17rem';
         $this->viteStylesheets = (array) ($config['vite_stylesheets'] ?? []);
         $this->viteBuildDirectory = $config['vite_build_directory'] ?? null;
+
+        $this->customizer = (bool) ($config['customizer']['enabled'] ?? false);
+        $this->customizerNavigationGroup = $config['customizer']['navigation_group'] ?? null;
+        $this->customizerNavigationSort = $config['customizer']['navigation_sort'] ?? null;
     }
 
     public static function make(): static
@@ -127,6 +149,12 @@ class MiaTheme implements Plugin
 
     public function register(Panel $panel): void
     {
+        $this->applyStoredSettings($panel->getId());
+
+        if ($this->customizer) {
+            $panel->pages([ThemeCustomizer::class]);
+        }
+
         $panel
             ->theme('mia')
             ->colors([
@@ -322,6 +350,156 @@ class MiaTheme implements Plugin
         $this->elevation = max(0.0, $scale);
 
         return $this;
+    }
+
+    /**
+     * Add the appearance page to the panel, where the theme can be edited from
+     * the interface and the result saved.
+     *
+     * Off by default. The page rewrites how the panel looks for everyone who
+     * uses it, so it should be an explicit decision rather than something that
+     * appears in the navigation the moment the package is installed.
+     *
+     * Restrict who reaches it with `customizerAuthorization()`.
+     */
+    public function customizer(bool $condition = true): static
+    {
+        $this->customizer = $condition;
+
+        return $this;
+    }
+
+    /**
+     * Decide who may open the appearance page.
+     *
+     * Without this, anyone who can reach the panel can open it. The callback
+     * runs on every navigation build, so keep it cheap.
+     *
+     *     ->customizerAuthorization(fn (): bool => auth()->user()?->isAdmin())
+     *
+     * @param  Closure(): bool  $callback
+     */
+    public function customizerAuthorization(Closure $callback): static
+    {
+        $this->customizerAuthorization = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Place the appearance page in the navigation.
+     */
+    public function customizerNavigation(
+        string|UnitEnum|null $group = null,
+        ?int $sort = null,
+        string|BackedEnum|null $icon = null,
+    ): static {
+        $this->customizerNavigationGroup = $group;
+        $this->customizerNavigationSort = $sort;
+        $this->customizerNavigationIcon = $icon;
+
+        return $this;
+    }
+
+    public function isCustomizerAuthorized(): bool
+    {
+        if (! $this->customizer) {
+            return false;
+        }
+
+        return ($this->customizerAuthorization === null)
+            || (bool) ($this->customizerAuthorization)();
+    }
+
+    public function getCustomizerNavigationGroup(): string|UnitEnum|null
+    {
+        return $this->customizerNavigationGroup;
+    }
+
+    public function getCustomizerNavigationSort(): ?int
+    {
+        return $this->customizerNavigationSort;
+    }
+
+    public function getCustomizerNavigationIcon(): string|BackedEnum|null
+    {
+        return $this->customizerNavigationIcon;
+    }
+
+    /**
+     * The plugin's current configuration as a settings record.
+     *
+     * This is what the customiser starts from before anything has been saved,
+     * so the form opens showing the panel as the code configured it.
+     */
+    public function toSettings(): ThemeSettings
+    {
+        return new ThemeSettings(
+            accentColor: $this->accentColor,
+            secondaryColor: $this->secondaryColor,
+            neutralColor: $this->neutralColor,
+            dangerColor: $this->dangerColor,
+            infoColor: $this->infoColor,
+            successColor: $this->successColor,
+            warningColor: $this->warningColor,
+            sansFont: $this->sansFont,
+            serifFont: $this->serifFont,
+            serifHeadings: $this->serifHeadings,
+            roundness: $this->roundness,
+            density: $this->density,
+            elevation: $this->elevation,
+            motion: $this->motion,
+        );
+    }
+
+    /**
+     * Overlay a settings record onto the plugin.
+     */
+    public function applySettings(ThemeSettings $settings): static
+    {
+        $this->accentColor = $settings->accentColor;
+        $this->secondaryColor = $settings->secondaryColor;
+        $this->neutralColor = $settings->neutralColor;
+        $this->dangerColor = $settings->dangerColor;
+        $this->infoColor = $settings->infoColor;
+        $this->successColor = $settings->successColor;
+        $this->warningColor = $settings->warningColor;
+        $this->sansFont = $settings->sansFont;
+        $this->serifFont = $settings->serifFont;
+        $this->serifHeadings = $settings->serifHeadings;
+        $this->roundness = $settings->roundness;
+        $this->density = $settings->density;
+        $this->elevation = $settings->elevation;
+        $this->motion = $settings->motion;
+
+        return $this;
+    }
+
+    /**
+     * Apply whatever the customiser last saved for this panel.
+     *
+     * Saved settings win over both the config file and the fluent calls above.
+     * They have to: they are the most recent deliberate decision, and a panel
+     * that ignored what an administrator just saved would be broken. Use the
+     * page's reset action to discard the record and return to the code.
+     *
+     * A stored record is applied whether or not the page is currently enabled,
+     * so turning the page off freezes the appearance rather than reverting it.
+     */
+    protected function applyStoredSettings(string $panelId): void
+    {
+        $stored = app(SettingsRepository::class)->get($panelId);
+
+        if ($stored === []) {
+            return;
+        }
+
+        try {
+            $this->applySettings(ThemeSettings::fromArray($stored, $this->toSettings()));
+        } catch (InvalidThemeOption) {
+            // A record hand-edited into an invalid state must not take the
+            // panel down, or there would be no way back in to fix it.
+        }
     }
 
     public function statusColors(

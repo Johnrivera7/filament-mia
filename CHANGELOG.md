@@ -9,8 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- An appearance page inside the panel, off by default. Edits accent, secondary
+  and status colours, the interface and heading families from a checked list of
+  Bunny Fonts families, roundness, density and elevation, with five presets
+  including the theme as shipped, a light and dark preview switch, and a
+  specimen of the components the settings affect most.
+  - The preview is not an approximation: every control writes a custom property
+    the compiled stylesheet already reads, and one code path paints both the
+    preview and the saved panel.
+  - `customizer()`, `customizerAuthorization()` and `customizerNavigation()` on
+    the plugin, and a `customizer` block in the config file.
+  - Settings are stored per panel, shared by everyone who uses it, as JSON under
+    `storage/app/filament-mia/`. No migration is needed. Bind the
+    `SettingsRepository` contract to store them anywhere else, including per
+    user.
+  - A saved record takes precedence over both the config file and the fluent
+    API, and applies whether or not the page is enabled. The page's reset action
+    discards it. A record that has been hand-edited into an invalid state is
+    ignored rather than thrown, so a bad value cannot lock anyone out of the
+    page that would fix it.
 - `Project status` and `Where this is going` sections in the README, stating
   the maturity of the `0.x` series and the direction of the project.
+
+### Changed
+
+- Colours are normalised when a settings record is built, so a value typed in
+  the appearance page and the same value written in the config file store
+  identically.
 
 ### Changed
 

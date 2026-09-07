@@ -152,6 +152,42 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Appearance page
+    |--------------------------------------------------------------------------
+    |
+    | Adds a page to the panel where the theme can be edited from the interface
+    | and the result saved. Off by default: it changes how the panel looks for
+    | everyone who uses it, which should be a deliberate choice rather than
+    | something that appears in the navigation on install.
+    |
+    | Restrict who can open it with ->customizerAuthorization(), which takes a
+    | closure and has no config equivalent:
+    |
+    |     ->plugin(
+    |         MiaTheme::make()
+    |             ->customizer()
+    |             ->customizerAuthorization(fn (): bool => auth()->user()?->isAdmin())
+    |     )
+    |
+    | Saved settings take precedence over this file and over the fluent API,
+    | because they are the most recent deliberate decision. The page's reset
+    | action discards the saved record and returns the panel to your code.
+    |
+    */
+
+    'customizer' => [
+
+        'enabled' => false,
+
+        // Navigation group for the page. Null leaves it ungrouped.
+        'navigation_group' => null,
+
+        'navigation_sort' => null,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Application stylesheets
     |--------------------------------------------------------------------------
     |

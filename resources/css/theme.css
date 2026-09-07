@@ -42,6 +42,7 @@
 @import './components/loading.css' layer(components);
 @import './components/auth.css' layer(components);
 @import './components/widget.css' layer(components);
+@import './components/customizer.css' layer(components);
 
 @import './motion.css' layer(components);
 

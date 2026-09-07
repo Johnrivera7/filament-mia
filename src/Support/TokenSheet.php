@@ -34,15 +34,35 @@ class TokenSheet
 
     public function render(): string
     {
-        $selector = '.fi-panel-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $this->panelId);
+        return sprintf(
+            '<style id="mia-theme-tokens">%s</style>',
+            $this->css(),
+        );
+    }
+
+    /**
+     * The declarations on their own, without the surrounding `<style>`.
+     *
+     * The customiser rebuilds this on every keystroke and swaps it into a
+     * `<style>` element of its own, so that a preview and a saved panel are
+     * produced by the same code and cannot drift.
+     */
+    public function css(): string
+    {
+        $selector = $this->selector();
 
         return sprintf(
-            '<style id="mia-theme-tokens">%s{%s}.dark %s{%s}</style>',
+            '%s{%s}.dark %s{%s}',
             $selector,
             $this->declarations($this->lightTokens()),
             $selector,
             $this->declarations($this->darkTokens()),
         );
+    }
+
+    public function selector(): string
+    {
+        return '.fi-panel-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $this->panelId);
     }
 
     /** @return array<string, string> */

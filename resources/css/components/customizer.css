@@ -1,0 +1,76 @@
+/*
+ * The appearance page.
+ *
+ * Every value here reads a token the page itself edits, so the page restyles
+ * itself as it is used — which is the point: the specimen below the form is
+ * the same components the settings affect everywhere else.
+ */
+
+.fi-mia-customizer {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 6 * var(--mia-density, 1));
+}
+
+.fi-mia-customizer-modes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+}
+
+.fi-mia-customizer-modes-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--mia-ink-muted);
+    margin-inline-end: calc(var(--spacing) * 1);
+}
+
+.fi-mia-customizer-modes-note {
+    font-size: 0.8125rem;
+    color: var(--mia-ink-muted);
+}
+
+.fi-mia-specimen {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4 * var(--mia-density, 1));
+}
+
+.fi-mia-specimen-heading {
+    font-family: var(--mia-heading-font, var(--font-serif));
+    font-weight: var(--mia-heading-weight, 500);
+    letter-spacing: var(--mia-heading-tracking, -0.011em);
+    font-size: 1.75rem;
+    line-height: 1.15;
+    color: var(--mia-ink);
+}
+
+.fi-mia-specimen-body {
+    max-width: 62ch;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--mia-ink-muted);
+}
+
+.fi-mia-specimen-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--spacing) * 3);
+}
+
+/* Tabular figures, so a changing density or family cannot shift the columns. */
+.fi-mia-specimen-figures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 6);
+    padding-block-start: calc(var(--spacing) * 3);
+    border-block-start: 1px solid var(--mia-hairline);
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+    font-variant-numeric: tabular-nums slashed-zero;
+    font-size: 1.125rem;
+    color: var(--mia-ink);
+}

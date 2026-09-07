@@ -178,6 +178,9 @@ php artisan vendor:publish --tag=filament-mia-config
 | [`darkMode()`](#darkmode) | `true` | `dark_mode` |
 | [`sidebarWidth()`](#sidebarwidth) | `17rem` | `sidebar_width` |
 | [`viteStylesheets()`](#vitestylesheets) | `[]` | `vite_stylesheets` `vite_build_directory` |
+| [`customizer()`](#customizer) | `false` | `customizer.enabled` |
+| [`customizerAuthorization()`](#customizerauthorization) | `null` — anyone who can reach the panel | — |
+| [`customizerNavigation()`](#customizernavigation) | ungrouped | `customizer.navigation_group` `customizer.navigation_sort` |
 
 ### Reference
 
@@ -379,6 +382,120 @@ put in the file.
 ```php
 MiaTheme::make()->viteStylesheets('resources/css/filament/admin/utilities.css')
 ```
+
+#### `customizer()`
+
+```php
+public function customizer(bool $condition = true): static
+```
+
+Adds the [appearance page](#the-appearance-page) to the panel. Off by default.
+
+```php
+MiaTheme::make()->customizer()
+```
+
+#### `customizerAuthorization()`
+
+```php
+public function customizerAuthorization(Closure $callback): static
+```
+
+Decides who may open the appearance page. Without it, anyone who can reach the
+panel can open it, and what they save applies to everyone. The callback runs on
+every navigation build, so keep it cheap.
+
+```php
+MiaTheme::make()
+    ->customizer()
+    ->customizerAuthorization(fn (): bool => auth()->user()?->isAdmin() ?? false)
+```
+
+#### `customizerNavigation()`
+
+```php
+public function customizerNavigation(
+    string|UnitEnum|null $group = null,
+    ?int $sort = null,
+    string|BackedEnum|null $icon = null,
+): static
+```
+
+Where the page sits in the navigation. The icon defaults to a swatch.
+
+```php
+MiaTheme::make()
+    ->customizer()
+    ->customizerNavigation(group: 'Settings', sort: 90)
+```
+
+## The appearance page
+
+An optional page inside the panel for editing the theme and saving the result,
+for the case where whoever decides how the panel looks is not the person who
+deploys it.
+
+It edits accent, secondary and status colours; the interface and heading
+families, from a checked list of Bunny Fonts families; roundness, density and
+elevation; and it carries five presets, including the theme as shipped. A
+specimen of the components the settings affect most sits below the form.
+
+Turn it on with [`customizer()`](#customizer) and restrict it with
+[`customizerAuthorization()`](#customizerauthorization).
+
+```php
+->plugin(
+    MiaTheme::make()
+        ->customizer()
+        ->customizerAuthorization(fn (): bool => auth()->user()?->isAdmin() ?? false)
+        ->customizerNavigation(group: 'Settings'),
+)
+```
+
+### The preview is the result
+
+Every control writes a custom property the compiled stylesheet already reads,
+and the same code paints the preview and the saved panel, so what is on screen
+before saving is what the panel becomes after. Nothing in the page can generate
+a Tailwind class — that is the constraint that makes a pre-compiled theme
+configurable at all.
+
+### Where the settings are stored, and for whom
+
+**Per panel, shared by everyone who uses it.** How a panel looks is a property
+of the panel, in the same way its logo is; it is not a per-user preference. Two
+panels in one application keep separate records.
+
+The exception is light and dark mode, which Filament already stores per browser
+and which the page only offers as a way to preview both.
+
+Records are written as JSON under `storage/app/filament-mia/`, one file per
+panel. That is the default because it needs no migration: the package installs
+into an existing project and works. The trade-off is local disk, so on several
+application servers, or on a platform with an ephemeral filesystem, bind your
+own repository:
+
+```php
+use JohnRivera7\FilamentMia\Settings\Contracts\SettingsRepository;
+
+$this->app->singleton(SettingsRepository::class, DatabaseSettingsRepository::class);
+```
+
+The contract is three methods — `get()`, `put()` and `forget()`, all keyed by
+panel id — so storing settings per user, per tenant or in a shared cache is a
+matter of implementing it.
+
+### Precedence
+
+**A saved record wins over both the config file and the fluent API.** It has to:
+it is the most recent deliberate decision, and a panel that ignored what an
+administrator just saved would be broken. The page's reset action discards the
+record and returns the panel to your code.
+
+A saved record applies whether or not the page is currently enabled, so turning
+the page off freezes the appearance rather than reverting it. A record that has
+been hand-edited into an invalid state is ignored rather than thrown, so a bad
+value cannot lock you out of the page that would fix it.
 
 ### How the options reach the browser
 
@@ -583,12 +700,20 @@ The test suite runs with `error_reporting=-1` and fails on any deprecation,
 notice or warning raised by the package, with those from Laravel and Filament
 ignored — a dependency's deprecation says nothing about this package.
 
+One gap worth naming: the suite does not render the appearance page. Rendering
+any Filament page under Orchestra Testbench currently fails inside Livewire's
+validation support, for Filament's own shipped pages as much as for this one,
+so a test there would report on the harness rather than on the package. The
+page's wiring, storage, precedence and preview output are covered; the rendered
+page is checked by hand against a running application.
+
 Three conventions keep the repository honest:
 
 - **`resources/dist/mia.css` is rebuilt and committed on its own.** It is
   committed so the package installs without a build step, and marked as
-  generated in `.gitattributes` so it stays out of diffs. CI fails if it was
-  not regenerated after a change to the source CSS.
+  generated in `.gitattributes` so it stays out of diffs. Rebuild it with
+  `npm run build` and commit it in a change of its own, never mixed with the
+  source CSS that produced it.
 - **A change to the public surface updates the README and the changelog in the
   same commit.** Any new or altered option, chainable method, published custom
   property, overridden view, requirement or command belongs in the diff that
@@ -610,15 +735,16 @@ Concretely, what is in and what is not.
 
 **Today.** A pre-compiled stylesheet, a configuration API for colour,
 typography, roundness, density and elevation, warm light and dark modes,
-illustrated empty states, loading states and measured contrast.
+illustrated empty states, loading states, measured contrast, and an in-panel
+appearance page that edits and persists all of it.
 
-**Next.** An in-panel settings page for editing those tokens live and
-persisting the result, so the theme can be tuned without touching code. A demo
-application in the repository that doubles as the source of every screenshot.
+**Next.** A demo application that doubles as the source of every screenshot.
+Presets shipped as named palettes beyond the five the appearance page carries.
 
-**Later, and deliberately vaguer because it is not built.** Presets shipped as
-named palettes. Blade components that use the tokens directly, for building
-custom pages that match the panel. Coverage for the Filament plugins that carry
+**Later, and deliberately vaguer because it is not built.** Blade components
+that use the tokens directly, for building custom pages that match the panel.
+Exporting a saved appearance back out as configuration, so a look tuned in one
+environment can be committed. Coverage for the Filament plugins that carry
 their own UI.
 
 Dates are not promised. The `0.x` series is where this gets worked out in the
