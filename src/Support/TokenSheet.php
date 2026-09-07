@@ -95,7 +95,12 @@ class TokenSheet
             'mia-hairline' => 'color-mix(in oklab, var(--gray-300) 55%, transparent)',
             'mia-hairline-strong' => 'color-mix(in oklab, var(--gray-400) 55%, transparent)',
             'mia-ink' => 'var(--gray-950)',
-            'mia-ink-muted' => 'var(--gray-500)',
+            /*
+             * One step darker than the obvious choice for a muted tone. The
+             * shade above it measures around 4.1:1 on this cream — enough to
+             * pass a glance, not enough to pass AA for text.
+             */
+            'mia-ink-muted' => 'var(--gray-600)',
             'mia-accent-wash' => 'color-mix(in oklab, var(--primary-200) 42%, transparent)',
             'mia-accent-line' => 'color-mix(in oklab, var(--primary-500) 55%, transparent)',
 

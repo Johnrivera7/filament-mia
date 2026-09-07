@@ -64,8 +64,12 @@ $pairs = [
     // Light mode
     'LIGHT body text on canvas' => [$gray[950], $gray[50]],
     'LIGHT body text on surface' => [$gray[950], $ivory],
-    'LIGHT muted text on canvas' => [$gray[500], $gray[50]],
-    'LIGHT muted text on surface' => [$gray[500], $ivory],
+    // `--mia-ink-muted` is gray-600 in light mode, not gray-500. The shade
+    // above passes against these nominal backgrounds and then misses AA once
+    // the warm gradients behind the page are actually painted; see
+    // bin/contrast-login.mjs, which measures rendered pixels.
+    'LIGHT muted text on canvas' => [$gray[600], $gray[50]],
+    'LIGHT muted text on surface' => [$gray[600], $ivory],
     'LIGHT link/accent text on surface' => [$primary[600], $ivory],
     'LIGHT white text on accent button' => ['#ffffff', $primary[600]],
 
