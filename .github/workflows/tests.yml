@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.2', '8.3', '8.4', '8.5']
+        php: ['8.4', '8.5']
         dependencies: [lowest, highest]
         exclude:
           # The oldest supported Laravel and Filament releases predate PHP 8.5
@@ -34,6 +34,10 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
+          # `zend.assertions` is settable only in php.ini, so PHPUnit asking for
+          # it at runtime raises a warning that `failOnWarning` turns into a
+          # failed build. Setting it here means the value already matches.
+          ini-values: zend.assertions=1
 
       - name: Install dependencies
         uses: ramsey/composer-install@v3
