@@ -1,0 +1,107 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4', '8.5']
+        dependencies: [lowest, highest]
+        exclude:
+          # The oldest supported Laravel and Filament releases predate PHP 8.5
+          # and never claimed to run on it, so pinning to them under 8.5 tests
+          # a combination nobody should assemble.
+          - php: '8.5'
+            dependencies: lowest
+
+    name: PHP ${{ matrix.php }} — ${{ matrix.dependencies }} dependencies
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+
+      # The suite runs with error_reporting=-1 and fails on any deprecation,
+      # notice or warning raised by this package, so a new PHP release breaking
+      # it is caught here rather than reported by a user.
+      - name: Run tests
+        run: vendor/bin/phpunit --display-phpunit-deprecations
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Code style
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Check code style
+        run: vendor/bin/pint --test
+
+  stylesheet:
+    runs-on: ubuntu-latest
+    name: Compiled stylesheet is current
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      # The theme compiles Filament's core stylesheet, so the framework has to
+      # be installed before Tailwind can resolve the import.
+      - name: Install PHP dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Rebuild the stylesheet
+        run: npm run build
+
+      # `resources/dist` is committed so the package installs without a build
+      # step. This fails the build if it was not regenerated after a CSS change.
+      - name: Fail if the committed stylesheet is out of date
+        run: |
+          if ! git diff --quiet -- resources/dist; then
+            echo "The compiled stylesheet is out of date. Run 'npm run build' and commit the result."
+            git diff --stat -- resources/dist
+            exit 1
+          fi
