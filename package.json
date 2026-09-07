@@ -1,0 +1,13 @@
+{
+    "name": "filament-mia",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "tailwindcss --input resources/css/theme.css --output resources/dist/mia.css --minify",
+        "dev": "tailwindcss --input resources/css/theme.css --output resources/dist/mia.css --watch"
+    },
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.3.0",
+        "tailwindcss": "^4.3.0"
+    }
+}

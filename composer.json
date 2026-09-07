@@ -1,0 +1,72 @@
+{
+    "name": "johnrivera7/filament-mia",
+    "description": "Mía — a warm editorial theme for Filament. Cream and champagne light mode, espresso dark mode, serif headings, hairline borders and slow, gentle motion. Ships pre-compiled: no build step required.",
+    "keywords": [
+        "johnrivera7",
+        "laravel",
+        "filamentphp",
+        "filament",
+        "filament-plugin",
+        "filament-theme",
+        "theme",
+        "admin-theme",
+        "design-system",
+        "dark-mode",
+        "tailwindcss"
+    ],
+    "homepage": "https://github.com/Johnrivera7/filament-mia",
+    "support": {
+        "issues": "https://github.com/Johnrivera7/filament-mia/issues",
+        "source": "https://github.com/Johnrivera7/filament-mia"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "John Rivera",
+            "email": "johnriveragonzalez7@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^5.7",
+        "illuminate/contracts": "^11.28|^12.0|^13.0",
+        "illuminate/support": "^11.28|^12.0|^13.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "phpunit/phpunit": "^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JohnRivera7\\FilamentMia\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JohnRivera7\\FilamentMia\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "lint": "pint",
+        "test": "phpunit",
+        "test:lint": "pint --test"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JohnRivera7\\FilamentMia\\FilamentMiaServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

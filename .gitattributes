@@ -1,0 +1,22 @@
+* text=auto eol=lf
+
+# The compiled stylesheet is committed so the package installs without a build
+# step, but it is generated output: keep it out of diffs and language stats.
+resources/dist/*.css linguist-generated=true -diff
+
+*.png binary
+*.jpg binary
+*.woff2 binary
+
+# Excluded from Composer distributions.
+/.github            export-ignore
+/art                export-ignore
+/bin                export-ignore
+/tests              export-ignore
+/.editorconfig      export-ignore
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/package.json       export-ignore
+/phpunit.xml.dist   export-ignore
+/pint.json          export-ignore
+/README.es.md       export-ignore
