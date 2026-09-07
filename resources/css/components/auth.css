@@ -6,22 +6,14 @@
  * the heading carries the display serif.
  */
 
-.fi-simple-layout {
-    background-color: var(--mia-canvas);
-    position: relative;
-}
-
 /*
  * Two very soft warm pools of light, one gold and one rose, drawn from the
- * palette. Fixed and behind everything, so nothing repaints on scroll.
+ * palette. Painted as backgrounds rather than as an overlay, so no element
+ * needs its `position` changed to sit above them.
  */
-.fi-simple-layout::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
+.fi-simple-layout {
+    background-color: var(--mia-canvas);
+    background-image:
         radial-gradient(
             60% 50% at 22% 18%,
             color-mix(in oklab, var(--primary-200) 46%, transparent) 0%,
@@ -32,10 +24,11 @@
             color-mix(in oklab, var(--secondary-200) 40%, transparent) 0%,
             transparent 70%
         );
+    background-repeat: no-repeat;
 }
 
-.dark .fi-simple-layout::before {
-    background:
+.dark .fi-simple-layout {
+    background-image:
         radial-gradient(
             60% 50% at 22% 18%,
             color-mix(in oklab, var(--primary-500) 12%, transparent) 0%,
@@ -46,12 +39,6 @@
             color-mix(in oklab, var(--secondary-500) 9%, transparent) 0%,
             transparent 70%
         );
-}
-
-/* Lift the real children above the background wash. */
-.fi-simple-layout > * {
-    position: relative;
-    z-index: 1;
 }
 
 .fi-simple-main {

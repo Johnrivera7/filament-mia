@@ -150,4 +150,27 @@ return [
 
     'dark_mode' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application stylesheets
+    |--------------------------------------------------------------------------
+    |
+    | A pre-compiled theme can only contain the utility classes Filament itself
+    | uses — it cannot know about classes in your own Blade views, because
+    | those files do not exist when the theme is built.
+    |
+    | If you write Tailwind utilities in your own views, compile them yourself
+    | and list the Vite entrypoints here. They are loaded after the theme,
+    | alongside it rather than instead of it. Do not use Panel::viteTheme() for
+    | this: Filament gives it unconditional precedence over theme() and would
+    | replace this theme entirely.
+    |
+    |     'vite_stylesheets' => ['resources/css/filament/admin/utilities.css'],
+    |
+    */
+
+    'vite_stylesheets' => [],
+
+    'vite_build_directory' => null,
+
 ];

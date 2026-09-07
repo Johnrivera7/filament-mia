@@ -1,0 +1,82 @@
+/*
+ * The type hierarchy.
+ *
+ * Imported into the components layer, not the base layer. Filament's own
+ * component rules live in `layer(components)`, and a cascade layer always
+ * loses to a later one regardless of specificity — so type rules placed in
+ * `layer(base)` are silently overridden by the framework's defaults.
+ *
+ * Three voices carry the interface: a high-contrast display serif for page and
+ * brand headings, the sans at semibold for structural labels, and the sans at
+ * regular for content. Structural labels are additionally set small, in caps
+ * and widely tracked, so the hierarchy survives even where sizes are close.
+ */
+
+.fi-body
+    :is(
+        .fi-header-heading,
+        .fi-modal-heading,
+        .fi-simple-header-heading,
+        .fi-ta-header-heading,
+        .fi-empty-state-heading,
+        .fi-ta-empty-state-heading,
+        .fi-logo
+    ) {
+    font-family: var(--mia-heading-font, ui-serif, Georgia, serif);
+    font-weight: var(--mia-heading-weight, 500);
+    letter-spacing: var(--mia-heading-tracking, -0.011em);
+    color: var(--mia-ink);
+}
+
+.fi-body .fi-header-heading {
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+/* Headings only reach their full size once there is room for them. */
+@media (min-width: 768px) {
+    .fi-body .fi-header-heading {
+        font-size: 1.875rem;
+        line-height: 1.15;
+    }
+}
+
+.fi-body .fi-header-subheading {
+    margin-top: calc(0.375rem * var(--mia-density, 1));
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--mia-ink-muted);
+}
+
+.fi-body .fi-modal-heading {
+    font-size: 1.375rem;
+    line-height: 1.25;
+}
+
+/*
+ * Structural labels: small caps, widely tracked, never competing with content.
+ *
+ * The treatment goes on `.fi-ta-header-cell` itself, not on an inner label.
+ * A sortable column wraps its heading in a button, but a non-sortable one
+ * renders the text as a bare child of the `<th>` with no element to target, so
+ * only styling the cell covers both and keeps a table's headings consistent.
+ */
+.fi-body
+    :is(
+        .fi-sidebar-group-label,
+        .fi-ta-header-cell,
+        .fi-ta-header-group-cell,
+        .fi-fieldset-label
+    ) {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.085em;
+}
+
+/* Inherited from the cell, so the button only needs its weight confirmed. */
+.fi-body .fi-ta-header-cell-label,
+.fi-body .fi-ta-header-cell-sort-btn {
+    font-weight: 600;
+}

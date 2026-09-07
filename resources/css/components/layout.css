@@ -2,43 +2,34 @@
  * The shell: canvas, content column and page rhythm.
  */
 
+/*
+ * A very faint warm bloom at the top of the canvas. It gives the page a sense
+ * of light falling on it rather than a flat fill, and is far too subtle to
+ * read as a gradient.
+ *
+ * Painted as a background on the layout itself rather than as a positioned
+ * pseudo-element. An overlay would need a stacking context, and raising the
+ * sidebar out of it would mean overriding its `position` — which on mobile
+ * returns the off-canvas drawer to the document flow and pushes the whole
+ * content column sideways.
+ */
 .fi-layout {
     background-color: var(--mia-canvas);
+    background-image: radial-gradient(
+        120% 60% at 50% 0%,
+        color-mix(in oklab, var(--primary-200) 26%, transparent) 0%,
+        transparent 70%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 32rem;
 }
 
-/*
- * A very faint warm bloom behind the content, brightest at the top. It gives
- * the page a sense of light falling on it instead of a flat fill, and is far
- * too subtle to read as a gradient.
- */
-.fi-layout::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-        radial-gradient(
-            120% 60% at 50% -10%,
-            color-mix(in oklab, var(--primary-200) 26%, transparent) 0%,
-            transparent 70%
-        );
-}
-
-.dark .fi-layout::before {
-    background:
-        radial-gradient(
-            120% 60% at 50% -10%,
-            color-mix(in oklab, var(--primary-500) 8%, transparent) 0%,
-            transparent 70%
-        );
-}
-
-.fi-main-ctn,
-.fi-sidebar,
-.fi-topbar {
-    position: relative;
-    z-index: 1;
+.dark .fi-layout {
+    background-image: radial-gradient(
+        120% 60% at 50% 0%,
+        color-mix(in oklab, var(--primary-500) 8%, transparent) 0%,
+        transparent 70%
+    );
 }
 
 /* Wider gutters and a taller first fold than the framework default. */

@@ -7,6 +7,8 @@ use Filament\FontProviders\BunnyFontProvider;
 use Filament\Panel;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Foundation\Vite;
 use Illuminate\Support\HtmlString;
 use JohnRivera7\FilamentMia\Enums\Density;
 use JohnRivera7\FilamentMia\Enums\Roundness;
@@ -67,6 +69,11 @@ class MiaTheme implements Plugin
 
     protected string $sidebarWidth;
 
+    /** @var array<string> */
+    protected array $viteStylesheets = [];
+
+    protected ?string $viteBuildDirectory = null;
+
     public function __construct()
     {
         $config = config('filament-mia', []);
@@ -96,6 +103,8 @@ class MiaTheme implements Plugin
         $this->motion = (bool) ($config['motion'] ?? true);
         $this->elevation = (float) ($config['elevation'] ?? 1.0);
         $this->sidebarWidth = $config['sidebar_width'] ?? '17rem';
+        $this->viteStylesheets = (array) ($config['vite_stylesheets'] ?? []);
+        $this->viteBuildDirectory = $config['vite_build_directory'] ?? null;
     }
 
     public static function make(): static
@@ -158,6 +167,41 @@ class MiaTheme implements Plugin
             PanelsRenderHook::STYLES_AFTER,
             fn (): HtmlString => new HtmlString($css),
         );
+
+        if ($this->viteStylesheets !== []) {
+            $stylesheets = $this->viteStylesheets;
+            $buildDirectory = $this->viteBuildDirectory;
+
+            FilamentView::registerRenderHook(
+                PanelsRenderHook::STYLES_AFTER,
+                fn (): Htmlable => app(Vite::class)($stylesheets, $buildDirectory),
+            );
+        }
+    }
+
+    /**
+     * Load one or more of the application's own Vite stylesheets after the
+     * theme.
+     *
+     * A pre-compiled theme can only contain the utility classes that Filament
+     * itself uses; it cannot know about classes in the *application's* Blade
+     * views, because those files do not exist when the theme is built. An
+     * application that writes Tailwind utilities in its own views therefore
+     * needs to compile them itself, and this is where to hand them over.
+     *
+     * `Panel::viteTheme()` cannot be used for it, since Filament gives that
+     * unconditional precedence over `theme()` and would replace this theme
+     * entirely. Emitting the stylesheet through the render hook instead loads
+     * it alongside the theme rather than instead of it.
+     *
+     * @param  string|array<string>  $paths
+     */
+    public function viteStylesheets(string|array $paths, ?string $buildDirectory = null): static
+    {
+        $this->viteStylesheets = (array) $paths;
+        $this->viteBuildDirectory = $buildDirectory;
+
+        return $this;
     }
 
     /**
