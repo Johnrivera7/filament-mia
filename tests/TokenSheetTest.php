@@ -8,6 +8,22 @@ use JohnRivera7\FilamentMia\Support\TokenSheet;
 
 class TokenSheetTest extends TestCase
 {
+    /**
+     * An application stylesheet loaded through `viteStylesheets()` imports
+     * Tailwind's theme layer, which redeclares these on `:root` without
+     * Filament's leading `var(--font-family)`. Restating them on the panel is
+     * what keeps the configured families from being silently dropped.
+     */
+    public function test_tailwinds_font_tokens_are_restated_on_the_panel(): void
+    {
+        $css = $this->sheet();
+
+        $this->assertStringContainsString('--font-sans:var(--font-family),', $css);
+        $this->assertStringContainsString('--font-serif:var(--serif-font-family),', $css);
+        $this->assertStringContainsString('--font-mono:var(--mono-font-family),', $css);
+        $this->assertStringContainsString('--default-font-family:var(--font-sans)', $css);
+    }
+
     private function sheet(
         string $panelId = 'admin',
         Roundness $roundness = Roundness::Soft,

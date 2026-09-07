@@ -7,6 +7,18 @@
     color: var(--mia-ink);
 
     /*
+     * Stated here rather than inherited from Tailwind's preflight, which
+     * reads `--default-font-family` off `:root`. An application stylesheet
+     * that imports Tailwind's theme layer redeclares that, and the panel
+     * would quietly fall back to a system stack. Naming the panel's own
+     * `--font-family` skips the token entirely.
+     */
+    font-family:
+        var(--font-family), ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+
+    /*
      * The interface sans is set at a geometric, slightly wide rhythm. Enabling
      * contextual and standard ligatures keeps that even at small sizes.
      */

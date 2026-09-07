@@ -99,6 +99,27 @@ class TokenSheet
             'mia-accent-wash' => 'color-mix(in oklab, var(--primary-200) 42%, transparent)',
             'mia-accent-line' => 'color-mix(in oklab, var(--primary-500) 55%, transparent)',
 
+            /*
+             * Tailwind's font tokens, restated on the panel rather than left
+             * to `:root`.
+             *
+             * An application stylesheet loaded through `viteStylesheets()`
+             * imports Tailwind's default theme layer, which declares
+             * `--font-sans` and `--font-serif` on `:root` without Filament's
+             * leading `var(--font-family)`. That would silently drop the
+             * configured families and return the panel to a system stack.
+             *
+             * Declaring them here fixes it for good: these land on `<body>`
+             * and `:root` is `<html>`, so the cascade never compares the two
+             * — an inherited value simply loses to one set on the element
+             * itself, whatever the specificity or source order.
+             */
+            'font-sans' => "var(--font-family), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+            'font-serif' => "var(--serif-font-family), ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif",
+            'font-mono' => "var(--mono-font-family), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+            'default-font-family' => 'var(--font-sans)',
+            'default-mono-font-family' => 'var(--font-mono)',
+
             'mia-heading-font' => $this->serifHeadings ? 'var(--font-serif)' : 'var(--font-sans)',
             'mia-heading-weight' => $this->serifHeadings ? '500' : '600',
             'mia-heading-tracking' => $this->serifHeadings ? '-0.011em' : '-0.018em',

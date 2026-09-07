@@ -33,6 +33,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Project status` and `Where this is going` sections in the README, stating
   the maturity of the `0.x` series and the direction of the project.
 
+### Fixed
+
+- The configured font families were silently dropped whenever the stylesheet
+  passed to `viteStylesheets()` imported Tailwind's theme layer. That layer
+  redeclares `--font-sans` and `--font-serif` on `:root` without Filament's
+  leading `var(--font-family)`, and it loads after the theme, so the panel fell
+  back to a system sans and headings to Georgia. The theme now restates those
+  tokens on the panel's own element and sets `font-family` on it directly,
+  which the cascade cannot undo from `:root`.
+
 ### Changed
 
 - Colours are normalised when a settings record is built, so a value typed in

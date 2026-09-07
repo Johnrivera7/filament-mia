@@ -673,6 +673,22 @@ If you need your own Tailwind utilities as well, use
 [`viteStylesheets()`](#tailwind-utilities-in-your-own-views), which loads them
 alongside the theme rather than instead of it.
 
+### The panel is not using the fonts I configured
+
+If the interface falls back to a system sans, or headings render in Georgia
+rather than the configured serif, an application stylesheet is redeclaring
+Tailwind's font tokens on `:root`.
+
+It happens when the file passed to [`viteStylesheets()`](#vitestylesheets)
+imports `tailwindcss/theme.css`, which is the normal way to give Tailwind the
+tokens it needs to compile utilities. That file declares `--font-sans` and
+`--font-serif` without Filament's leading `var(--font-family)`, and because
+your stylesheet loads after the theme it wins.
+
+The theme now restates those tokens on the panel's own `<body>` and sets
+`font-family` there explicitly, so this resolves itself on upgrade. Nothing to
+change in your stylesheet.
+
 ### Some of my own components lost their styling
 
 Your views are using Tailwind utilities that the pre-compiled theme does not
