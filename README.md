@@ -943,7 +943,12 @@ Three conventions keep the repository honest:
   committed so the package installs without a build step, and marked as
   generated in `.gitattributes` so it stays out of diffs. Rebuild it with
   `npm run build` and commit it in a change of its own, never mixed with the
-  source CSS that produced it.
+  source CSS that produced it. Because `->theme()` replaces Filament's
+  stylesheet outright, that file contains Filament's own compiled core, and is
+  built against the newest release in the supported range — currently Filament
+  5.8. CI rebuilds it on every push and fails if the result differs from what
+  is committed, which is also how a Filament release that changes the core
+  stylesheet announces itself.
 - **A change to the public surface updates the README and the changelog in the
   same commit.** Any new or altered option, chainable method, published custom
   property, overridden view, requirement or command belongs in the diff that

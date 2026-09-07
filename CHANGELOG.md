@@ -33,7 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Project status` and `Where this is going` sections in the README, stating
   the maturity of the `0.x` series and the direction of the project.
 
-### Added
 
 - Five compositions for the screens shown before sign-in, chosen with
   `loginLayout()` or from the appearance page: `card`, `split`, `bleed`,
@@ -74,6 +73,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The background grain on the sign-in canvas is finer and fainter. At two
   device pixels per CSS pixel the previous grating read as a visible weave.
 
+
+- Colours are normalised when a settings record is built, so a value typed in
+  the appearance page and the same value written in the config file store
+  identically.
+
+
+- Reworked the README positioning and the `composer.json` description so both
+  say what the theme is and who it is for, and recorded the plugin directory
+  copy in the repository so the three stay consistent.
+
+- The shipped stylesheet is compiled against Filament 5.8, the newest release
+  in the supported range, rather than 5.7.8. Because `->theme()` replaces
+  Filament's stylesheet outright, the file carries Filament's compiled core,
+  and building it against the oldest supported release left panels on 5.8
+  without two fixes to the collapsible sidebar and the modal window. Panels on
+  5.7 are unaffected: the two rules they gain address markup they already ship.
+
 ### Fixed
 
 - The configured font families were silently dropped whenever the stylesheet
@@ -83,18 +99,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   back to a system sans and headings to Georgia. The theme now restates those
   tokens on the panel's own element and sets `font-family` on it directly,
   which the cascade cannot undo from `:root`.
-
-### Changed
-
-- Colours are normalised when a settings record is built, so a value typed in
-  the appearance page and the same value written in the config file store
-  identically.
-
-### Changed
-
-- Reworked the README positioning and the `composer.json` description so both
-  say what the theme is and who it is for, and recorded the plugin directory
-  copy in the repository so the three stay consistent.
 
 ### Removed
 

@@ -12,11 +12,10 @@
 /node_modules
 composer.lock
 # `package-lock.json` is committed on purpose, unusual though that is for a
-# package with no published JavaScript. The compiled stylesheet is committed
-# too, and CI fails the build when a rebuild does not reproduce it — which it
-# cannot do unless the Tailwind version is pinned. Without the lockfile the
-# check compares output from two different compilers and reports a difference
-# that means nothing.
+# package that publishes no JavaScript. `resources/dist/mia.css` is committed
+# too, and CI fails the build when a rebuild does not reproduce it byte for
+# byte. That check is only worth running if the compiler is fixed; otherwise a
+# new Tailwind patch reports a difference that says nothing about the source.
 .DS_Store
 .idea
 .phpunit.result.cache
