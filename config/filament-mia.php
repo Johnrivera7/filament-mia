@@ -1,0 +1,153 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Mía — a warm editorial theme for Filament
+|--------------------------------------------------------------------------
+|
+| These values are the defaults for every panel running the theme. Anything
+| set fluently on the plugin takes precedence, so this file is the place for
+| project-wide defaults and the fluent API is the place for per-panel
+| exceptions:
+|
+|     ->plugin(MiaTheme::make()->accentColor('#C9A227'))
+|
+| Colours are resolved at runtime and emitted as OKLCH custom properties, so
+| changing anything here takes effect immediately — the stylesheet never needs
+| to be recompiled.
+|
+*/
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Colours
+    |--------------------------------------------------------------------------
+    |
+    | Each value seeds an eleven-shade ramp. The theme preserves the hue *and*
+    | the saturation character of what it is given, so an understated colour
+    | stays understated rather than being pushed to full chroma.
+    |
+    | Accepted formats: hex (#RGB or #RRGGBB), rgb(r, g, b), a bare "r, g, b"
+    | triplet, or oklch(l c h). Invalid values fail loudly at boot.
+    |
+    */
+
+    'colors' => [
+
+        // The accent that carries buttons, links, focus rings and active states.
+        // A soft honey gold, drawn from the brand illustration.
+        'accent' => '#D9A14E',
+
+        // A supporting colour, available to components as ->color('secondary').
+        // A desaturated dusty rose.
+        'secondary' => '#E4A987',
+
+        // Page backgrounds, surfaces, borders and body copy are all built from
+        // the neutral. Leave null to keep the curated warm ramp, which is tuned
+        // so that light mode reads as cream and dark mode as espresso.
+        'neutral' => null,
+
+        // Status colours, warmed to sit inside the palette instead of cutting
+        // across it with stock blues and greens.
+        'danger' => '#C1614F',
+        'info' => '#8B9FB0',
+        'success' => '#8A9A6B',
+        'warning' => '#D9A441',
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Typography
+    |--------------------------------------------------------------------------
+    |
+    | Families are served from Bunny Fonts, a privacy-friendly mirror that sets
+    | no cookies and logs no IP addresses, so the theme adds no third-party
+    | tracking and needs no cookie notice.
+    |
+    | Give plain family names, without quotes or CSS fallbacks.
+    |
+    */
+
+    'fonts' => [
+
+        // The interface sans, used for content and controls.
+        'sans' => 'Jost',
+
+        // The display serif, used for page headings and brand type.
+        'serif' => 'Cormorant Garamond',
+
+        // Optional monospace family. Null keeps the system stack.
+        'mono' => null,
+
+    ],
+
+    'typography' => [
+
+        // Set headings in the serif family. Disable for a quieter interface
+        // that stays in the sans throughout.
+        'serif_headings' => true,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Shape and spacing
+    |--------------------------------------------------------------------------
+    |
+    | Both are applied as custom properties over Tailwind's own scales, so they
+    | retune the whole interface at runtime.
+    |
+    | roundness: sharp | subtle | soft | round
+    | density:   compact | comfortable | spacious
+    |
+    */
+
+    'roundness' => 'soft',
+
+    'density' => 'comfortable',
+
+    // Narrower than Filament's 20rem default, which crowds the content column
+    // on smaller laptops. Any CSS length.
+    'sidebar_width' => '17rem',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Depth
+    |--------------------------------------------------------------------------
+    |
+    | Multiplier for the shadow system. Shadows are wide, diffuse and tinted
+    | with the neutral rather than pure black at any value. Use 0 for a
+    | completely flat interface.
+    |
+    */
+
+    'elevation' => 1.0,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Motion
+    |--------------------------------------------------------------------------
+    |
+    | Entry animations and hover micro-interactions. This is independent of
+    | `prefers-reduced-motion`, which the theme always honours.
+    |
+    */
+
+    'motion' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dark mode
+    |--------------------------------------------------------------------------
+    |
+    | Whether the panel offers the light/dark switch. The dark palette is built
+    | from the same neutral ramp as the light one, so both modes stay coherent.
+    |
+    */
+
+    'dark_mode' => true,
+
+];
