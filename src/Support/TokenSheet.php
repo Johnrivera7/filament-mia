@@ -159,6 +159,17 @@ class TokenSheet
      */
     protected function shadowTokens(float $ambient, float $cast, float $deep): array
     {
+        // A completely flat interface declares no shadow at all, rather than a
+        // fully transparent one the browser would still have to composite.
+        if ($this->elevation <= 0.0) {
+            return [
+                'mia-shadow-sm' => 'none',
+                'mia-shadow-md' => 'none',
+                'mia-shadow-lg' => 'none',
+                'mia-shadow-xl' => 'none',
+            ];
+        }
+
         $tint = fn (float $alpha): string => sprintf(
             'color-mix(in oklab, var(--gray-950) %s%%, transparent)',
             round(min(100, $alpha * $this->elevation * 100), 2),
