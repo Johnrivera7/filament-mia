@@ -7,18 +7,42 @@
     cacheDirectory=".phpunit.cache"
     failOnWarning="true"
     failOnRisky="true"
+    failOnNotice="true"
+    failOnDeprecation="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
 >
     <testsuites>
         <testsuite name="Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <source>
+
+    <!--
+        The suite runs with `error_reporting=-1` and fails on any deprecation,
+        notice or warning, which is what makes support for a new PHP release a
+        verified claim rather than a hopeful one.
+
+        `ignoreIndirectDeprecations` keeps that honest in the other direction:
+        a deprecation raised inside Laravel or Filament says nothing about this
+        package, so only those originating in `src` count.
+    -->
+    <source
+        ignoreIndirectDeprecations="true"
+        restrictNotices="true"
+        restrictWarnings="true"
+    >
         <include>
             <directory>src</directory>
         </include>
     </source>
+
     <php>
         <env name="APP_KEY" value="base64:2fl+Ktrz+Zi/DFuC4jZkVFf5Cj0EVYnJKvxCLnfg1Xk="/>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="display_errors" value="1"/>
+        <ini name="zend.assertions" value="1"/>
     </php>
 </phpunit>

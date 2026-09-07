@@ -10,7 +10,7 @@ Cream and champagne in the light, espresso in the dark, with a high-contrast<br 
 serif for headings. An admin panel that reads like a printed page.
 
 [![License](https://img.shields.io/badge/license-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
-[![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.4-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%C2%B7%2012%20%C2%B7%2013-FF2D20?style=flat-square&labelColor=3C3227)](https://laravel.com)
 [![Filament](https://img.shields.io/badge/Filament-v5.7%2B-F59E0B?style=flat-square&labelColor=3C3227)](https://filamentphp.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
@@ -90,9 +90,20 @@ It ships pre-compiled. There is no Node, Tailwind or build step to install.
 
 | | |
 |---|---|
-| PHP | 8.2 or later |
+| PHP | 8.2 – 8.5 |
 | Laravel | 11.28, 12 or 13 |
 | Filament | 5.7 or later |
+
+PHP 8.5 is supported, not required. The constraint is `^8.2`, the lowest
+version Filament v5 itself accepts, so the package installs on the PHP most
+Laravel projects are still running. Note that Laravel 13 requires PHP 8.3 or
+later independently of this package.
+
+PHP 8.5 support is verified rather than assumed: the full test suite and a
+live panel render were both exercised under PHP 8.5.8 with
+`error_reporting=-1`, failing on any deprecation, notice or warning originating
+in the package. Deprecations raised inside Laravel or Filament are ignored,
+since they say nothing about this package.
 
 The stylesheet is compiled with Tailwind CSS v4.3 and committed to the
 repository. Tailwind is a development dependency of this package only — your
@@ -334,9 +345,26 @@ composer test     # run the test suite
 composer lint     # apply the code style
 ```
 
-`resources/dist/mia.css` is committed so the package installs without a build
-step, and is marked as generated in `.gitattributes` to keep it out of diffs.
-Rebuild and commit it in a separate commit whenever the source CSS changes.
+The test suite runs with `error_reporting=-1` and fails on any deprecation,
+notice or warning raised by the package, with those from Laravel and Filament
+ignored — a dependency's deprecation says nothing about this package.
+
+Two conventions keep the repository honest:
+
+- **`resources/dist/mia.css` is rebuilt and committed on its own.** It is
+  committed so the package installs without a build step, and marked as
+  generated in `.gitattributes` so it stays out of diffs. CI fails if it was
+  not regenerated after a change to the source CSS.
+- **A change to the public surface updates the README and the changelog in the
+  same commit.** Any new or altered option, chainable method, published custom
+  property, overridden view, requirement or command belongs in the diff that
+  introduces it. This README is the product page, and documenting afterwards
+  reliably leaves options undocumented and examples that no longer match the
+  code.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## Credits
 

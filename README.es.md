@@ -10,7 +10,7 @@ Crema y champán en claro, espresso en oscuro, con una serif de alto contraste<b
 para los titulares. Un panel que se lee como una página impresa.
 
 [![Licencia](https://img.shields.io/badge/licencia-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
-[![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.4-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%C2%B7%2012%20%C2%B7%2013-FF2D20?style=flat-square&labelColor=3C3227)](https://laravel.com)
 [![Filament](https://img.shields.io/badge/Filament-v5.7%2B-F59E0B?style=flat-square&labelColor=3C3227)](https://filamentphp.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
@@ -49,9 +49,20 @@ de compilación.
 
 | | |
 |---|---|
-| PHP | 8.2 o superior |
+| PHP | 8.2 – 8.5 |
 | Laravel | 11.28, 12 o 13 |
 | Filament | 5.7 o superior |
+
+PHP 8.5 es compatible, no obligatorio. La restricción es `^8.2`, el mínimo que
+acepta Filament v5, para que el paquete instale en el PHP que todavía usan la
+mayoría de los proyectos Laravel. Ten en cuenta que Laravel 13 exige PHP 8.3 o
+superior por su cuenta.
+
+La compatibilidad con 8.5 está verificada, no supuesta: la suite completa y el
+renderizado de un panel real se ejercitaron bajo PHP 8.5.8 con
+`error_reporting=-1`, fallando ante cualquier deprecación, aviso o advertencia
+originada en el paquete. Las deprecaciones de Laravel o Filament se ignoran,
+porque no dicen nada sobre este paquete.
 
 ## Instalación
 
