@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     discards it. A record that has been hand-edited into an invalid state is
     ignored rather than thrown, so a bad value cannot lock anyone out of the
     page that would fix it.
+- Spanish translations for the appearance page, alongside the English ones.
+  Publish or override them with the `filament-mia-translations` tag.
 - `Project status` and `Where this is going` sections in the README, stating
   the maturity of the `0.x` series and the direction of the project.
 

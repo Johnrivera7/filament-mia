@@ -199,6 +199,57 @@ personalizadas en tiempo de ejecución). No se publica ni se reemplaza ninguna
 vista Blade, así que una actualización de Filament no puede revertir en
 silencio a una copia antigua de una plantilla del framework.
 
+## La página de apariencia
+
+Una página opcional dentro del panel para editar el tema y guardar el
+resultado, pensada para cuando quien decide cómo se ve el panel no es quien lo
+despliega.
+
+Ajusta los colores de acento, secundario y de estado; las familias de interfaz
+y de titulares, desde una lista comprobada de Bunny Fonts; la redondez, la
+densidad y la elevación; e incluye cinco preajustes, entre ellos el tema tal
+como se distribuye. Debajo del formulario hay una muestra de los componentes a
+los que más afectan los ajustes.
+
+Está desactivada por defecto, porque reescribe el panel para todo el mundo que
+lo usa:
+
+```php
+->plugin(
+    MiaTheme::make()
+        ->customizer()
+        ->customizerAuthorization(fn (): bool => auth()->user()?->isAdmin() ?? false)
+        ->customizerNavigation(group: 'Ajustes'),
+)
+```
+
+**La previsualización es el resultado.** Cada control escribe una propiedad
+personalizada que la hoja de estilos compilada ya lee, y el mismo código pinta
+la previsualización y el panel guardado, así que lo que se ve antes de guardar
+es en lo que se convierte el panel después. Nada en la página puede generar una
+clase de Tailwind: esa es la restricción que hace configurable un tema
+precompilado.
+
+**Dónde se guarda, y para quién.** Por panel, compartido por todos los que lo
+usan. Cómo se ve un panel es una propiedad del panel, igual que su logotipo, no
+una preferencia de cada persona. La excepción es el modo claro y oscuro, que
+Filament ya guarda por navegador y que la página solo ofrece para previsualizar
+ambos.
+
+Los registros se escriben como JSON en `storage/app/filament-mia/`, uno por
+panel, para que el paquete se instale en un proyecto existente sin migraciones.
+Si necesitas base de datos, caché compartida o almacenamiento por usuario,
+enlaza tu propia implementación del contrato `SettingsRepository`, que son tres
+métodos.
+
+**Precedencia.** Un registro guardado gana sobre el archivo de configuración y
+sobre la API fluida: es la decisión deliberada más reciente. La acción de
+restablecer lo descarta y devuelve el panel a tu código. Un registro guardado
+se aplica esté o no activada la página, así que desactivarla congela la
+apariencia en lugar de revertirla. Un registro editado a mano hasta quedar
+inválido se ignora en vez de lanzar una excepción, para que un valor erróneo no
+pueda dejarte fuera de la página que lo arreglaría.
+
 ## Hacia dónde va
 
 Mía empieza como tema. La dirección es un sistema de diseño para Filament: la
@@ -208,17 +259,17 @@ En concreto, qué hay y qué no.
 
 **Hoy.** Hoja de estilos precompilada, API de configuración para color,
 tipografía, redondez, densidad y elevación, modos claro y oscuro cálidos,
-estados vacíos ilustrados, estados de carga y contraste medido.
+estados vacíos ilustrados, estados de carga, contraste medido y una página de
+apariencia dentro del panel que edita y persiste todo lo anterior.
 
-**A continuación.** Una página de ajustes dentro del panel para editar esas
-variables en vivo y persistir el resultado, de modo que el tema pueda afinarse
-sin tocar código. Una aplicación de demostración en el repositorio que sirva
-además como origen de todas las capturas.
+**A continuación.** Una aplicación de demostración que sirva además como origen
+de todas las capturas. Más preajustes distribuidos como paletas con nombre.
 
 **Más adelante, y deliberadamente más vago porque no está construido.**
-Preajustes distribuidos como paletas con nombre. Componentes Blade que usen las
-variables directamente, para construir páginas propias que encajen con el
-panel. Cobertura para los plugins de Filament que traen su propia interfaz.
+Componentes Blade que usen las variables directamente, para construir páginas
+propias que encajen con el panel. Exportar una apariencia guardada de vuelta a
+configuración, para poder versionar en el repositorio un ajuste hecho en un
+entorno. Cobertura para los plugins de Filament que traen su propia interfaz.
 
 No se prometen fechas. La serie `0.x` es donde esto se resuelve a la vista de
 todos; ver [Estado del proyecto](#estado-del-proyecto).
