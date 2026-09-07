@@ -436,9 +436,21 @@ for the case where whoever decides how the panel looks is not the person who
 deploys it.
 
 It edits accent, secondary and status colours; the interface and heading
-families, from a checked list of Bunny Fonts families; roundness, density and
-elevation; and it carries five presets, including the theme as shipped. A
-specimen of the components the settings affect most sits below the form.
+families; roundness, density and elevation; and it carries five presets —
+Mía, Atelier, Botanica, Papier and Plain. A specimen of the components the
+settings affect most sits below the form.
+
+The font list is short on purpose. The theme sets headings at sizes and
+tracking that most families do not survive, so the page offers ten of each,
+all confirmed to be served by Bunny Fonts:
+
+| | |
+|---|---|
+| Interface | Jost, Outfit, Manrope, Nunito Sans, DM Sans, Figtree, Plus Jakarta Sans, Urbanist, Karla, Work Sans |
+| Headings | Cormorant Garamond, Playfair Display, Fraunces, EB Garamond, Lora, Crimson Pro, Bodoni Moda, DM Serif Display, Spectral, Newsreader |
+
+This list constrains the page only. [`font()`](#font) accepts any family Bunny
+Fonts serves.
 
 Turn it on with [`customizer()`](#customizer) and restrict it with
 [`customizerAuthorization()`](#customizerauthorization).
