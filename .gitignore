@@ -17,3 +17,9 @@ package-lock.json
 .phpunit.result.cache
 .phpunit.cache
 build
+
+# Captures kept for checking rather than for the README. `bin/shots.mjs`
+# produces the full set — every composition, both colour modes, both widths,
+# with and without a validation error — and only the frames the README uses
+# are committed.
+/art/verification

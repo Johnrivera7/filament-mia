@@ -20,3 +20,5 @@ resources/dist/*.css linguist-generated=true -diff
 /phpunit.xml.dist   export-ignore
 /pint.json          export-ignore
 /README.es.md       export-ignore
+/testbench.yaml     export-ignore
+/workbench          export-ignore

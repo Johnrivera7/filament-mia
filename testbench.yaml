@@ -1,0 +1,40 @@
+laravel: '@testbench'
+
+# Testbench defaults the session to the array driver, which cannot hold a
+# login across requests. The preview panel needs one that can.
+env:
+  - SESSION_DRIVER=file
+  - CACHE_STORE=file
+  - APP_KEY=base64:kZQvVKZlvUCJfEQVjKpZKVYQDDtGQZLKGYQNhZzKZmA=
+
+providers:
+  - Workbench\App\Providers\PreviewPanelProvider
+
+migrations:
+  - workbench/database/migrations
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: '/admin/login'
+  install: true
+  health: false
+  discovers:
+    web: true
+    api: true
+    commands: true
+    components: false
+    factories: true
+    views: false
+  build:
+    - asset-publish
+    - create-sqlite-db
+    - db-wipe
+    - migrate-fresh
+  assets:
+    - laravel-assets
+  sync:
+    - from: storage
+      to: workbench/storage
+      reverse: true
