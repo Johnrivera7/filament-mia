@@ -1,0 +1,90 @@
+/*
+ * Default values for every token the theme reads.
+ *
+ * The plugin re-declares most of these at runtime through the STYLES_AFTER
+ * render hook, which is unlayered and therefore always wins. Keeping a full
+ * set of defaults here means the stylesheet is also usable on its own, via
+ * `->theme('mia')` without the plugin registered.
+ *
+ * Tokens are declared on `.fi-body` rather than `:root` so that they resolve
+ * on the same element the runtime hook targets (`.fi-panel-{id}`, which is
+ * `<body>`). A custom property that references another is substituted using
+ * the values computed for the element it is declared on, so splitting the two
+ * across `<html>` and `<body>` would silently ignore the runtime overrides.
+ */
+
+.fi-body {
+    /*
+     * Filament paints a great many surfaces pure white. Warming Tailwind's own
+     * `--color-white` retunes all of them at once, and keeps them tied to the
+     * configured neutral instead of drifting from it.
+     */
+    --color-white: color-mix(in oklab, var(--gray-50) 55%, white);
+
+    --mia-radius-xs: 0.25rem;
+    --mia-radius-sm: 0.375rem;
+    --mia-radius-md: 0.5rem;
+    --mia-radius-lg: 0.75rem;
+    --mia-radius-xl: 0.9375rem;
+    --mia-radius-2xl: 1.25rem;
+    --mia-radius-3xl: 1.75rem;
+
+    --mia-density: 1;
+    --mia-row-height: 3.5rem;
+    --mia-section-gap: 2rem;
+
+    --mia-ease: cubic-bezier(0.22, 0.61, 0.24, 1);
+    --mia-duration: 260ms;
+    --mia-duration-slow: 420ms;
+    --mia-anim-duration: 520ms;
+
+    --mia-canvas: var(--gray-50);
+    --mia-surface: var(--color-white);
+    --mia-surface-sunken: color-mix(in oklab, var(--gray-100) 70%, var(--color-white));
+    --mia-surface-raised: var(--color-white);
+    --mia-hairline: color-mix(in oklab, var(--gray-300) 55%, transparent);
+    --mia-hairline-strong: color-mix(in oklab, var(--gray-400) 55%, transparent);
+    --mia-ink: var(--gray-950);
+    --mia-ink-muted: var(--gray-500);
+    --mia-accent-wash: color-mix(in oklab, var(--primary-200) 42%, transparent);
+    --mia-accent-line: color-mix(in oklab, var(--primary-500) 55%, transparent);
+
+    --mia-heading-font: var(--font-serif);
+    --mia-heading-weight: 500;
+    --mia-heading-tracking: -0.011em;
+
+    --mia-shadow-sm: 0 1px 2px color-mix(in oklab, var(--gray-950) 4%, transparent);
+    --mia-shadow-md:
+        0 1px 2px color-mix(in oklab, var(--gray-950) 3.5%, transparent),
+        0 8px 20px -6px color-mix(in oklab, var(--gray-950) 9%, transparent);
+    --mia-shadow-lg:
+        0 1px 3px color-mix(in oklab, var(--gray-950) 3.5%, transparent),
+        0 18px 40px -12px color-mix(in oklab, var(--gray-950) 10%, transparent);
+    --mia-shadow-xl:
+        0 2px 4px color-mix(in oklab, var(--gray-950) 4%, transparent),
+        0 32px 72px -20px color-mix(in oklab, var(--gray-950) 11%, transparent);
+}
+
+.dark .fi-body {
+    --mia-canvas: var(--gray-950);
+    --mia-surface: var(--gray-900);
+    --mia-surface-sunken: color-mix(in oklab, var(--gray-950) 60%, var(--gray-900));
+    --mia-surface-raised: var(--gray-800);
+    --mia-hairline: color-mix(in oklab, var(--gray-700) 62%, transparent);
+    --mia-hairline-strong: color-mix(in oklab, var(--gray-600) 70%, transparent);
+    --mia-ink: var(--color-white);
+    --mia-ink-muted: var(--gray-400);
+    --mia-accent-wash: color-mix(in oklab, var(--primary-500) 16%, transparent);
+    --mia-accent-line: color-mix(in oklab, var(--primary-400) 45%, transparent);
+
+    --mia-shadow-sm: 0 1px 2px color-mix(in oklab, var(--gray-950) 24%, transparent);
+    --mia-shadow-md:
+        0 1px 2px color-mix(in oklab, var(--gray-950) 21%, transparent),
+        0 8px 20px -6px color-mix(in oklab, var(--gray-950) 42%, transparent);
+    --mia-shadow-lg:
+        0 1px 3px color-mix(in oklab, var(--gray-950) 21%, transparent),
+        0 18px 40px -12px color-mix(in oklab, var(--gray-950) 46%, transparent);
+    --mia-shadow-xl:
+        0 2px 4px color-mix(in oklab, var(--gray-950) 24%, transparent),
+        0 32px 72px -20px color-mix(in oklab, var(--gray-950) 52%, transparent);
+}

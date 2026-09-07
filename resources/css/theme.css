@@ -1,0 +1,54 @@
+/*
+ * Mía — a warm editorial theme for Filament.
+ *
+ * Build entrypoint. Compiles to `resources/dist/mia.css`, which is committed
+ * so that the package installs without a build step:
+ *
+ *     npm install && npm run build
+ *
+ * Activating a theme *replaces* Filament's own stylesheet rather than layering
+ * on top of it, so the core has to be compiled in here. Everything after that
+ * import is this theme's own work.
+ *
+ * Two rules govern the whole stylesheet:
+ *
+ *  1. Never write a literal colour. Filament emits its palettes as OKLCH
+ *     custom properties on every request, so referencing `var(--primary-600)`
+ *     lets an application recolour the entire theme through `->colors([...])`
+ *     with no rebuild.
+ *
+ *  2. Read non-colour settings from `--mia-*` tokens, always with a fallback.
+ *     The plugin injects them after this stylesheet, so roundness, density,
+ *     motion and elevation are configurable at runtime too.
+ */
+
+@import '../../vendor/filament/filament/resources/css/theme.css';
+
+@import './tokens.css' layer(base);
+@import './base.css' layer(base);
+
+@import './components/layout.css' layer(components);
+@import './components/sidebar.css' layer(components);
+@import './components/topbar.css' layer(components);
+@import './components/header.css' layer(components);
+@import './components/section.css' layer(components);
+@import './components/button.css' layer(components);
+@import './components/input.css' layer(components);
+@import './components/table.css' layer(components);
+@import './components/badge.css' layer(components);
+@import './components/overlay.css' layer(components);
+@import './components/empty-state.css' layer(components);
+@import './components/loading.css' layer(components);
+@import './components/auth.css' layer(components);
+@import './components/widget.css' layer(components);
+
+@import './motion.css' layer(components);
+
+/*
+ * Filament's core stylesheet declares `source(none)`, which switches off
+ * automatic content detection, so the files to scan have to be named. Without
+ * the vendor glob the utility classes used by Filament's own Blade views are
+ * never generated and the panel renders unstyled.
+ */
+@source '../views/**/*.blade.php';
+@source '../../vendor/filament/**/*.blade.php';
