@@ -1,0 +1,142 @@
+/*
+ * Form controls.
+ *
+ * This is the single biggest departure from the framework's look. Filament
+ * draws inputs with a 1px *ring* plus a shadow, which is what gives its forms
+ * their distinctive slightly-raised, glassy feel. Here they are flat fields
+ * with a real hairline border, and the accent appears only on focus.
+ *
+ * The border is deliberately stronger than the theme's decorative hairline:
+ * an input is a user interface component, so WCAG 1.4.11 asks for 3:1 against
+ * its background. It clears that in both modes.
+ */
+
+.fi-body .fi-input-wrp {
+    background-color: var(--mia-surface);
+    border: 1px solid var(--mia-hairline-strong);
+    border-radius: var(--mia-radius-lg, 0.75rem);
+    box-shadow: none;
+    transition:
+        background-color 200ms var(--mia-ease, ease),
+        border-color 200ms var(--mia-ease, ease),
+        box-shadow 200ms var(--mia-ease, ease);
+}
+
+.dark .fi-body .fi-input-wrp {
+    background-color: color-mix(in oklab, var(--gray-50) 4%, transparent);
+    border-color: var(--mia-hairline-strong);
+}
+
+.fi-body .fi-input-wrp:not(.fi-disabled):not(.fi-invalid):hover {
+    border-color: color-mix(in oklab, var(--gray-500) 65%, transparent);
+}
+
+/*
+ * Focus is a coloured border plus a soft halo, replacing the framework's
+ * 2px ring. The halo is wide and low-opacity so it reads as a glow.
+ */
+.fi-body .fi-input-wrp:not(.fi-disabled):not(:has(.fi-ac-action:focus)):focus-within {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3.5px color-mix(in oklab, var(--primary-500) 18%, transparent);
+}
+
+.fi-body .fi-input-wrp.fi-invalid {
+    border-color: var(--danger-600);
+    box-shadow: none;
+}
+
+.dark .fi-body .fi-input-wrp.fi-invalid {
+    border-color: var(--danger-500);
+}
+
+.fi-body .fi-input-wrp.fi-invalid:not(.fi-disabled):focus-within {
+    border-color: var(--danger-600);
+    box-shadow: 0 0 0 3.5px color-mix(in oklab, var(--danger-500) 18%, transparent);
+}
+
+.fi-body .fi-input-wrp.fi-disabled {
+    background-color: var(--mia-surface-sunken);
+    border-color: var(--mia-hairline);
+    box-shadow: none;
+}
+
+.dark .fi-body .fi-input-wrp.fi-disabled {
+    background-color: color-mix(in oklab, var(--gray-950) 40%, transparent);
+}
+
+/* Internal dividers between prefixes, suffixes and the field itself. */
+.fi-body .fi-input-wrp .fi-input-wrp-prefix:not(.fi-inline),
+.fi-body .fi-input-wrp .fi-input-wrp-suffix:not(.fi-inline) {
+    border-color: var(--mia-hairline);
+}
+
+.fi-body .fi-input {
+    padding-block: calc(0.5625rem * var(--mia-density, 1));
+    font-size: 0.875rem;
+    color: var(--mia-ink);
+}
+
+.fi-body .fi-input::placeholder {
+    color: color-mix(in oklab, var(--gray-500) 72%, transparent);
+}
+
+/*
+ * Field labels sit closer to their control and are set slightly smaller and
+ * heavier than the value they describe, which is what makes a dense form
+ * scannable.
+ */
+.fi-body .fi-fo-field-lbl-content,
+.fi-body .fi-fo-field-wrp-label {
+    font-size: 0.8125rem;
+    font-weight: 550;
+    letter-spacing: -0.002em;
+    color: var(--gray-700);
+}
+
+.dark .fi-body .fi-fo-field-lbl-content,
+.dark .fi-body .fi-fo-field-wrp-label {
+    color: var(--gray-300);
+}
+
+.fi-body .fi-fo-field-wrp-hint,
+.fi-body .fi-fo-field-wrp-helper-text {
+    font-size: 0.75rem;
+    line-height: 1.55;
+    color: var(--mia-ink-muted);
+}
+
+.fi-body .fi-fo-field-wrp-error-message {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--danger-700);
+}
+
+.dark .fi-body .fi-fo-field-wrp-error-message {
+    color: var(--danger-400);
+}
+
+/* Checkboxes, radios and toggles pick up the same radius scale. */
+.fi-body .fi-checkbox-input {
+    border-radius: var(--mia-radius-xs, 0.25rem);
+    border-color: color-mix(in oklab, var(--gray-500) 65%, transparent);
+    transition:
+        background-color 200ms var(--mia-ease, ease),
+        border-color 200ms var(--mia-ease, ease);
+}
+
+.fi-body .fi-radio-input {
+    border-color: color-mix(in oklab, var(--gray-500) 65%, transparent);
+}
+
+.fi-body .fi-toggle {
+    transition: background-color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.fi-body .fi-select-input {
+    color: var(--mia-ink);
+}
+
+/* Filament's own select dropdown panel, so it matches the theme's overlays. */
+.fi-body .fi-fo-select-option-label {
+    font-size: 0.875rem;
+}

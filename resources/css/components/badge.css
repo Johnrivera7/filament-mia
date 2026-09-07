@@ -1,0 +1,70 @@
+/*
+ * Badges.
+ *
+ * Filament's badge is a pale rounded rectangle with a 1px ring. This one drops
+ * the ring entirely and leans on a tinted wash and small tracked caps, so it
+ * reads as a typographic label rather than a chip.
+ */
+
+.fi-body .fi-badge {
+    box-shadow: none;
+    border: 0;
+    border-radius: 9999px;
+    padding: 0.1875rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.055em;
+    line-height: 1.35;
+}
+
+.fi-body .fi-badge.fi-color {
+    background-color: color-mix(in oklab, var(--color-200) 55%, transparent);
+    color: var(--color-800);
+}
+
+.dark .fi-body .fi-badge.fi-color {
+    background-color: color-mix(in oklab, var(--color-500) 18%, transparent);
+    color: var(--color-200);
+}
+
+/* The default, colourless badge. */
+.fi-body .fi-badge:not(.fi-color) {
+    background-color: color-mix(in oklab, var(--gray-400) 16%, transparent);
+    color: var(--gray-700);
+}
+
+.dark .fi-body .fi-badge:not(.fi-color) {
+    background-color: color-mix(in oklab, var(--gray-50) 8%, transparent);
+    color: var(--gray-300);
+}
+
+.fi-body .fi-badge.fi-size-lg {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+}
+
+.fi-body .fi-avatar {
+    border-radius: 9999px;
+    box-shadow: 0 0 0 1px var(--mia-hairline);
+}
+
+/*
+ * Callouts sit on a tinted wash with a rule on the leading edge, which is a
+ * calmer way to signal importance than a fully saturated panel.
+ */
+.fi-body .fi-callout {
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    box-shadow: none;
+}
+
+.fi-body .fi-callout.fi-color {
+    background-color: color-mix(in oklab, var(--color-200) 32%, transparent);
+    border-color: color-mix(in oklab, var(--color-500) 28%, transparent);
+}
+
+.dark .fi-body .fi-callout.fi-color {
+    background-color: color-mix(in oklab, var(--color-500) 11%, transparent);
+    border-color: color-mix(in oklab, var(--color-400) 24%, transparent);
+}

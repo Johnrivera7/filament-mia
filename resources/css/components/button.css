@@ -1,0 +1,101 @@
+/*
+ * Buttons, links and icon buttons.
+ *
+ * Filament's buttons transition in 75ms, which reads as a snap. Everything
+ * here moves over roughly 200ms on a decelerating curve, and lifts by a single
+ * pixel on hover — enough to feel responsive, not enough to notice.
+ *
+ * Colours are left to Filament's contrast-aware colour maps, which pick the
+ * background and text shades that clear WCAG AA for whatever accent is
+ * configured. Only shape, weight and motion are restyled.
+ */
+
+.fi-body .fi-btn {
+    border-radius: var(--mia-radius-lg, 0.75rem);
+    padding: calc(0.5rem * var(--mia-density, 1)) calc(0.9375rem * var(--mia-density, 1));
+    font-weight: 500;
+    letter-spacing: 0.004em;
+    transition:
+        background-color 200ms var(--mia-ease, ease),
+        border-color 200ms var(--mia-ease, ease),
+        color 200ms var(--mia-ease, ease),
+        box-shadow 200ms var(--mia-ease, ease),
+        transform 200ms var(--mia-ease, ease);
+}
+
+.fi-body .fi-btn:not(.fi-disabled):not([disabled]):hover {
+    transform: translateY(-1px);
+}
+
+.fi-body .fi-btn:not(.fi-disabled):not([disabled]):active {
+    transform: translateY(0);
+}
+
+/* Accent buttons carry a warm shadow in their own hue rather than a grey one. */
+.fi-body .fi-btn.fi-color:not(.fi-outlined):not(label) {
+    box-shadow: 0 1px 2px color-mix(in oklab, var(--gray-950) 8%, transparent);
+}
+
+.fi-body .fi-btn.fi-color:not(.fi-outlined):not(label):not(.fi-disabled):not([disabled]):hover {
+    box-shadow:
+        0 2px 4px color-mix(in oklab, var(--gray-950) 8%, transparent),
+        0 8px 18px -6px color-mix(in oklab, var(--color-600) 40%, transparent);
+}
+
+/* Outlined and plain buttons get a hairline border in place of Filament's ring. */
+.fi-body .fi-btn.fi-outlined {
+    box-shadow: none;
+    border: 1px solid var(--mia-hairline-strong);
+}
+
+.fi-body .fi-btn.fi-outlined.fi-color {
+    border-color: color-mix(in oklab, var(--color-500) 45%, transparent);
+}
+
+.fi-body .fi-btn:not(.fi-outlined):not(.fi-color):not(label) {
+    border: 1px solid var(--mia-hairline);
+    box-shadow: var(--mia-shadow-sm);
+}
+
+.fi-body .fi-btn.fi-size-sm {
+    padding: calc(0.375rem * var(--mia-density, 1)) calc(0.75rem * var(--mia-density, 1));
+}
+
+.fi-body .fi-btn.fi-size-lg,
+.fi-body .fi-btn.fi-size-xl {
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    padding: calc(0.6875rem * var(--mia-density, 1)) calc(1.25rem * var(--mia-density, 1));
+}
+
+.fi-body .fi-icon-btn {
+    border-radius: 9999px;
+    transition:
+        background-color 200ms var(--mia-ease, ease),
+        color 200ms var(--mia-ease, ease);
+}
+
+.fi-body .fi-icon-btn:not(.fi-disabled):not([disabled]):hover {
+    background-color: color-mix(in oklab, var(--gray-400) 14%, transparent);
+}
+
+.dark .fi-body .fi-icon-btn:not(.fi-disabled):not([disabled]):hover {
+    background-color: color-mix(in oklab, var(--gray-50) 8%, transparent);
+}
+
+/*
+ * Links are underlined with a low-contrast rule that warms to the accent on
+ * hover, rather than appearing and disappearing.
+ */
+.fi-body .fi-link {
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklab, var(--primary-500) 32%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition:
+        color 200ms var(--mia-ease, ease),
+        text-decoration-color 200ms var(--mia-ease, ease);
+}
+
+.fi-body .fi-link:hover {
+    text-decoration-color: var(--primary-500);
+}

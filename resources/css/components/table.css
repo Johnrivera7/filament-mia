@@ -1,0 +1,215 @@
+/*
+ * Tables.
+ *
+ * The aim is a table that reads like a printed index: quiet caps headings,
+ * generous row height, numbers that line up, and no vertical rules at all.
+ */
+
+.fi-body .fi-ta-ctn {
+    background-color: var(--mia-surface);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-2xl, 1.25rem);
+    box-shadow: var(--mia-shadow-md);
+}
+
+.fi-body .fi-ta-header {
+    border-bottom: 1px solid var(--mia-hairline);
+    padding: calc(1.25rem * var(--mia-density, 1)) calc(1.5rem * var(--mia-density, 1));
+}
+
+.fi-body .fi-ta-header-heading {
+    font-family: var(--mia-heading-font, ui-serif, Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: var(--mia-heading-weight, 500);
+    letter-spacing: var(--mia-heading-tracking, -0.011em);
+}
+
+.fi-body .fi-ta-header-toolbar {
+    padding: calc(0.875rem * var(--mia-density, 1)) calc(1.5rem * var(--mia-density, 1));
+    border-bottom: 1px solid var(--mia-hairline);
+    gap: calc(0.75rem * var(--mia-density, 1));
+}
+
+/*
+ * Column headings: small, in caps, widely tracked and muted. This is the
+ * clearest signal that the table is a document rather than a grid.
+ */
+.fi-body .fi-ta-header-cell {
+    background-color: transparent;
+    border-bottom: 1px solid var(--mia-hairline-strong);
+    padding-block: calc(0.75rem * var(--mia-density, 1));
+    color: var(--mia-ink-muted);
+    white-space: nowrap;
+}
+
+.fi-body .fi-ta-header-cell-label {
+    color: var(--mia-ink-muted);
+}
+
+.fi-body .fi-ta-header-cell-sorted .fi-ta-header-cell-label {
+    color: var(--primary-700);
+}
+
+.dark .fi-body .fi-ta-header-cell-sorted .fi-ta-header-cell-label {
+    color: var(--primary-300);
+}
+
+/*
+ * Tabular figures with slashed zeroes. Costs nothing and makes numeric
+ * columns legible as columns.
+ */
+.fi-body .fi-ta-cell {
+    font-feature-settings: 'tnum' 1, 'zero' 1, 'kern' 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.fi-body .fi-ta-cell-content {
+    padding-block: calc(0.75rem * var(--mia-density, 1));
+    min-height: var(--mia-row-height, 3.5rem);
+}
+
+.fi-body .fi-ta-row > .fi-ta-cell,
+.fi-body .fi-ta-row > .fi-ta-selection-cell,
+.fi-body .fi-ta-row > .fi-ta-actions-cell {
+    border-bottom: 1px solid var(--mia-hairline);
+    transition: background-color 200ms var(--mia-ease, ease);
+}
+
+.fi-body .fi-ta-row:last-child > * {
+    border-bottom: 0;
+}
+
+/*
+ * Row hover is a background wash plus an inset rule on the leading edge of the
+ * first cell. An inset shadow rather than a border, because a border would
+ * reflow the cell's content and make the row jump on every hover.
+ */
+.fi-body .fi-ta-row:hover > * {
+    background-color: color-mix(in oklab, var(--primary-200) 22%, transparent);
+}
+
+.dark .fi-body .fi-ta-row:hover > * {
+    background-color: color-mix(in oklab, var(--primary-500) 9%, transparent);
+}
+
+.fi-body .fi-ta-row:hover > *:first-child {
+    box-shadow: inset 2px 0 0 var(--primary-500);
+}
+
+[dir='rtl'] .fi-body .fi-ta-row:hover > *:first-child {
+    box-shadow: inset -2px 0 0 var(--primary-500);
+}
+
+.fi-body .fi-ta-row.fi-selected > * {
+    background-color: var(--mia-accent-wash);
+}
+
+/*
+ * Row actions stay visible at rest, only slightly recessed. Hiding them until
+ * hover removes them from keyboard navigation entirely and makes them
+ * unreachable on touch.
+ */
+.fi-body .fi-ta-actions {
+    opacity: 0.6;
+    transition: opacity 200ms var(--mia-ease, ease);
+    gap: calc(0.375rem * var(--mia-density, 1));
+}
+
+.fi-body .fi-ta-row:hover .fi-ta-actions,
+.fi-body .fi-ta-actions:focus-within,
+.fi-body .fi-ta-actions:hover {
+    opacity: 1;
+}
+
+/*
+ * A single transition on the content container, never on individual rows.
+ * Livewire re-renders the rows on every search keystroke, filter, sort and
+ * poll, so a per-row animation would make the table appear to rebuild itself
+ * as the user types.
+ */
+.fi-body .fi-ta-content {
+    transition:
+        opacity var(--mia-duration, 260ms) var(--mia-ease, ease),
+        transform var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.fi-body .fi-ta-content[wire\:loading] {
+    opacity: 0.55;
+}
+
+/* Horizontal scroll on narrow screens, with a fade to hint at the overflow. */
+@media (max-width: 767px) {
+    .fi-body .fi-ta-content-ctn {
+        position: relative;
+    }
+
+    .fi-body .fi-ta-content-ctn::after {
+        content: '';
+        position: absolute;
+        inset-block: 0;
+        inset-inline-end: 0;
+        width: 2rem;
+        pointer-events: none;
+        background: linear-gradient(
+            to left,
+            var(--mia-surface),
+            transparent
+        );
+    }
+
+    [dir='rtl'] .fi-body .fi-ta-content-ctn::after {
+        background: linear-gradient(to right, var(--mia-surface), transparent);
+    }
+}
+
+/*
+ * Stacked layout on mobile: each record becomes its own bordered card, which
+ * is far easier to read than a table squeezed into 375px.
+ */
+.fi-body .fi-ta-table-stacked-on-mobile .fi-ta-record {
+    border-bottom: 1px solid var(--mia-hairline);
+}
+
+.fi-body .fi-ta-cell-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    color: var(--mia-ink-muted);
+}
+
+/* Pagination reads as a footer note rather than a control strip. */
+.fi-body .fi-pagination {
+    padding: calc(0.875rem * var(--mia-density, 1)) calc(1.5rem * var(--mia-density, 1));
+    border-top: 1px solid var(--mia-hairline);
+}
+
+.fi-body .fi-pagination-overview {
+    font-size: 0.8125rem;
+    color: var(--mia-ink-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.fi-body .fi-pagination-item-btn {
+    border-radius: var(--mia-radius-md, 0.5rem);
+    font-variant-numeric: tabular-nums;
+    transition:
+        background-color 200ms var(--mia-ease, ease),
+        color 200ms var(--mia-ease, ease);
+}
+
+.fi-body .fi-pagination-item.fi-active .fi-pagination-item-btn {
+    background-color: var(--mia-accent-wash);
+    color: var(--primary-700);
+    font-weight: 550;
+}
+
+.dark .fi-body .fi-pagination-item.fi-active .fi-pagination-item-btn {
+    color: var(--primary-200);
+}
+
+.fi-body .fi-ta-filter-indicators {
+    border-top: 1px solid var(--mia-hairline);
+    background-color: var(--mia-surface-sunken);
+    padding: calc(0.625rem * var(--mia-density, 1)) calc(1.5rem * var(--mia-density, 1));
+}
