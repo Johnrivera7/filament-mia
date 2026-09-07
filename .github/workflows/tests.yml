@@ -99,9 +99,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
 
+      # `npm ci` rather than `npm install`: the check below only means something
+      # if the compiler is the same one the committed stylesheet was built
+      # with, and only the lockfile guarantees that.
       - name: Install Node dependencies
-        run: npm install
+        run: npm ci
 
       - name: Rebuild the stylesheet
         run: npm run build

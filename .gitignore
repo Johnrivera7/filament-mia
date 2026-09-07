@@ -11,7 +11,12 @@
 /vendor
 /node_modules
 composer.lock
-package-lock.json
+# `package-lock.json` is committed on purpose, unusual though that is for a
+# package with no published JavaScript. The compiled stylesheet is committed
+# too, and CI fails the build when a rebuild does not reproduce it — which it
+# cannot do unless the Tailwind version is pinned. Without the lockfile the
+# check compares output from two different compilers and reports a difference
+# that means nothing.
 .DS_Store
 .idea
 .phpunit.result.cache
