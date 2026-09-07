@@ -140,6 +140,43 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Sign-in
+    |--------------------------------------------------------------------------
+    |
+    | The sign-in screen is the only part of a panel a visitor sees without an
+    | account, so the theme offers five compositions of it rather than one.
+    | They differ in staging, not in identity: what changes is where the form
+    | sits and what occupies the rest of the viewport.
+    |
+    |   card       A single card centred on the canvas, over two soft pools of
+    |              warm light. The quietest of the five.
+    |   split      Two columns, one of them brand territory in a deep warm
+    |              field. Folds to a banner above the form on narrow screens.
+    |   bleed      A warm field running to every edge, with the form on
+    |              frosted glass above it.
+    |   editorial  Asymmetric and print-like: the form anchored to one side
+    |              with no card around it, the facing side left as air.
+    |   portal     A narrow, tall column with a brand medallion above the
+    |              heading and no card edge at all.
+    |
+    | The choice applies to the whole flow — sign-in, registration, password
+    | reset and the multi-factor challenge — so a panel does not change shape
+    | halfway through logging in.
+    |
+    */
+
+    'login' => [
+
+        'layout' => 'card',
+
+        // A single line of copy for the brand stage. Only `split` and
+        // `editorial` have somewhere to put it; the others ignore it.
+        'tagline' => null,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Dark mode
     |--------------------------------------------------------------------------
     |

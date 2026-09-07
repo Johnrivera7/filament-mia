@@ -3,6 +3,7 @@
 namespace JohnRivera7\FilamentMia\Settings;
 
 use JohnRivera7\FilamentMia\Enums\Density;
+use JohnRivera7\FilamentMia\Enums\LoginLayout;
 use JohnRivera7\FilamentMia\Enums\Roundness;
 use JohnRivera7\FilamentMia\Exceptions\InvalidThemeOption;
 use JohnRivera7\FilamentMia\Support\ColorValidator;
@@ -22,6 +23,8 @@ class ThemeSettings
 {
     /**
      * @param  string|null  $neutralColor  Null keeps the curated warm ramp.
+     * @param  string|null  $loginTagline  Shown only by the compositions that
+     *                                     stage the brand separately.
      */
     final public function __construct(
         public readonly string $accentColor,
@@ -38,6 +41,8 @@ class ThemeSettings
         public readonly Density $density,
         public readonly float $elevation,
         public readonly bool $motion,
+        public readonly LoginLayout $loginLayout,
+        public readonly ?string $loginTagline,
     ) {}
 
     /**
@@ -74,6 +79,12 @@ class ThemeSettings
             density: Density::fromValue($values['density'] ?? $fallback->density),
             elevation: max(0.0, min(2.0, (float) ($values['elevation'] ?? $fallback->elevation))),
             motion: (bool) ($values['motion'] ?? $fallback->motion),
+            loginLayout: LoginLayout::fromValue($values['login_layout'] ?? $fallback->loginLayout),
+            loginTagline: static::normaliseTagline(
+                array_key_exists('login_tagline', $values)
+                    ? $values['login_tagline']
+                    : $fallback->loginTagline,
+            ),
         );
     }
 
@@ -105,6 +116,8 @@ class ThemeSettings
             density: Density::fromValue($config['density'] ?? Density::Comfortable),
             elevation: (float) ($config['elevation'] ?? 1.0),
             motion: (bool) ($config['motion'] ?? true),
+            loginLayout: LoginLayout::fromValue($config['login']['layout'] ?? LoginLayout::Card),
+            loginTagline: static::normaliseTagline($config['login']['tagline'] ?? null),
         );
     }
 
@@ -128,7 +141,27 @@ class ThemeSettings
             'density' => $this->density->value,
             'elevation' => $this->elevation,
             'motion' => $this->motion,
+            'login_layout' => $this->loginLayout->value,
+            'login_tagline' => $this->loginTagline,
         ];
+    }
+
+    /**
+     * A single line of copy, or null.
+     *
+     * Trimmed and capped rather than validated against a pattern: this is the
+     * one setting whose value is prose, and the cap is what keeps a paragraph
+     * pasted into the field from breaking the composition it appears in.
+     */
+    protected static function normaliseTagline(mixed $value): ?string
+    {
+        if (! is_string($value)) {
+            return null;
+        }
+
+        $value = trim(preg_replace('/\s+/u', ' ', $value) ?? '');
+
+        return blank($value) ? null : mb_substr($value, 0, 120);
     }
 
     /**

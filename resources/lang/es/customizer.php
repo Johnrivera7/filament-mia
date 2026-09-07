@@ -72,6 +72,33 @@ return [
         'motion_help' => 'Animaciones de entrada y transiciones al pasar el cursor. Es independiente de la preferencia de movimiento reducido, que siempre se respeta.',
     ],
 
+    'login' => [
+        'heading' => 'Pantalla de acceso',
+        'description' => 'Lo único de este panel que ve alguien sin cuenta. Hay cinco composiciones; se diferencian en dónde vive el formulario y qué ocupa el resto de la pantalla, no en la paleta ni en la tipografía.',
+        'layout' => 'Composición',
+        'options' => [
+            'card' => 'Tarjeta centrada',
+            'split' => 'Pantalla partida',
+            'bleed' => 'Fondo a sangre',
+            'editorial' => 'Editorial',
+            'portal' => 'Portal',
+        ],
+        'descriptions' => [
+            'card' => 'Una tarjeta centrada sobre el lienzo, con dos halos de luz cálida. La más serena de las cinco.',
+            'split' => 'Dos columnas, una de ellas territorio de marca sobre un campo cálido y profundo. En pantallas estrechas se pliega a una franja sobre el formulario.',
+            'bleed' => 'Un campo cálido que llega a todos los bordes, con el formulario sobre cristal esmerilado.',
+            'editorial' => 'Asimétrica y de imprenta: el formulario anclado a un costado y sin tarjeta, con el lado opuesto en aire.',
+            'portal' => 'Una columna estrecha y alta, con un medallón de marca sobre el encabezado y sin borde de tarjeta.',
+        ],
+        'tagline' => 'Línea de texto',
+        'tagline_help' => 'Se muestra en el lado de marca, bajo el nombre del panel. Una sola línea; los valores largos se recortan. Solo estas dos composiciones tienen sitio para ella.',
+        'tagline_placeholder' => 'Una línea sobre tu producto.',
+        'sample_heading' => 'Iniciar sesión',
+        'sample_email' => 'Correo electrónico',
+        'sample_password' => 'Contraseña',
+        'sample_action' => 'Iniciar sesión',
+    ],
+
     'specimen' => [
         'heading' => 'Muestra',
         'description' => 'Los componentes a los que más afectan estos ajustes.',

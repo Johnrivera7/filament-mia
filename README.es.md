@@ -47,6 +47,39 @@ ilustración dibujada para el tema, no un icono de contorno genérico.
 Se distribuye precompilado. No hay que instalar Node, Tailwind ni ningún paso
 de compilación.
 
+## Capturas
+
+La pantalla de acceso, en las cinco composiciones que trae el tema. Todas las
+imágenes salen del panel de previsualización que acompaña al paquete, con datos
+inventados.
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-card-light-desktop.jpg" alt="Composición de tarjeta centrada en modo claro" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-light-desktop.jpg" alt="Composición de pantalla partida en modo claro" /></td>
+</tr>
+<tr>
+<td><b>Tarjeta centrada</b><br />Una tarjeta sobre el lienzo, con dos halos de luz cálida.</td>
+<td><b>Pantalla partida</b><br />Dos columnas, una de ellas territorio de marca.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-bleed-light-desktop.jpg" alt="Composición de fondo a sangre en modo claro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-editorial-light-desktop.jpg" alt="Composición editorial en modo claro" /></td>
+</tr>
+<tr>
+<td><b>Fondo a sangre</b><br />Campo cálido a todos los bordes, con el panel tendido a lo ancho sobre cristal.</td>
+<td><b>Editorial</b><br />Asimétrica y de imprenta, con el costado opuesto en aire.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-portal-light-desktop.jpg" alt="Composición de portal en modo claro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-dark-desktop.jpg" alt="Composición de pantalla partida en modo oscuro" /></td>
+</tr>
+<tr>
+<td><b>Portal</b><br />Columna estrecha y alta, con medallón de marca y sin borde de tarjeta.</td>
+<td><b>Modo oscuro</b><br />La misma composición en la paleta cálida oscura.</td>
+</tr>
+</table>
+
 ## Estado del proyecto
 
 Mía es un proyecto joven en desarrollo activo, hoy en la serie `0.x`.
@@ -193,13 +226,94 @@ las cifras usan figuras tabulares con cero barrado.
 
 ## Vistas de Filament sobreescritas
 
-**Ninguna.** El tema está implementado por completo en CSS y un único render
-hook (`PanelsRenderHook::STYLES_AFTER`, para emitir las propiedades
-personalizadas en tiempo de ejecución). No se publica ni se reemplaza ninguna
-vista Blade, así que una actualización de Filament no puede revertir en
-silencio a una copia antigua de una plantilla del framework.
+**Ninguna.** El tema está implementado en CSS y dos render hooks:
+
+- `PanelsRenderHook::STYLES_AFTER` emite las propiedades personalizadas en
+  tiempo de ejecución.
+- `PanelsRenderHook::SIMPLE_LAYOUT_START` emite el elemento marcador que
+  selecciona una [composición de acceso](#composiciones-de-la-pantalla-de-acceso)
+  y el escenario de marca de las dos que lo usan.
+
+No se publica ni se reemplaza ninguna vista Blade, así que una actualización de
+Filament no puede revertir en silencio a una copia antigua de una plantilla del
+framework. El layout simple es, además, uno de los archivos que más cambia
+entre versiones, y una copia publicada dejaría de seguir a la original sin
+avisar.
+
+## Composiciones de la pantalla de acceso
+
+La pantalla de acceso es lo único de un panel que ve alguien sin cuenta, así
+que el tema trae cinco puestas en escena en lugar de una. Lo que cambia es la
+composición —dónde vive el formulario y qué ocupa el resto de la pantalla—, no
+la identidad: paleta, tipografía y tratamiento de formas son idénticos en las
+cinco.
+
+| Valor | Composición |
+|---|---|
+| `card` | Una tarjeta centrada sobre el lienzo, con dos halos de luz cálida. La más serena, y la que viene por defecto. |
+| `split` | Dos columnas. Una es territorio de marca —un campo cálido y profundo con el logotipo, el nombre del panel y una línea de texto opcional— y la otra lleva el formulario, sin tarjeta, sobre el lienzo crema. |
+| `bleed` | Un campo cálido que llega a todos los bordes. El panel se tiende *a lo ancho* sobre cristal esmerilado: marca y encabezado en una mitad, campos en la otra, separados por un capilar. |
+| `editorial` | Asimétrica y de imprenta. El formulario se ancla a un costado sin tarjeta alrededor, y el costado opuesto queda en aire con el nombre del panel a tamaño de titular. |
+| `portal` | Una columna estrecha y alta, centrada, con un medallón de marca sobre el encabezado y sin borde de tarjeta. El lienzo degrada en vertical. |
+
+Se elige al registrar el plugin:
+
+```php
+->plugin(
+    MiaTheme::make()
+        ->loginLayout('split')
+        ->loginTagline('Client work, kept in one place.'),
+)
+```
+
+O desde la [página de apariencia](#la-página-de-apariencia), que previsualiza
+la elección antes de guardarla. La previsualización es el layout real, no un
+esquema: renderiza el mismo marcado con la misma hoja de estilos.
+
+La elección se aplica a todo el flujo de autenticación. Registro, recuperación
+de contraseña y el desafío en dos pasos toman la misma puesta en escena, así
+que el panel no cambia de forma entre escribir la contraseña y confirmar un
+código.
+
+**No hace falta configurar nada.** Sin ningún ajuste, el panel recibe la
+composición `card`, que ya está lejos de la caja por defecto de Filament.
+
+### Qué pasa en el móvil
+
+Las composiciones a dos columnas son las que se rompen en pantallas estrechas,
+así que cada una declara qué hace:
+
+- `split` pliega la columna de marca a una franja sobre el formulario, con el
+  logotipo, el nombre y la regla de acento, y suelta la línea de texto y la
+  rama botánica, que necesitan ancho para no leerse como ruido.
+- `editorial` suelta el costado opuesto por completo: es ornamento, y apilarlo
+  bajo el formulario solo añadiría desplazamiento.
+- `bleed` vuelve a una sola columna, y el cristal vuelve a ser tarjeta.
+- `card` y `portal` ya son de una columna.
+
+Las composiciones con tarjeta conservan su radio en anchos de móvil, con un
+margen pequeño donde apoyarlo, ahí donde Filament la lleva de borde a borde.
+
+### Accesibilidad de las composiciones
+
+El contraste de estas pantallas se mide sobre los píxeles renderizados, no se
+calcula desde la paleta. Dos composiciones ponen texto sobre un degradado y una
+lo pone sobre cristal esmerilado, y una razón calculada contra un fondo nominal
+no sería la medida de nada.
+
+`bin/contrast-login.mjs` recorre las cinco en ambos modos de color, con un
+error de validación en pantalla, y de cada texto toma el color computado,
+oculta los glifos, fotografía la caja que ocupaban y promedia lo que hay
+detrás. 48 pares, todos por encima de WCAG AA.
+
+Esa medición es también la que detectó los dos fallos que ahora evita: el texto
+atenuado y las acciones de enlace quedaban en torno a 4.1:1 sobre el crema una
+vez pintados los degradados cálidos del fondo, mientras pasaban con holgura
+contra el fondo plano que asume el informe de paleta.
 
 ## La página de apariencia
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
 
 Una página opcional dentro del panel para editar el tema y guardar el
 resultado, pensada para cuando quien decide cómo se ve el panel no es quien lo
@@ -207,9 +321,18 @@ despliega.
 
 Ajusta los colores de acento, secundario y de estado; las familias de interfaz
 y de titulares, desde una lista comprobada de Bunny Fonts; la redondez, la
-densidad y la elevación; e incluye cinco preajustes, entre ellos el tema tal
-como se distribuye. Debajo del formulario hay una muestra de los componentes a
-los que más afectan los ajustes.
+densidad y la elevación; la [composición de la pantalla de
+acceso](#composiciones-de-la-pantalla-de-acceso) y su línea de texto; e incluye
+cinco preajustes, entre ellos el tema tal como se distribuye. Debajo del
+formulario hay una muestra de los componentes a los que más afectan los
+ajustes.
+
+La composición de acceso es el único ajuste cuyo resultado no se ve desde la
+página, porque cambia una pantalla que solo ven quienes no han entrado, así que
+tiene su propia previsualización en vivo. Esa previsualización renderiza el
+layout simple real con el marcador real, bajo la hoja de estilos compilada —no
+un esquema— y se redibuja al cambiar la elección sin esperar una ida y vuelta
+al servidor.
 
 Está desactivada por defecto, porque reescribe el panel para todo el mundo que
 lo usa:

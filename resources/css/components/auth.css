@@ -1,19 +1,289 @@
 /*
- * Login, registration and password reset.
+ * Sign-in, registration, password reset and the multi-factor challenge.
  *
- * These are the screens a user sees before anything else, and Filament's are
- * plainly framework-default. Here the card sits on a warm washed canvas and
- * the heading carries the display serif.
+ * These share Filament's simple layout, and it is the only part of a panel a
+ * visitor sees without an account. The theme offers five compositions of it.
+ * The first half of this file is what they all share — type, fields, error
+ * states, the brand mark. The second half is one block per composition.
+ *
+ * A composition is selected by the marker element the plugin injects at
+ * `SIMPLE_LAYOUT_START`, matched here with `:has()`. That keeps every variant
+ * in the compiled stylesheet, addressed by a data attribute, rather than
+ * pushing layout into strings of runtime CSS.
  */
 
-/*
- * Two very soft warm pools of light, one gold and one rose, drawn from the
- * palette. Painted as backgrounds rather than as an overlay, so no element
- * needs its `position` changed to sit above them.
- */
+/* -------------------------------------------------------------------------
+ * Shared
+ * ---------------------------------------------------------------------- */
+
+.fi-body {
+    /*
+     * A fine warm grain, laid over the gradients. Two hairline gratings at
+     * barely-there opacity, which read as paper rather than as pattern and
+     * cost nothing to paint.
+     */
+    --mia-grain:
+        repeating-linear-gradient(
+            0deg,
+            color-mix(in oklab, var(--gray-950) 1%, transparent) 0 1px,
+            transparent 1px 5px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            color-mix(in oklab, var(--gray-950) 0.7%, transparent) 0 1px,
+            transparent 1px 5px
+        );
+
+    /* The deep field the brand stage is painted in. */
+    --mia-stage: linear-gradient(
+        155deg,
+        color-mix(in oklab, var(--gray-950) 94%, var(--primary-900)) 0%,
+        color-mix(in oklab, var(--gray-900) 88%, var(--primary-800)) 58%,
+        color-mix(in oklab, var(--gray-950) 90%, var(--secondary-900)) 100%
+    );
+}
+
+.dark .fi-body {
+    --mia-grain:
+        repeating-linear-gradient(
+            0deg,
+            color-mix(in oklab, white 1%, transparent) 0 1px,
+            transparent 1px 5px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            color-mix(in oklab, white 0.7%, transparent) 0 1px,
+            transparent 1px 5px
+        );
+
+    --mia-stage: linear-gradient(
+        155deg,
+        color-mix(in oklab, var(--gray-900) 92%, var(--primary-800)) 0%,
+        color-mix(in oklab, var(--gray-950) 90%, var(--primary-900)) 55%,
+        color-mix(in oklab, var(--gray-900) 88%, var(--secondary-900)) 100%
+    );
+}
+
 .fi-simple-layout {
     background-color: var(--mia-canvas);
+    background-repeat: no-repeat;
+}
+
+/*
+ * The marker the plugin injects. It carries the stage for the compositions
+ * that use one, and is inert for the ones that do not.
+ */
+.fi-mia-login {
+    display: contents;
+}
+
+.fi-mia-login:empty {
+    display: none;
+}
+
+/*
+ * Three of the compositions have nowhere to put a brand stage, so the plugin
+ * does not render one for them. Hidden here as well, because the appearance
+ * page previews all five out of one piece of markup and switches between them
+ * on the attribute alone.
+ */
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='card']) .fi-mia-login-stage,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed']) .fi-mia-login-stage,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='portal']) .fi-mia-login-stage {
+    display: none;
+}
+
+/* Heading, subheading and the rule beneath them. */
+.fi-simple-header {
+    text-align: center;
+}
+
+.fi-simple-header-heading {
+    font-family: var(--mia-heading-font, ui-serif, Georgia, serif);
+    font-size: clamp(1.875rem, 1.55rem + 1.4vw, 2.375rem);
+    font-weight: var(--mia-heading-weight, 500);
+    letter-spacing: var(--mia-heading-tracking, -0.011em);
+    line-height: 1.12;
+    color: var(--mia-ink);
+    text-wrap: balance;
+}
+
+.fi-simple-header-subheading {
+    margin-top: calc(0.625rem * var(--mia-density, 1));
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--mia-ink-muted);
+    text-wrap: pretty;
+}
+
+/*
+ * Filament puts the link to registration inside the subheading, and the link
+ * to password recovery in the password field's hint. Both are the only way
+ * out of this screen, so they get the accent and an underline that clears the
+ * descenders.
+ */
+/*
+ * Set one step darker than the accent's usual link shade: measured on the
+ * cream canvas, `--primary-600` comes in at 4.1:1 and misses AA for text at
+ * this size.
+ *
+ * Both links are Filament link actions, which carry `fi-text-color-600` and
+ * are coloured through it. That selector is more specific than an element
+ * rule on the subheading, so the class is matched here too rather than
+ * relying on descent.
+ */
+.fi-simple-header-subheading a,
+.fi-simple-main .fi-fo-field-wrp-hint a,
+.fi-simple-layout .fi-link.fi-color-primary.fi-text-color-600 {
+    color: var(--primary-700);
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklab, var(--primary-500) 40%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color var(--mia-duration, 260ms) var(--mia-ease, ease),
+        text-decoration-color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.fi-simple-header-subheading a:hover,
+.fi-simple-main .fi-fo-field-wrp-hint a:hover,
+.fi-simple-layout .fi-link.fi-color-primary.fi-text-color-600:hover {
+    color: var(--primary-800);
+    text-decoration-color: var(--primary-500);
+}
+
+.dark .fi-simple-header-subheading a,
+.dark .fi-simple-main .fi-fo-field-wrp-hint a,
+.dark .fi-simple-layout .fi-link.fi-color-primary.fi-text-color-600 {
+    color: var(--primary-300);
+}
+
+.dark .fi-simple-header-subheading a:hover,
+.dark .fi-simple-main .fi-fo-field-wrp-hint a:hover,
+.dark .fi-simple-layout .fi-link.fi-color-primary.fi-text-color-600:hover {
+    color: var(--primary-200);
+}
+
+/*
+ * Three of the compositions set their type flush left. Filament centres the
+ * header both ways — `items-center` on the flex container and `text-center`
+ * on the heading and subheading — so all three have to be undone, and on the
+ * elements themselves rather than on their parent.
+ */
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='split']) .fi-simple-header,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-simple-header,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed']) .fi-simple-header {
+    align-items: flex-start;
+}
+
+@media (max-width: 1023px) {
+    /*
+     * Except on narrow screens, where the split banner sits above a form that
+     * has the full width to itself and reads better centred, and where the
+     * bleed panel is a single column again.
+     */
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-header,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-header {
+        align-items: center;
+    }
+}
+
+/* A short rule with the accent centred on it, under the heading block. */
+.fi-simple-header::after {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 2px;
+    margin: calc(1.25rem * var(--mia-density, 1)) auto 0;
+    border-radius: 9999px;
+    background-color: var(--primary-500);
+}
+
+.fi-simple-layout .fi-logo {
+    justify-content: center;
+}
+
+/*
+ * Fields on these screens are set taller and further apart than in the panel
+ * proper. There are only ever two or three of them, and the extra air is what
+ * separates an entrance from a form.
+ */
+.fi-simple-main .fi-fo-field-wrp .fi-input-wrp .fi-input {
+    padding-block: calc(0.6875rem * var(--mia-density, 1));
+    font-size: 0.9375rem;
+}
+
+.fi-simple-main .fi-fo-field-wrp-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.006em;
+    color: var(--mia-ink);
+}
+
+.fi-simple-main .fi-fo-component-ctn {
+    row-gap: calc(1.25rem * var(--mia-density, 1));
+}
+
+/*
+ * Validation errors are the state that decides whether a composition holds
+ * together. They are given room in advance — the message is laid out in flow,
+ * so the card grows by one line rather than reflowing around it — and a rose
+ * tint that stays legible without shouting.
+ */
+.fi-simple-main .fi-fo-field-wrp-error-message {
+    margin-top: 0.4375rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* The submit action fills the width and is the heaviest thing on the screen. */
+.fi-simple-main .fi-form-actions .fi-ac {
+    margin-top: calc(0.375rem * var(--mia-density, 1));
+}
+
+.fi-simple-main .fi-form-actions .fi-btn {
+    padding-block: calc(0.6875rem * var(--mia-density, 1));
+    font-size: 0.9375rem;
+    letter-spacing: 0.004em;
+}
+
+/*
+ * The remember-me checkbox. Filament renders it as an ordinary field, which
+ * on a two-field form reads as a third input. Pulled in tighter and set at
+ * label weight instead.
+ */
+.fi-simple-main .fi-fo-checkbox .fi-fo-field-wrp-label {
+    font-weight: 400;
+    color: var(--mia-ink-muted);
+}
+
+/*
+ * The multi-factor challenge nests a section inside the card, and a card
+ * inside a card is the one thing this theme is trying to avoid everywhere
+ * else. Flattened to an inset well.
+ */
+.fi-simple-main .fi-sc-section {
+    background-color: var(--mia-surface-sunken);
+    border-color: var(--mia-hairline);
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    box-shadow: none;
+}
+
+/* -------------------------------------------------------------------------
+ * Composition: card
+ *
+ * A single card centred on the canvas, over two soft pools of warm light.
+ * This is the default, and the quietest of the five.
+ * ---------------------------------------------------------------------- */
+
+.fi-simple-layout:not(:has(> .fi-mia-login[data-mia-login])),
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='card']) {
     background-image:
+        var(--mia-grain),
         radial-gradient(
             60% 50% at 22% 18%,
             color-mix(in oklab, var(--primary-200) 46%, transparent) 0%,
@@ -24,11 +294,12 @@
             color-mix(in oklab, var(--secondary-200) 40%, transparent) 0%,
             transparent 70%
         );
-    background-repeat: no-repeat;
 }
 
-.dark .fi-simple-layout {
+.dark .fi-simple-layout:not(:has(> .fi-mia-login[data-mia-login])),
+.dark .fi-simple-layout:has(> .fi-mia-login[data-mia-login='card']) {
     background-image:
+        var(--mia-grain),
         radial-gradient(
             60% 50% at 22% 18%,
             color-mix(in oklab, var(--primary-500) 12%, transparent) 0%,
@@ -41,63 +312,689 @@
         );
 }
 
-.fi-simple-main {
+/*
+ * The card itself, shared by `card` and `bleed`. Both float; they differ in
+ * how much of the field behind them shows through.
+ */
+.fi-simple-layout:not(:has(> .fi-mia-login[data-mia-login])) .fi-simple-main,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='card']) .fi-simple-main,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed']) .fi-simple-main {
     background-color: color-mix(in oklab, var(--mia-surface) 88%, transparent);
     border: 1px solid var(--mia-hairline);
     border-radius: var(--mia-radius-3xl, 1.75rem);
-    box-shadow: var(--mia-shadow-xl);
     padding: calc(2.5rem * var(--mia-density, 1));
+
+    /*
+     * The diffuse warm shadow, plus a one-pixel highlight along the top edge.
+     * That highlight is what makes the card read as lit from above rather
+     * than as a rectangle with a border.
+     */
+    box-shadow:
+        inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
+        var(--mia-shadow-xl);
+}
+
+.dark .fi-simple-layout:not(:has(> .fi-mia-login[data-mia-login])) .fi-simple-main,
+.dark .fi-simple-layout:has(> .fi-mia-login[data-mia-login='card']) .fi-simple-main,
+.dark .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed']) .fi-simple-main {
+    box-shadow:
+        inset 0 1px 0 color-mix(in oklab, white 7%, transparent),
+        var(--mia-shadow-xl);
 }
 
 @supports (backdrop-filter: blur(1px)) {
-    .fi-simple-main {
+    .fi-simple-layout:not(:has(> .fi-mia-login[data-mia-login])) .fi-simple-main,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='card']) .fi-simple-main {
         backdrop-filter: blur(14px) saturate(140%);
     }
 }
 
 @supports not (backdrop-filter: blur(1px)) {
-    .fi-simple-main {
+    .fi-simple-layout:not(:has(> .fi-mia-login[data-mia-login])) .fi-simple-main,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='card']) .fi-simple-main,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed']) .fi-simple-main {
         background-color: var(--mia-surface);
     }
 }
 
 @media (max-width: 639px) {
-    .fi-simple-main {
+    .fi-simple-layout .fi-simple-main {
         padding: calc(1.75rem * var(--mia-density, 1));
         border-radius: var(--mia-radius-2xl, 1.25rem);
     }
+
+    /*
+     * Filament runs the card edge to edge below `sm` and drops its corners.
+     * The corners are kept here, so the card needs a margin to show them
+     * against — and `width: auto` because the element is otherwise 100% wide
+     * and would push past the viewport.
+     */
+    .fi-simple-layout:not(:has(> .fi-mia-login[data-mia-login])) .fi-simple-main,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='card'])
+        .fi-simple-main,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-main {
+        width: auto;
+        margin-inline: 0.875rem;
+    }
 }
 
-.fi-simple-header {
-    text-align: center;
+/* -------------------------------------------------------------------------
+ * Composition: split
+ *
+ * Two columns. The stage is brand territory in a deep warm field; the form
+ * sits uncarded on the canvas beside it. Below the tablet breakpoint the
+ * stage becomes a banner above the form.
+ * ---------------------------------------------------------------------- */
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='split']) {
+    display: grid;
+    align-items: stretch;
+
+    /*
+     * Rows are stated rather than left to `grid-auto-rows`. A container this
+     * tall with two automatic rows distributes its leftover height between
+     * them, which would pull the mobile banner to half the viewport.
+     */
+    grid-template-rows: auto 1fr;
+    background-image: var(--mia-grain);
 }
 
-.fi-simple-header-heading {
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='split']) .fi-simple-main {
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+    margin-block: calc(3rem * var(--mia-density, 1));
+    padding-inline: 1.5rem;
+    max-width: 26rem;
+}
+
+@media (min-width: 1024px) {
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split']) {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: 1fr;
+    }
+
+    /* The form column keeps a hairline seam against the stage. */
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-main-ctn {
+        padding-inline: clamp(1.5rem, 4vw, 4rem);
+    }
+}
+
+/*
+ * A seam between the two columns, in dark mode only. In light the espresso
+ * field against the cream canvas needs no help; in dark the two are close
+ * enough in value that the join goes soft without one.
+ */
+.dark
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+    .fi-mia-login-stage {
+    border-block-end: 1px solid var(--mia-hairline);
+}
+
+@media (min-width: 1024px) {
+    .dark
+        .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-mia-login-stage {
+        border-block-end: 0;
+        border-inline-end: 1px solid var(--mia-hairline);
+    }
+}
+
+/* The brand mark lives on the stage, so the one above the form goes. */
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+    .fi-simple-header
+    .fi-logo {
+    display: none;
+}
+
+/*
+ * The stage. Its content is centred against the viewport rather than against
+ * the column, so a tall form — registration, or sign-in showing two errors —
+ * scrolls past a brand panel that stays put.
+ */
+.fi-mia-login-stage {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    background-image: var(--mia-stage);
+    color: color-mix(in oklab, var(--gray-50) 92%, white);
+}
+
+.fi-mia-login-stage-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2rem, 5vw, 4.5rem);
+}
+
+/* A halo of the accent, and the sprig, as the only ornament on the field. */
+.fi-mia-login-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        70% 55% at 18% 12%,
+        color-mix(in oklab, var(--primary-400) 26%, transparent) 0%,
+        transparent 72%
+    );
+}
+
+.fi-mia-login-stage::after {
+    content: '';
+    position: absolute;
+    right: -6%;
+    bottom: -12%;
+    width: 62%;
+    aspect-ratio: 79 / 87;
+    background-color: color-mix(in oklab, var(--primary-200) 14%, transparent);
+    mask-image: var(--mia-sprig);
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-image: var(--mia-sprig);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+
+.fi-mia-login-stage-logo {
+    justify-content: flex-start;
+    margin-bottom: 2.25rem;
+
+    /*
+     * Where no brand image is configured Filament's logo component falls back
+     * to the panel name as text, and its own rule colours that with the ink
+     * meant for the canvas. On a field this dark that is unreadable, so the
+     * stage's colour is reasserted.
+     */
+    color: inherit;
+}
+
+.fi-mia-login-stage-name {
     font-family: var(--mia-heading-font, ui-serif, Georgia, serif);
-    font-size: 2rem;
+    font-size: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem);
     font-weight: var(--mia-heading-weight, 500);
-    letter-spacing: var(--mia-heading-tracking, -0.011em);
-    line-height: 1.15;
-    color: var(--mia-ink);
+    letter-spacing: -0.018em;
+    line-height: 1.05;
+    text-wrap: balance;
 }
 
-.fi-simple-header-subheading {
-    margin-top: calc(0.5rem * var(--mia-density, 1));
-    font-size: 0.875rem;
+.fi-mia-login-stage-tagline {
+    margin-top: 1.25rem;
+    max-width: 26ch;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: color-mix(in oklab, var(--gray-50) 74%, transparent);
+    text-wrap: pretty;
+}
+
+/* A short accent rule closing the brand block. */
+.fi-mia-login-stage-inner::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 2px;
+    margin-top: 2.25rem;
+    border-radius: 9999px;
+    background-color: color-mix(in oklab, var(--primary-400) 80%, transparent);
+}
+
+@media (min-width: 1024px) {
+    .fi-mia-login-stage-inner {
+        position: sticky;
+        top: 0;
+        min-height: 100dvh;
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-header,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-header-heading,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-header-subheading {
+        text-align: start;
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-header::after {
+        margin-inline: 0 auto;
+    }
+}
+
+/*
+ * Below the breakpoint the stage folds to a banner. It keeps the logo, the
+ * name and the accent rule, and drops the tagline and the sprig, which need
+ * width to read as anything but clutter.
+ */
+@media (max-width: 1023px) {
+    .fi-mia-login-stage {
+        padding-block: 0;
+    }
+
+    .fi-mia-login-stage-inner {
+        padding: 2rem 1.5rem 1.75rem;
+        width: 100%;
+    }
+
+    .fi-mia-login-stage-name {
+        font-size: 1.75rem;
+    }
+
+    .fi-mia-login-stage-logo {
+        margin-bottom: 1.25rem;
+    }
+
+    .fi-mia-login-stage-tagline,
+    .fi-mia-login-stage::after {
+        display: none;
+    }
+
+    .fi-mia-login-stage-inner::after {
+        margin-top: 1.5rem;
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-main {
+        margin-block: calc(2.5rem * var(--mia-density, 1));
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Composition: bleed
+ *
+ * A warm field running to every edge, with the form on frosted glass above
+ * it. The glass is kept opaque enough that text contrast never depends on
+ * what happens to be behind it.
+ * ---------------------------------------------------------------------- */
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed']) {
+    background-image:
+        var(--mia-grain),
+        radial-gradient(
+            48% 42% at 14% 12%,
+            color-mix(in oklab, var(--primary-300) 72%, transparent) 0%,
+            transparent 70%
+        ),
+        radial-gradient(
+            44% 40% at 86% 20%,
+            color-mix(in oklab, var(--secondary-300) 62%, transparent) 0%,
+            transparent 72%
+        ),
+        radial-gradient(
+            56% 48% at 74% 88%,
+            color-mix(in oklab, var(--primary-400) 44%, transparent) 0%,
+            transparent 74%
+        ),
+        linear-gradient(
+            168deg,
+            color-mix(in oklab, var(--secondary-100) 70%, var(--mia-canvas)) 0%,
+            var(--mia-canvas) 55%,
+            color-mix(in oklab, var(--primary-100) 78%, var(--mia-canvas)) 100%
+        );
+}
+
+.dark .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed']) {
+    background-image:
+        var(--mia-grain),
+        radial-gradient(
+            48% 42% at 14% 12%,
+            color-mix(in oklab, var(--primary-500) 26%, transparent) 0%,
+            transparent 70%
+        ),
+        radial-gradient(
+            44% 40% at 86% 20%,
+            color-mix(in oklab, var(--secondary-500) 20%, transparent) 0%,
+            transparent 72%
+        ),
+        radial-gradient(
+            56% 48% at 74% 88%,
+            color-mix(in oklab, var(--primary-600) 24%, transparent) 0%,
+            transparent 74%
+        ),
+        linear-gradient(
+            168deg,
+            color-mix(in oklab, var(--gray-900) 62%, var(--mia-canvas)) 0%,
+            var(--mia-canvas) 60%,
+            color-mix(in oklab, var(--gray-900) 45%, var(--mia-canvas)) 100%
+        );
+}
+
+/*
+ * The glass panel is laid out across the screen rather than up it: the brand
+ * mark and heading take one half and the fields the other, divided by a
+ * hairline. That is what keeps this composition from being the centred card
+ * with a louder background — it is a different shape on the page.
+ *
+ * The two halves are the two children the simple page already renders, so
+ * this needs no extra markup.
+ */
+@media (min-width: 1024px) {
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-main {
+        max-width: 50rem;
+        padding: clamp(2.5rem, 3.5vw, 3.25rem);
+    }
+
+    /* Room for the heading to run larger, which balances the two halves. */
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-header-heading {
+        font-size: clamp(2.25rem, 1.6rem + 1.6vw, 3rem);
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-page-content {
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        column-gap: clamp(2rem, 4vw, 3.25rem);
+        align-items: center;
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-header,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-header-heading,
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-header-subheading {
+        text-align: start;
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-header
+        .fi-logo {
+        justify-content: flex-start;
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-header::after {
+        margin-inline: 0 auto;
+    }
+
+    /* Everything in the content grid that is not the header: the form. */
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-page-content
+        > :not(.fi-simple-header) {
+        padding-inline-start: clamp(2rem, 4vw, 3.25rem);
+        border-inline-start: 1px solid var(--mia-hairline);
+    }
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-main {
+        /*
+         * 82% in light and 86% in dark. Enough of the field reads through to
+         * be unmistakably glass, and not enough to move the measured contrast
+         * of the text sitting on it.
+         */
+        background-color: color-mix(in oklab, var(--mia-surface) 82%, transparent);
+        border-color: color-mix(in oklab, white 42%, var(--mia-hairline));
+        backdrop-filter: blur(28px) saturate(180%);
+    }
+
+    .dark
+        .fi-simple-layout:has(> .fi-mia-login[data-mia-login='bleed'])
+        .fi-simple-main {
+        background-color: color-mix(in oklab, var(--mia-surface) 86%, transparent);
+        border-color: color-mix(in oklab, white 12%, var(--mia-hairline));
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Composition: editorial
+ *
+ * Asymmetric and print-like. The form is anchored to one side with no card
+ * around it and its type set flush left; the facing side is air, carrying the
+ * panel name at display size. A hairline runs between them.
+ * ---------------------------------------------------------------------- */
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial']) {
+    display: grid;
+    align-items: stretch;
+    background-image:
+        var(--mia-grain),
+        linear-gradient(
+            100deg,
+            var(--mia-canvas) 0%,
+            var(--mia-canvas) 52%,
+            color-mix(in oklab, var(--primary-100) 62%, var(--mia-canvas)) 100%
+        );
+}
+
+.dark .fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial']) {
+    background-image:
+        var(--mia-grain),
+        linear-gradient(
+            100deg,
+            var(--mia-canvas) 0%,
+            var(--mia-canvas) 52%,
+            color-mix(in oklab, var(--gray-900) 70%, var(--mia-canvas)) 100%
+        );
+}
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-simple-main {
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+    max-width: 25rem;
+    padding-inline: 1.5rem;
+}
+
+/* Flush left, and the heading rule aligned to the same margin as the fields. */
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-simple-header,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-simple-header-heading,
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-simple-header-subheading {
+    text-align: start;
+}
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-simple-header
+    .fi-logo {
+    justify-content: flex-start;
+}
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-simple-header::after {
+    margin-inline: 0 auto;
+}
+
+@media (min-width: 1024px) {
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial']) {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+        .fi-simple-main-ctn {
+        /*
+         * The form is placed first visually and the facing page second, which
+         * is the reverse of the document. The stage is marked decorative for
+         * this composition precisely because of that, so no reading order is
+         * being scrambled.
+         */
+        order: 1;
+        justify-content: flex-end;
+        padding-inline: clamp(2rem, 6vw, 6rem);
+        border-inline-end: 1px solid var(--mia-hairline);
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+        .fi-mia-login-stage {
+        order: 2;
+    }
+}
+
+/* No width for a facing page, so it goes rather than stacking. */
+@media (max-width: 1023px) {
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+        .fi-mia-login-stage {
+        display: none;
+    }
+}
+
+/*
+ * The facing page. Type at display size in the accent, low in contrast
+ * because it is ornament and not content — it repeats the brand name a
+ * screen reader has already met in the form's own heading.
+ */
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-mia-login-stage {
+    background-image: none;
+    color: inherit;
+    align-items: center;
+}
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-mia-login-stage-inner {
+    padding-inline: clamp(2rem, 6vw, 6rem);
+    padding-block: 4rem;
+}
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-mia-login-stage-name {
+    font-size: clamp(3rem, 1rem + 5.4vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: color-mix(in oklab, var(--primary-700) 62%, transparent);
+}
+
+.dark
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-mia-login-stage-name {
+    color: color-mix(in oklab, var(--primary-300) 42%, transparent);
+}
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-mia-login-stage-tagline {
+    max-width: 30ch;
     color: var(--mia-ink-muted);
 }
 
-.fi-simple-layout .fi-logo {
-    justify-content: center;
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='editorial'])
+    .fi-mia-login-stage-inner::after {
+    background-color: var(--mia-accent-line);
 }
 
-/* A hairline rule with the accent centred on it, under the brand mark. */
-.fi-simple-header::after {
-    content: '';
-    display: block;
-    width: 2.5rem;
-    height: 2px;
-    margin: calc(1.25rem * var(--mia-density, 1)) auto 0;
-    border-radius: 9999px;
-    background-color: var(--primary-500);
+/* -------------------------------------------------------------------------
+ * Composition: portal
+ *
+ * A narrow, tall column with a brand medallion above the heading and no card
+ * edge at all. The canvas grades vertically.
+ * ---------------------------------------------------------------------- */
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='portal']) {
+    background-image:
+        var(--mia-grain),
+        radial-gradient(
+            85% 42% at 50% 0%,
+            color-mix(in oklab, var(--primary-200) 52%, transparent) 0%,
+            transparent 72%
+        ),
+        linear-gradient(
+            180deg,
+            color-mix(in oklab, var(--secondary-100) 46%, var(--mia-canvas)) 0%,
+            var(--mia-canvas) 42%,
+            color-mix(in oklab, var(--gray-100) 76%, var(--mia-canvas)) 100%
+        );
+}
+
+.dark .fi-simple-layout:has(> .fi-mia-login[data-mia-login='portal']) {
+    background-image:
+        var(--mia-grain),
+        radial-gradient(
+            85% 42% at 50% 0%,
+            color-mix(in oklab, var(--primary-500) 16%, transparent) 0%,
+            transparent 72%
+        ),
+        linear-gradient(
+            180deg,
+            color-mix(in oklab, var(--gray-900) 52%, var(--mia-canvas)) 0%,
+            var(--mia-canvas) 45%,
+            color-mix(in oklab, var(--gray-950) 60%, var(--mia-canvas)) 100%
+        );
+}
+
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='portal']) .fi-simple-main {
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+    max-width: 23rem;
+    padding-inline: 1.5rem;
+}
+
+/*
+ * The medallion. A rounded plate rather than a disc, so it sits correctly
+ * around a wordmark as well as around a square logo, and around the plain
+ * brand name Filament falls back to when no logo is configured.
+ */
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='portal'])
+    .fi-simple-header
+    .fi-logo {
+    box-sizing: content-box;
+    align-self: center;
+    margin-bottom: calc(1.75rem * var(--mia-density, 1));
+    padding: 1.375rem 1.625rem;
+    min-width: 4rem;
+    background-color: var(--mia-surface-raised);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-2xl, 1.25rem);
+    box-shadow:
+        inset 0 1px 0 color-mix(in oklab, white 60%, transparent),
+        0 0 0 6px color-mix(in oklab, var(--primary-200) 26%, transparent),
+        var(--mia-shadow-lg);
+}
+
+.dark
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='portal'])
+    .fi-simple-header
+    .fi-logo {
+    box-shadow:
+        inset 0 1px 0 color-mix(in oklab, white 8%, transparent),
+        0 0 0 6px color-mix(in oklab, var(--primary-500) 14%, transparent),
+        var(--mia-shadow-lg);
+}
+
+/*
+ * With no card to separate it from the canvas, the form gets a hairline above
+ * the fields to close the header block.
+ */
+.fi-simple-layout:has(> .fi-mia-login[data-mia-login='portal'])
+    .fi-simple-page-content {
+    row-gap: calc(2rem * var(--mia-density, 1));
+}
+
+/* -------------------------------------------------------------------------
+ * Entry
+ * ---------------------------------------------------------------------- */
+
+.fi-simple-main,
+.fi-mia-login-stage-inner {
+    animation: mia-auth-in var(--mia-anim-duration, 520ms) var(--mia-ease, ease)
+        both;
+}
+
+.fi-mia-login-stage-inner {
+    animation-delay: 60ms;
+}
+
+@keyframes mia-auth-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.75rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fi-simple-main,
+    .fi-mia-login-stage-inner {
+        animation: none;
+    }
 }

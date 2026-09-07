@@ -74,3 +74,63 @@
     font-size: 1.125rem;
     color: var(--mia-ink);
 }
+
+/*
+ * The sign-in composition preview.
+ *
+ * The frame holds a real `.fi-simple-layout`, so every rule that paints the
+ * sign-in screen paints this too. Two things have to be undone for it to sit
+ * inside a page: the layout's full-viewport height, and the entry animation,
+ * which would otherwise replay on each change.
+ *
+ * Scaled with `zoom` rather than `transform`. A transform would leave the
+ * element occupying its unscaled size and need a compensating negative
+ * margin; zoom scales the box as well, so the frame reserves exactly the
+ * height it draws. Where zoom is unsupported the preview simply renders at
+ * full size inside a scrolling frame, which is a degradation rather than a
+ * break.
+ */
+.fi-mia-login-preview {
+    overflow: hidden;
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    box-shadow: var(--mia-shadow-sm);
+}
+
+.fi-mia-login-preview-frame {
+    zoom: 0.55;
+    height: 47rem;
+    overflow: hidden;
+}
+
+.fi-mia-login-preview-frame .fi-simple-layout {
+    min-height: 100%;
+    height: 100%;
+}
+
+.fi-mia-login-preview-frame .fi-simple-main,
+.fi-mia-login-preview-frame .fi-mia-login-stage-inner {
+    animation: none;
+}
+
+/*
+ * The stage pins itself to the viewport on the real screen, which inside a
+ * frame this size would push the brand block off the bottom.
+ */
+.fi-mia-login-preview-frame .fi-mia-login-stage-inner {
+    position: static;
+    min-height: 0;
+}
+
+/* Nothing in the preview is reachable, so nothing in it should look it. */
+.fi-mia-login-preview-frame .fi-input,
+.fi-mia-login-preview-frame .fi-btn {
+    pointer-events: none;
+    user-select: none;
+}
+
+.fi-mia-login-preview-frame .fi-btn {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

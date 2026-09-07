@@ -10,9 +10,11 @@ use Filament\Panel;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
 use Illuminate\Support\HtmlString;
 use JohnRivera7\FilamentMia\Enums\Density;
+use JohnRivera7\FilamentMia\Enums\LoginLayout;
 use JohnRivera7\FilamentMia\Enums\Roundness;
 use JohnRivera7\FilamentMia\Exceptions\InvalidThemeOption;
 use JohnRivera7\FilamentMia\Pages\ThemeCustomizer;
@@ -76,6 +78,10 @@ class MiaTheme implements Plugin
 
     protected string $sidebarWidth;
 
+    protected LoginLayout $loginLayout;
+
+    protected ?string $loginTagline;
+
     /** @var array<string> */
     protected array $viteStylesheets = [];
 
@@ -121,6 +127,8 @@ class MiaTheme implements Plugin
         $this->motion = (bool) ($config['motion'] ?? true);
         $this->elevation = (float) ($config['elevation'] ?? 1.0);
         $this->sidebarWidth = $config['sidebar_width'] ?? '17rem';
+        $this->loginLayout = LoginLayout::fromValue($config['login']['layout'] ?? LoginLayout::Card);
+        $this->loginTagline = $config['login']['tagline'] ?? null;
         $this->viteStylesheets = (array) ($config['vite_stylesheets'] ?? []);
         $this->viteBuildDirectory = $config['vite_build_directory'] ?? null;
 
@@ -194,6 +202,26 @@ class MiaTheme implements Plugin
         FilamentView::registerRenderHook(
             PanelsRenderHook::STYLES_AFTER,
             fn (): HtmlString => new HtmlString($css),
+        );
+
+        $loginLayout = $this->loginLayout;
+        $loginTagline = $this->loginTagline;
+
+        /*
+         * The marker that selects a sign-in composition, and the brand stage
+         * for the two compositions that use one.
+         *
+         * Injected rather than published as an overridden Blade view: the
+         * simple layout is one of the files most likely to change between
+         * Filament releases, and a published copy of it would silently stop
+         * tracking upstream.
+         */
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::SIMPLE_LAYOUT_START,
+            fn (): View => view('filament-mia::login-stage', [
+                'layout' => $loginLayout,
+                'tagline' => $loginTagline,
+            ]),
         );
 
         if ($this->viteStylesheets !== []) {
@@ -331,6 +359,42 @@ class MiaTheme implements Plugin
     }
 
     /**
+     * Choose how the screens shown before sign-in are composed.
+     *
+     * Five compositions are available, and they differ in staging rather than
+     * in identity: where the form sits and what occupies the rest of the
+     * viewport changes, the palette and the type pairing do not. The setting
+     * covers the whole authentication flow, so a panel does not change shape
+     * between signing in and answering a multi-factor challenge.
+     *
+     *     ->loginLayout('split')
+     *     ->loginLayout(LoginLayout::Split)
+     *
+     * Accepted values: card | split | bleed | editorial | portal.
+     * Defaults to `card`.
+     */
+    public function loginLayout(LoginLayout|string $layout): static
+    {
+        $this->loginLayout = LoginLayout::fromValue($layout);
+
+        return $this;
+    }
+
+    /**
+     * A line of copy for the brand stage.
+     *
+     * Only the `split` and `editorial` compositions have somewhere to put it;
+     * the others ignore it. Trimmed to a single line and capped, because it
+     * shares its space with type set at display size.
+     */
+    public function loginTagline(?string $tagline): static
+    {
+        $this->loginTagline = $tagline;
+
+        return $this;
+    }
+
+    /**
      * Entry animations and hover micro-interactions. Independent of
      * `prefers-reduced-motion`, which is always honoured.
      */
@@ -449,6 +513,8 @@ class MiaTheme implements Plugin
             density: $this->density,
             elevation: $this->elevation,
             motion: $this->motion,
+            loginLayout: $this->loginLayout,
+            loginTagline: $this->loginTagline,
         );
     }
 
@@ -471,6 +537,8 @@ class MiaTheme implements Plugin
         $this->density = $settings->density;
         $this->elevation = $settings->elevation;
         $this->motion = $settings->motion;
+        $this->loginLayout = $settings->loginLayout;
+        $this->loginTagline = $settings->loginTagline;
 
         return $this;
     }

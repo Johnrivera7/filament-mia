@@ -9,6 +9,7 @@ use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Slider;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Notifications\Notification;
@@ -16,9 +17,11 @@ use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use JohnRivera7\FilamentMia\Enums\Density;
+use JohnRivera7\FilamentMia\Enums\LoginLayout;
 use JohnRivera7\FilamentMia\Enums\Roundness;
 use JohnRivera7\FilamentMia\Exceptions\InvalidThemeOption;
 use JohnRivera7\FilamentMia\MiaTheme;
@@ -104,6 +107,7 @@ class ThemeCustomizer extends Page
                 $this->typographySection(),
                 $this->shapeSection(),
                 $this->depthSection(),
+                $this->loginSection(),
             ]);
     }
 
@@ -263,6 +267,54 @@ class ThemeCustomizer extends Page
                 $this->preview(Toggle::make('motion'))
                     ->label(__('filament-mia::customizer.depth.motion'))
                     ->helperText(__('filament-mia::customizer.depth.motion_help')),
+            ]);
+    }
+
+    /**
+     * The sign-in composition.
+     *
+     * Given its own section and placed last, because it is the one setting
+     * whose result is not visible from this page: it changes a screen only
+     * people who are not signed in ever see. Hence the preview, which is the
+     * real layout rather than a diagram of it.
+     */
+    protected function loginSection(): Section
+    {
+        return Section::make(__('filament-mia::customizer.login.heading'))
+            ->description(__('filament-mia::customizer.login.description'))
+            ->schema([
+                Radio::make('login_layout')
+                    ->label(__('filament-mia::customizer.login.layout'))
+                    ->options(array_combine(
+                        LoginLayout::values(),
+                        array_map(
+                            fn (string $value): string => __("filament-mia::customizer.login.options.{$value}"),
+                            LoginLayout::values(),
+                        ),
+                    ))
+                    ->descriptions(array_combine(
+                        LoginLayout::values(),
+                        array_map(
+                            fn (string $value): string => __("filament-mia::customizer.login.descriptions.{$value}"),
+                            LoginLayout::values(),
+                        ),
+                    ))
+                    // Live, so the preview below follows the choice.
+                    ->live()
+                    ->required(),
+
+                TextInput::make('login_tagline')
+                    ->label(__('filament-mia::customizer.login.tagline'))
+                    ->helperText(__('filament-mia::customizer.login.tagline_help'))
+                    ->maxLength(120)
+                    ->live(debounce: 400)
+                    ->visible(fn (Get $get): bool => in_array(
+                        $get('login_layout'),
+                        [LoginLayout::Split->value, LoginLayout::Editorial->value],
+                        strict: true,
+                    )),
+
+                View::make('filament-mia::customizer.login-preview'),
             ]);
     }
 

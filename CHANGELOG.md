@@ -33,6 +33,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Project status` and `Where this is going` sections in the README, stating
   the maturity of the `0.x` series and the direction of the project.
 
+### Added
+
+- Five compositions for the screens shown before sign-in, chosen with
+  `loginLayout()` or from the appearance page: `card`, `split`, `bleed`,
+  `editorial` and `portal`. They differ in staging rather than identity — where
+  the form sits and what occupies the rest of the viewport — and the choice
+  covers the whole authentication flow, including registration, password
+  recovery and the multi-factor challenge. `card` is the default and needs no
+  configuration.
+- `loginTagline()`, a line of copy for the brand stage carried by the `split`
+  and `editorial` compositions. Collapsed to a single line and capped at 120
+  characters.
+- A live preview of the sign-in composition on the appearance page. It renders
+  the real simple layout under the compiled stylesheet rather than a diagram of
+  it, and redraws client-side as the choice changes.
+- Each of the five presets now names a composition, so applying one is still a
+  complete set of design decisions.
+- `PanelsRenderHook::SIMPLE_LAYOUT_START` is now used to emit the composition
+  marker and the brand stage. Still no published or overridden Blade views.
+- A preview panel bundled with the package (`php vendor/bin/testbench serve`),
+  which serves sign-in, registration, password recovery and a multi-factor
+  challenge against one invented account. Every screenshot in the README is
+  taken from it.
+- `bin/contrast-login.mjs`, which measures contrast on the sign-in screens from
+  rendered pixels rather than from the palette — necessary because two
+  compositions put text over a gradient and one puts it over frosted glass. 48
+  pairs across five compositions and both colour modes, all clearing WCAG AA.
+
+### Changed
+
+- `--mia-ink-muted` is one step darker in light mode, `--gray-600` rather than
+  `--gray-500`. Measured against the rendered page it sat at 4.1:1, which
+  passes against the flat background the palette-level report assumes and
+  misses AA once the warm gradients behind the page are painted. Secondary text
+  throughout the theme is affected.
+- Link actions on the sign-in screens are set a step darker for the same
+  reason, and are now matched on `fi-text-color-600` as well, which Filament
+  applies with more specificity than an element rule on the subheading.
+- The background grain on the sign-in canvas is finer and fainter. At two
+  device pixels per CSS pixel the previous grating read as a visible weave.
+
 ### Fixed
 
 - The configured font families were silently dropped whenever the stylesheet

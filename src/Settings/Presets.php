@@ -6,10 +6,11 @@ namespace JohnRivera7\FilamentMia\Settings;
  * Named starting points for the customiser.
  *
  * Each preset is a complete set of design decisions — palette, pairing, shape,
- * density and depth — rather than a colour swap, because those choices depend
- * on each other: a high-contrast serif wants more air around it, and a flat
- * interface needs firmer borders to keep its edges. Applying a preset fills
- * the form; nothing is saved until the form is.
+ * density, depth and sign-in composition — rather than a colour swap, because
+ * those choices depend on each other: a high-contrast serif wants more air
+ * around it, a flat interface needs firmer borders to keep its edges, and a
+ * palette this warm carries a brand stage better than a pale one does.
+ * Applying a preset fills the form; nothing is saved until the form is.
  *
  * All of them stay inside the theme's warm range. A preset is a variation on
  * Mía, not an escape from it; anything can still be overridden by hand
@@ -37,6 +38,7 @@ class Presets
                     'density' => 'comfortable',
                     'elevation' => 1.0,
                     'motion' => true,
+                    'login_layout' => 'card',
                 ],
             ],
 
@@ -54,6 +56,7 @@ class Presets
                     'density' => 'comfortable',
                     'elevation' => 0.8,
                     'motion' => true,
+                    'login_layout' => 'split',
                 ],
             ],
 
@@ -71,6 +74,7 @@ class Presets
                     'density' => 'spacious',
                     'elevation' => 1.2,
                     'motion' => true,
+                    'login_layout' => 'portal',
                 ],
             ],
 
@@ -88,6 +92,7 @@ class Presets
                     'density' => 'compact',
                     'elevation' => 0.0,
                     'motion' => true,
+                    'login_layout' => 'editorial',
                 ],
             ],
 
@@ -105,6 +110,7 @@ class Presets
                     'density' => 'comfortable',
                     'elevation' => 1.0,
                     'motion' => true,
+                    'login_layout' => 'card',
                 ],
             ],
         ];

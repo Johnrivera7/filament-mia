@@ -72,6 +72,33 @@ return [
         'motion_help' => 'Entry animations and hover transitions. Independent of the reader\'s reduced-motion setting, which is always honoured.',
     ],
 
+    'login' => [
+        'heading' => 'Sign-in screen',
+        'description' => 'The only part of this panel a visitor sees without an account. Five compositions are available; they differ in where the form sits and what fills the rest of the screen, not in palette or type.',
+        'layout' => 'Composition',
+        'options' => [
+            'card' => 'Centred card',
+            'split' => 'Split stage',
+            'bleed' => 'Full bleed',
+            'editorial' => 'Editorial',
+            'portal' => 'Portal',
+        ],
+        'descriptions' => [
+            'card' => 'A single card centred on the canvas, over two soft pools of warm light. The quietest of the five.',
+            'split' => 'Two columns, one of them brand territory in a deep warm field. On narrow screens it folds to a banner above the form.',
+            'bleed' => 'A warm field running to every edge, with the form on frosted glass above it.',
+            'editorial' => 'Asymmetric and print-like: the form anchored to one side with no card around it, the facing side left as air.',
+            'portal' => 'A narrow, tall column with a brand medallion above the heading and no card edge at all.',
+        ],
+        'tagline' => 'Line of copy',
+        'tagline_help' => 'Shown on the brand side, under the panel name. One line; long values are trimmed. Only these two compositions have room for it.',
+        'tagline_placeholder' => 'A line of copy about your product.',
+        'sample_heading' => 'Sign in',
+        'sample_email' => 'Email address',
+        'sample_password' => 'Password',
+        'sample_action' => 'Sign in',
+    ],
+
     'specimen' => [
         'heading' => 'Specimen',
         'description' => 'The components the settings affect most.',

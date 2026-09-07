@@ -45,7 +45,59 @@ It ships pre-compiled. There is no Node, Tailwind or build step to install.
 
 ## Screenshots
 
-_Being retaken from the bundled demo application. See [Roadmap](#where-this-is-going)._
+The sign-in screen, in the five compositions the theme ships. Every image on
+this page comes from the preview panel bundled with the package, on invented
+data — see [Looking at it locally](#looking-at-it-locally) to run it yourself.
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-card-light-desktop.jpg" alt="The centred card composition in light mode" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-light-desktop.jpg" alt="The split stage composition in light mode" /></td>
+</tr>
+<tr>
+<td><b>Centred card</b><br />A single card on the canvas, over two soft pools of warm light.</td>
+<td><b>Split stage</b><br />Two columns, one of them brand territory in a deep warm field.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-bleed-light-desktop.jpg" alt="The full bleed composition in light mode" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-editorial-light-desktop.jpg" alt="The editorial composition in light mode" /></td>
+</tr>
+<tr>
+<td><b>Full bleed</b><br />A warm field to every edge, the panel laid out across the screen on frosted glass.</td>
+<td><b>Editorial</b><br />Asymmetric and print-like, with the facing side left as air.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-portal-light-desktop.jpg" alt="The portal composition in light mode" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-dark-desktop.jpg" alt="The split stage composition in dark mode" /></td>
+</tr>
+<tr>
+<td><b>Portal</b><br />A narrow, tall column with a brand medallion and no card edge.</td>
+<td><b>Dark mode</b><br />The same composition in the warm dark palette.</td>
+</tr>
+</table>
+
+Every composition holds its shape in the states that actually happen — a
+validation error, a phone, a two-step challenge:
+
+<table>
+<tr>
+<td width="25%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-light-mobile.jpg" alt="The split stage composition on a phone, with the brand column folded into a banner" /></td>
+<td width="37%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-card-light-desktop-error.jpg" alt="The centred card composition showing a validation error" /></td>
+<td width="38%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-two-step-split-dark.jpg" alt="The two-step challenge in the split stage composition, dark mode" /></td>
+</tr>
+<tr>
+<td><b>Folded</b><br />The brand column becomes a banner.</td>
+<td><b>Wrong credentials</b><br />The message takes a line; nothing reflows.</td>
+<td><b>Two steps</b><br />The challenge keeps the staging.</td>
+</tr>
+</table>
+
+The appearance page previews the choice before it is saved:
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/appearance-login.jpg" alt="The sign-in section of the appearance page, with the five compositions and a live preview of the selected one" width="100%" />
+
+The rest of the panel is being rephotographed from the same panel. See
+[Roadmap](#where-this-is-going).
 
 ## Project status
 
@@ -178,6 +230,8 @@ php artisan vendor:publish --tag=filament-mia-config
 | [`darkMode()`](#darkmode) | `true` | `dark_mode` |
 | [`sidebarWidth()`](#sidebarwidth) | `17rem` | `sidebar_width` |
 | [`viteStylesheets()`](#vitestylesheets) | `[]` | `vite_stylesheets` `vite_build_directory` |
+| [`loginLayout()`](#loginlayout) | `card` | `login.layout` |
+| [`loginTagline()`](#logintagline) | `null` | `login.tagline` |
 | [`customizer()`](#customizer) | `false` | `customizer.enabled` |
 | [`customizerAuthorization()`](#customizerauthorization) | `null` — anyone who can reach the panel | — |
 | [`customizerNavigation()`](#customizernavigation) | ungrouped | `customizer.navigation_group` `customizer.navigation_sort` |
@@ -383,6 +437,40 @@ put in the file.
 MiaTheme::make()->viteStylesheets('resources/css/filament/admin/utilities.css')
 ```
 
+#### `loginLayout()`
+
+```php
+public function loginLayout(LoginLayout|string $layout): static
+```
+
+Which of the five [sign-in compositions](#sign-in-compositions) the panel uses.
+Accepts a case of `JohnRivera7\FilamentMia\Enums\LoginLayout` or its string
+value: `card`, `split`, `bleed`, `editorial`, `portal`. Anything else throws
+`InvalidThemeOption` at boot.
+
+The setting covers the whole authentication flow — sign-in, registration,
+password reset and the multi-factor challenge — so a panel does not change
+shape halfway through logging in.
+
+```php
+MiaTheme::make()->loginLayout('split')
+```
+
+#### `loginTagline()`
+
+```php
+public function loginTagline(?string $tagline): static
+```
+
+A line of copy for the brand stage. Only the `split` and `editorial`
+compositions have somewhere to put it; the others ignore it. Whitespace is
+collapsed to a single line and the value is capped at 120 characters, because
+it shares its space with type set at display size.
+
+```php
+MiaTheme::make()->loginLayout('split')->loginTagline('Client work, kept in one place.')
+```
+
 #### `customizer()`
 
 ```php
@@ -429,6 +517,82 @@ MiaTheme::make()
     ->customizerNavigation(group: 'Settings', sort: 90)
 ```
 
+## Sign-in compositions
+
+The sign-in screen is the only part of a panel a visitor sees without an
+account, so the theme ships five stagings of it rather than one. They differ in
+composition — where the form sits and what occupies the rest of the viewport —
+not in identity. Palette, type pairing and shape treatment are the same across
+all five.
+
+| Value | Composition |
+|---|---|
+| `card` | A single card centred on the canvas, over two soft pools of warm light. The quietest of the five, and the default. |
+| `split` | Two columns. One is brand territory — a deep warm field carrying the logo, the panel name and an optional line of copy — and the other holds the form, uncarded, on the cream canvas. |
+| `bleed` | A warm field running to every edge. The panel is laid out *across* the screen on frosted glass: brand and heading in one half, fields in the other, divided by a hairline. |
+| `editorial` | Asymmetric and print-like. The form is anchored to one side with no card around it, and the facing side is left as air with the panel name at display size. |
+| `portal` | A narrow, tall column, centred, with a brand medallion above the heading and no card edge at all. The canvas grades vertically. |
+
+Choose one when registering the plugin:
+
+```php
+->plugin(
+    MiaTheme::make()
+        ->loginLayout('split')
+        ->loginTagline('Client work, kept in one place.'),
+)
+```
+
+Or from the [appearance page](#the-appearance-page), which previews the choice
+before it is saved. The preview is the real layout rather than a diagram of
+one: it renders the same markup with the same stylesheet, so what is on screen
+is what visitors will get.
+
+The choice applies to the whole authentication flow. Registration, password
+recovery and the multi-factor challenge all take the same staging, so a panel
+does not change shape between entering a password and confirming a code.
+
+**Nothing needs configuring.** With no settings at all the panel gets the
+`card` composition, which is already a long way from Filament's default box.
+
+### What happens on a phone
+
+The two-column compositions are the ones that break on narrow screens, so each
+states what it does rather than leaving it to the grid:
+
+- `split` folds the brand column into a short banner above the form, keeping
+  the logo, the panel name and the accent rule, and dropping the tagline and
+  the botanical mark — both need width to read as anything but clutter.
+- `editorial` drops the facing side entirely. It is ornament, and stacking it
+  under the form would only add scroll.
+- `bleed` becomes a single column, and the glass panel returns to a card.
+- `card` and `portal` are single-column already.
+
+The carded compositions keep their corner radius at phone widths, with a small
+margin to show it against, where Filament runs the card edge to edge.
+
+### Accessibility of the compositions
+
+Contrast on these screens is measured from rendered pixels rather than
+calculated from the palette. Two of the compositions put text over a gradient
+and one puts it over frosted glass, and a ratio computed against a nominal
+background would not be a measurement of anything.
+
+`bin/contrast-login.mjs` walks all five in both colour modes, with a validation
+error on screen, and for every piece of text takes the computed colour, hides
+the glyphs, photographs the box they occupied and averages what is behind them.
+48 pairs, all clearing WCAG AA — headings against the 3:1 that 1.4.3 allows
+large text, everything else against 4.5:1.
+
+That measurement is also what caught the two failures it now guards against:
+muted text and link actions both sat around 4.1:1 on the cream once the warm
+gradients behind the page were actually painted, while passing comfortably
+against the flat background the palette-level report assumes.
+
+Entry motion is a single fade and rise, disabled under `prefers-reduced-motion`
+along with everything else the theme animates. The backgrounds are static
+gradients — nothing animates continuously.
+
 ## The appearance page
 
 An optional page inside the panel for editing the theme and saving the result,
@@ -436,9 +600,16 @@ for the case where whoever decides how the panel looks is not the person who
 deploys it.
 
 It edits accent, secondary and status colours; the interface and heading
-families; roundness, density and elevation; and it carries five presets —
-Mía, Atelier, Botanica, Papier and Plain. A specimen of the components the
-settings affect most sits below the form.
+families; roundness, density and elevation; the [sign-in
+composition](#sign-in-compositions) and its line of copy; and it carries five
+presets — Mía, Atelier, Botanica, Papier and Plain. A specimen of the
+components the settings affect most sits below the form.
+
+The sign-in composition is the one setting whose result is not visible from the
+page, since it changes a screen only people who are not signed in ever see, so
+it gets a live preview of its own. That preview renders the real simple layout
+with the real marker element, under the compiled stylesheet — not a wireframe
+of it — and it redraws as the choice changes without waiting for a round trip.
 
 The font list is short on purpose. The theme sets headings at sizes and
 tracking that most families do not survive, so the page offers ten of each,
@@ -628,14 +799,17 @@ suite, so a change to the ramps that broke accessibility fails the build.
 |---|---|---|
 | Body text on the page | 18.97:1 | 19.58:1 |
 | Body text on a card | 19.58:1 | 17.03:1 |
-| Muted text on a card | 4.79:1 | 7.29:1 |
+| Muted text on a card | 6.97:1 | 7.29:1 |
 | Link and accent text on a card | 4.88:1 | 9.07:1 |
 | Button label on the accent | 5.04:1 | 5.04:1 |
 | Input border on a card | 4.79:1 | 7.29:1 |
 | Focus ring on a card | 4.88:1 | 9.07:1 |
 
 Text pairs clear the 4.5:1 that WCAG AA asks of body copy, and controls clear
-the 3:1 that WCAG 1.4.11 asks of user interface components. Decorative
+the 3:1 that WCAG 1.4.11 asks of user interface components. The sign-in screens
+are measured separately, from rendered pixels, because their backgrounds are
+gradients; see [Accessibility of the
+compositions](#accessibility-of-the-compositions). Decorative
 hairlines are deliberately below that: they carry no information, and WCAG
 1.4.11 explicitly exempts elements that do not.
 
@@ -655,10 +829,17 @@ Beyond contrast:
 
 ## Overridden Filament views
 
-**None.** The theme is implemented entirely in CSS and one render hook
-(`PanelsRenderHook::STYLES_AFTER`, used to emit the runtime custom properties).
+**None.** The theme is implemented in CSS and two render hooks:
+
+- `PanelsRenderHook::STYLES_AFTER` emits the runtime custom properties.
+- `PanelsRenderHook::SIMPLE_LAYOUT_START` emits the marker element that selects
+  a [sign-in composition](#sign-in-compositions), and the brand stage for the
+  two compositions that use one.
+
 No Blade view is published or replaced, so Filament upgrades cannot silently
-revert to an old copy of a framework template.
+revert to an old copy of a framework template. The simple layout in particular
+is one of the files most likely to change between releases, and a published
+copy of it would stop tracking upstream without saying so.
 
 ## Troubleshooting
 
@@ -735,6 +916,27 @@ so a test there would report on the harness rather than on the package. The
 page's wiring, storage, precedence and preview output are covered; the rendered
 page is checked by hand against a running application.
 
+### Looking at it locally
+
+The package carries its own panel, so no application is needed to see the
+theme:
+
+```bash
+php vendor/bin/testbench workbench:build
+php vendor/bin/testbench serve
+```
+
+That serves a panel at `/admin` with sign-in, registration, password recovery
+and a multi-factor challenge, against one invented account
+(`valeria@mia.test` / `password`). Every screenshot in this README is taken
+from it:
+
+```bash
+node bin/shots.mjs             # all five compositions, both modes, both widths
+node bin/contrast-login.mjs    # measured contrast for the same set
+php bin/contrast-report.php    # palette-level contrast
+```
+
 Three conventions keep the repository honest:
 
 - **`resources/dist/mia.css` is rebuilt and committed on its own.** It is
@@ -748,9 +950,9 @@ Three conventions keep the repository honest:
   introduces it. This README is the product page, and documenting afterwards
   reliably leaves options undocumented and examples that no longer match the
   code.
-- **Every image comes from the demo application.** Captures are named `art/demo-*`
-  and are produced against invented data. `.gitignore` blocks the other
-  filenames screenshots tend to get, because an image of a real system can
+- **Every image comes from the bundled preview panel or the demo
+  application.** Both run on invented data. `.gitignore` blocks the filenames
+  screenshots tend to get by default, because an image of a real system can
   carry personal data and a blob pushed to a public repository stays reachable
   by SHA long after the file is deleted.
 
@@ -762,11 +964,11 @@ stylesheet is the first layer, not the whole of it.
 Concretely, what is in and what is not.
 
 **Today.** A pre-compiled stylesheet, a configuration API for colour,
-typography, roundness, density and elevation, warm light and dark modes,
-illustrated empty states, loading states, measured contrast, and an in-panel
-appearance page that edits and persists all of it.
+typography, roundness, density and elevation, warm light and dark modes, five
+sign-in compositions, illustrated empty states, loading states, measured
+contrast, and an in-panel appearance page that edits and persists all of it.
 
-**Next.** A demo application that doubles as the source of every screenshot.
+**Next.** The rest of the panel rephotographed from the bundled preview panel.
 Presets shipped as named palettes beyond the five the appearance page carries.
 
 **Later, and deliberately vaguer because it is not built.** Blade components
