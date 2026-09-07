@@ -72,6 +72,9 @@ recompiling, and can differ between panels in one application.
 - Invalid colours, font families and enum values throw `InvalidThemeOption` at
   boot, because Filament converts colours without validating them and an
   unparseable value would otherwise yield a black palette and no error.
+- The `--mia-*` custom properties are documented as public surface, so
+  application components can match the theme or adjust what the options do not
+  cover, along with a `fi-skeleton` class for loading states in your own views.
 
 #### Accessibility
 

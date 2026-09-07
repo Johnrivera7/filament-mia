@@ -183,24 +183,227 @@ To set project-wide defaults instead:
 php artisan vendor:publish --tag=filament-mia-config
 ```
 
-### Options
+### Options at a glance
 
-| Method | Default | Accepts |
+| Method | Default | Config key |
 |---|---|---|
-| `accentColor()` | `#D9A14E` | Hex, `rgb()`, an `r, g, b` triplet or `oklch()` |
-| `secondaryColor()` | `#E4A987` | as above |
-| `neutralColor()` | the theme's warm ramp | as above, or `null` to keep it |
-| `statusColors()` | warmed defaults | Named arguments: `danger:` `info:` `success:` `warning:` |
-| `font()` | `Jost`, `Cormorant Garamond` | Sans, then optional serif — family names as spelled on [Bunny Fonts](https://fonts.bunny.net) |
-| `monoFont()` | the system stack | A family name, or `null` |
-| `serifHeadings()` | `true` | `bool` — `false` keeps headings in the sans |
-| `roundness()` | `soft` | `sharp` `subtle` `soft` `round` |
-| `density()` | `comfortable` | `compact` `comfortable` `spacious` |
-| `elevation()` | `1.0` | `0.0`–`2.0`; `0` is completely flat |
-| `motion()` | `true` | `bool` — independent of `prefers-reduced-motion` |
-| `darkMode()` | `true` | `bool` |
-| `sidebarWidth()` | `17rem` | Any CSS length |
-| `viteStylesheets()` | none | See [below](#tailwind-utilities-in-your-own-views) |
+| [`accentColor()`](#accentcolor) | `#D9A14E` | `colors.accent` |
+| [`secondaryColor()`](#secondarycolor) | `#E4A987` | `colors.secondary` |
+| [`neutralColor()`](#neutralcolor) | `null` — the theme's warm ramp | `colors.neutral` |
+| [`statusColors()`](#statuscolors) | warmed defaults | `colors.danger` `colors.info` `colors.success` `colors.warning` |
+| [`font()`](#font) | `Jost`, `Cormorant Garamond` | `fonts.sans` `fonts.serif` |
+| [`monoFont()`](#monofont) | `null` — the system stack | `fonts.mono` |
+| [`serifHeadings()`](#serifheadings) | `true` | `typography.serif_headings` |
+| [`roundness()`](#roundness) | `soft` | `roundness` |
+| [`density()`](#density) | `comfortable` | `density` |
+| [`elevation()`](#elevation) | `1.0` | `elevation` |
+| [`motion()`](#motion) | `true` | `motion` |
+| [`darkMode()`](#darkmode) | `true` | `dark_mode` |
+| [`sidebarWidth()`](#sidebarwidth) | `17rem` | `sidebar_width` |
+| [`viteStylesheets()`](#vitestylesheets) | `[]` | `vite_stylesheets` `vite_build_directory` |
+
+### Reference
+
+Everywhere a colour is accepted, the accepted formats are hex (`#RGB` or
+`#RRGGBB`), `rgb(r, g, b)`, a bare `r, g, b` triplet, or `oklch(l c h)`.
+Anything else throws `InvalidThemeOption` at boot.
+
+#### `accentColor()`
+
+```php
+public function accentColor(string $color): static
+```
+
+The accent that carries buttons, links, focus rings and active states.
+
+```php
+MiaTheme::make()->accentColor('#C9A227')
+```
+
+#### `secondaryColor()`
+
+```php
+public function secondaryColor(string $color): static
+```
+
+A supporting colour, available to any component as `->color('secondary')`.
+
+```php
+MiaTheme::make()->secondaryColor('#E8C4C0')
+```
+
+#### `neutralColor()`
+
+```php
+public function neutralColor(?string $color): static
+```
+
+Page backgrounds, surfaces, borders and body copy are all built from the
+neutral. `null` keeps the theme's curated warm ramp, which is tuned so light
+mode reads as cream and dark mode as espresso — replace it only if you want a
+different temperature throughout.
+
+```php
+MiaTheme::make()->neutralColor('#8A7D6D')
+```
+
+#### `statusColors()`
+
+```php
+public function statusColors(
+    ?string $danger = null,
+    ?string $info = null,
+    ?string $success = null,
+    ?string $warning = null,
+): static
+```
+
+Status colours, warmed by default so they sit inside the palette instead of
+cutting across it with stock blues and greens. Any argument left out keeps its
+default. Use named arguments.
+
+```php
+MiaTheme::make()->statusColors(danger: '#C1614F', success: '#8A9A6B')
+```
+
+#### `font()`
+
+```php
+public function font(string $sans, ?string $serif = null): static
+```
+
+The interface sans, and optionally the display serif. Families are served from
+[Bunny Fonts](https://fonts.bunny.net), which sets no cookies and logs no IP
+addresses. Give plain family names as spelled there, without quotes or CSS
+fallbacks.
+
+```php
+MiaTheme::make()->font('Outfit', 'Fraunces')
+```
+
+#### `monoFont()`
+
+```php
+public function monoFont(?string $family): static
+```
+
+An optional monospace family. `null` keeps the system stack.
+
+```php
+MiaTheme::make()->monoFont('JetBrains Mono')
+```
+
+#### `serifHeadings()`
+
+```php
+public function serifHeadings(bool $condition = true): static
+```
+
+Whether page, modal, brand and empty-state headings use the serif family.
+`false` keeps the whole interface in the sans, for a quieter panel.
+
+```php
+MiaTheme::make()->serifHeadings(false)
+```
+
+#### `roundness()`
+
+```php
+public function roundness(Roundness|string $roundness): static
+```
+
+Accepts `sharp`, `subtle`, `soft` or `round`, or the matching
+`Roundness` enum case. Applied over Tailwind's own `--radius-*` scale, so it
+retunes every `rounded-*` utility already compiled into the stylesheet.
+
+```php
+use JohnRivera7\FilamentMia\Enums\Roundness;
+
+MiaTheme::make()->roundness(Roundness::Sharp)
+```
+
+#### `density()`
+
+```php
+public function density(Density|string $density): static
+```
+
+Accepts `compact`, `comfortable` or `spacious`, or the matching `Density` enum
+case. Scales padding, gaps and table row height together.
+
+```php
+MiaTheme::make()->density('compact')
+```
+
+#### `elevation()`
+
+```php
+public function elevation(float $scale): static
+```
+
+Multiplier for the shadow system, from `0.0` to `2.0`. Shadows stay wide,
+diffuse and tinted with the neutral rather than black at any value. `0.0`
+declares no shadow at all, for a completely flat interface.
+
+```php
+MiaTheme::make()->elevation(0.0)
+```
+
+#### `motion()`
+
+```php
+public function motion(bool $condition = true): static
+```
+
+Entry animations and hover micro-interactions. Independent of
+`prefers-reduced-motion`, which the theme always honours regardless of this
+setting.
+
+```php
+MiaTheme::make()->motion(false)
+```
+
+#### `darkMode()`
+
+```php
+public function darkMode(bool $condition = true): static
+```
+
+Whether the panel offers the light and dark switch.
+
+```php
+MiaTheme::make()->darkMode(false)
+```
+
+#### `sidebarWidth()`
+
+```php
+public function sidebarWidth(string $width): static
+```
+
+Any CSS length. The default `17rem` is narrower than Filament's `20rem`, which
+crowds the content column on smaller laptops.
+
+```php
+MiaTheme::make()->sidebarWidth('19rem')
+```
+
+#### `viteStylesheets()`
+
+```php
+public function viteStylesheets(string|array $paths, ?string $buildDirectory = null): static
+```
+
+One or more of your application's own Vite entrypoints, loaded after the theme
+and alongside it. See [Tailwind utilities in your own
+views](#tailwind-utilities-in-your-own-views) for why this exists and what to
+put in the file.
+
+```php
+MiaTheme::make()->viteStylesheets('resources/css/filament/admin/utilities.css')
+```
+
+### How the options reach the browser
 
 Colours are resolved per request and emitted as OKLCH custom properties, and
 non-colour settings as `--mia-*` properties scoped to `.fi-panel-{id}`. Nothing
@@ -220,6 +423,60 @@ MiaTheme::make()
 ```
 
 <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-variant.png" alt="The same panel reconfigured with a violet accent, sharp corners, compact density and no shadows" width="100%" />
+
+### Custom properties
+
+These are part of the theme's public surface. Read them to make your own
+components match, or redeclare them on `.fi-body` to adjust something the
+options do not cover. All are set for both colour modes.
+
+| Property | What it holds |
+|---|---|
+| `--mia-canvas` | The page background |
+| `--mia-surface` | Cards, tables, modals |
+| `--mia-surface-sunken` | Recessed areas — modal footers, fieldsets |
+| `--mia-surface-raised` | Floating surfaces — dropdowns, notifications |
+| `--mia-ink` | Body copy and headings |
+| `--mia-ink-muted` | Secondary and supporting text |
+| `--mia-hairline` | Decorative borders and dividers |
+| `--mia-hairline-strong` | Borders on interactive controls, which must clear 3:1 |
+| `--mia-accent-wash` | The tinted background of active and selected states |
+| `--mia-accent-line` | The accent at border strength |
+| `--mia-radius-xs` … `--mia-radius-3xl` | The radius scale, set by `roundness()` |
+| `--mia-density` | The spacing multiplier, set by `density()` |
+| `--mia-row-height` | Minimum table row height |
+| `--mia-section-gap` | Vertical rhythm between sections |
+| `--mia-shadow-sm` … `--mia-shadow-xl` | The shadow scale, set by `elevation()` |
+| `--mia-ease` | The theme's easing curve |
+| `--mia-duration` | Standard transition duration |
+| `--mia-duration-slow` | Slower transitions, for larger movements |
+| `--mia-anim-duration` | Entry animations |
+| `--mia-heading-font` | The heading family, set by `serifHeadings()` |
+| `--mia-heading-weight` | Heading weight |
+| `--mia-heading-tracking` | Heading letter-spacing |
+
+Reference them with a fallback, as the theme's own stylesheet does, so your
+component still renders if a property is ever renamed:
+
+```css
+.my-panel {
+    background-color: var(--mia-surface);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-2xl, 1.25rem);
+    box-shadow: var(--mia-shadow-md);
+    transition: box-shadow var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+```
+
+### Skeleton placeholders
+
+The theme also publishes one class, for loading states in your own views. It
+carries the warm shimmer used by Filament's deferred sections, and stops
+animating under `prefers-reduced-motion`:
+
+```blade
+<div class="fi-skeleton" style="height: 1rem; width: 60%"></div>
+```
 
 A colour you pass is expanded into an eleven-shade ramp that preserves its hue
 *and* its saturation character, so an understated colour stays understated
