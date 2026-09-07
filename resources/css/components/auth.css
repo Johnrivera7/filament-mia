@@ -1,0 +1,116 @@
+/*
+ * Login, registration and password reset.
+ *
+ * These are the screens a user sees before anything else, and Filament's are
+ * plainly framework-default. Here the card sits on a warm washed canvas and
+ * the heading carries the display serif.
+ */
+
+.fi-simple-layout {
+    background-color: var(--mia-canvas);
+    position: relative;
+}
+
+/*
+ * Two very soft warm pools of light, one gold and one rose, drawn from the
+ * palette. Fixed and behind everything, so nothing repaints on scroll.
+ */
+.fi-simple-layout::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            60% 50% at 22% 18%,
+            color-mix(in oklab, var(--primary-200) 46%, transparent) 0%,
+            transparent 68%
+        ),
+        radial-gradient(
+            55% 45% at 82% 82%,
+            color-mix(in oklab, var(--secondary-200) 40%, transparent) 0%,
+            transparent 70%
+        );
+}
+
+.dark .fi-simple-layout::before {
+    background:
+        radial-gradient(
+            60% 50% at 22% 18%,
+            color-mix(in oklab, var(--primary-500) 12%, transparent) 0%,
+            transparent 68%
+        ),
+        radial-gradient(
+            55% 45% at 82% 82%,
+            color-mix(in oklab, var(--secondary-500) 9%, transparent) 0%,
+            transparent 70%
+        );
+}
+
+/* Lift the real children above the background wash. */
+.fi-simple-layout > * {
+    position: relative;
+    z-index: 1;
+}
+
+.fi-simple-main {
+    background-color: color-mix(in oklab, var(--mia-surface) 88%, transparent);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-3xl, 1.75rem);
+    box-shadow: var(--mia-shadow-xl);
+    padding: calc(2.5rem * var(--mia-density, 1));
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .fi-simple-main {
+        backdrop-filter: blur(14px) saturate(140%);
+    }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+    .fi-simple-main {
+        background-color: var(--mia-surface);
+    }
+}
+
+@media (max-width: 639px) {
+    .fi-simple-main {
+        padding: calc(1.75rem * var(--mia-density, 1));
+        border-radius: var(--mia-radius-2xl, 1.25rem);
+    }
+}
+
+.fi-simple-header {
+    text-align: center;
+}
+
+.fi-simple-header-heading {
+    font-family: var(--mia-heading-font, ui-serif, Georgia, serif);
+    font-size: 2rem;
+    font-weight: var(--mia-heading-weight, 500);
+    letter-spacing: var(--mia-heading-tracking, -0.011em);
+    line-height: 1.15;
+    color: var(--mia-ink);
+}
+
+.fi-simple-header-subheading {
+    margin-top: calc(0.5rem * var(--mia-density, 1));
+    font-size: 0.875rem;
+    color: var(--mia-ink-muted);
+}
+
+.fi-simple-layout .fi-logo {
+    justify-content: center;
+}
+
+/* A hairline rule with the accent centred on it, under the brand mark. */
+.fi-simple-header::after {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 2px;
+    margin: calc(1.25rem * var(--mia-density, 1)) auto 0;
+    border-radius: 9999px;
+    background-color: var(--primary-500);
+}

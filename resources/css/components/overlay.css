@@ -1,0 +1,184 @@
+/*
+ * Dropdowns, modals, notifications and tooltips.
+ *
+ * Everything that floats above the page shares one treatment: a warm raised
+ * surface, a hairline, a wide diffuse shadow, and a blur behind it. Blur is
+ * safe here because these surfaces do not scroll with the document.
+ */
+
+.fi-body .fi-dropdown-panel {
+    background-color: color-mix(in oklab, var(--mia-surface-raised) 92%, transparent);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    box-shadow: var(--mia-shadow-lg);
+    padding: 0.3125rem;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .fi-body .fi-dropdown-panel {
+        backdrop-filter: blur(16px) saturate(150%);
+    }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+    .fi-body .fi-dropdown-panel {
+        background-color: var(--mia-surface-raised);
+    }
+}
+
+.fi-body .fi-dropdown-header {
+    border-bottom: 1px solid var(--mia-hairline);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    color: var(--mia-ink-muted);
+}
+
+.fi-body .fi-dropdown-list {
+    padding: 0;
+    gap: 0.0625rem;
+}
+
+.fi-body .fi-dropdown-list-item {
+    border-radius: var(--mia-radius-md, 0.5rem);
+    font-size: 0.8125rem;
+    font-weight: 450;
+    transition:
+        background-color 200ms var(--mia-ease, ease),
+        color 200ms var(--mia-ease, ease);
+}
+
+.fi-body .fi-dropdown-list-item:hover {
+    background-color: color-mix(in oklab, var(--gray-400) 13%, transparent);
+}
+
+.dark .fi-body .fi-dropdown-list-item:hover {
+    background-color: color-mix(in oklab, var(--gray-50) 7%, transparent);
+}
+
+/*
+ * Modals. The overlay is a warm scrim rather than neutral black, which keeps
+ * the page underneath looking lit rather than switched off.
+ */
+.fi-body .fi-modal-close-overlay {
+    background-color: color-mix(in oklab, var(--gray-900) 42%, transparent);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .fi-body .fi-modal-close-overlay {
+        backdrop-filter: blur(4px);
+    }
+}
+
+.dark .fi-body .fi-modal-close-overlay {
+    background-color: color-mix(in oklab, var(--gray-950) 68%, transparent);
+}
+
+.fi-body .fi-modal-window {
+    background-color: var(--mia-surface);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-3xl, 1.75rem);
+    box-shadow: var(--mia-shadow-xl);
+}
+
+.fi-body .fi-modal-header {
+    padding: calc(1.625rem * var(--mia-density, 1)) calc(1.75rem * var(--mia-density, 1))
+        calc(0.75rem * var(--mia-density, 1));
+}
+
+.fi-body .fi-modal-content {
+    padding-inline: calc(1.75rem * var(--mia-density, 1));
+}
+
+.fi-body .fi-modal-footer {
+    padding: calc(1.25rem * var(--mia-density, 1)) calc(1.75rem * var(--mia-density, 1));
+    margin-top: calc(1.25rem * var(--mia-density, 1));
+    border-top: 1px solid var(--mia-hairline);
+    background-color: var(--mia-surface-sunken);
+    border-end-start-radius: var(--mia-radius-3xl, 1.75rem);
+    border-end-end-radius: var(--mia-radius-3xl, 1.75rem);
+}
+
+.fi-body .fi-modal-description {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--mia-ink-muted);
+}
+
+/* Full-bleed on small screens, where a floating card wastes space. */
+@media (max-width: 639px) {
+    .fi-body .fi-modal-window {
+        border-radius: var(--mia-radius-2xl, 1.25rem);
+    }
+}
+
+/*
+ * Notifications get the accent as a rule on the leading edge, so their colour
+ * is legible at a glance without flooding the whole surface.
+ */
+.fi-body .fi-no-notification {
+    background-color: color-mix(in oklab, var(--mia-surface-raised) 94%, transparent);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    box-shadow: var(--mia-shadow-lg);
+    overflow: hidden;
+    position: relative;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .fi-body .fi-no-notification {
+        backdrop-filter: blur(16px) saturate(150%);
+    }
+}
+
+.fi-body .fi-no-notification::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block: 0;
+    width: 3px;
+    background-color: var(--primary-500);
+}
+
+.fi-body .fi-no-notification:has(.fi-color-success)::before {
+    background-color: var(--success-500);
+}
+
+.fi-body .fi-no-notification:has(.fi-color-danger)::before {
+    background-color: var(--danger-500);
+}
+
+.fi-body .fi-no-notification:has(.fi-color-warning)::before {
+    background-color: var(--warning-500);
+}
+
+.fi-body .fi-no-notification:has(.fi-color-info)::before {
+    background-color: var(--info-500);
+}
+
+.fi-body .fi-no-notification-title {
+    font-size: 0.875rem;
+    font-weight: 550;
+    letter-spacing: -0.004em;
+}
+
+.fi-body .fi-no-notification-body {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--mia-ink-muted);
+}
+
+.fi-body .fi-tooltip .tippy-box,
+.fi-body .tippy-box {
+    background-color: var(--gray-900);
+    color: var(--gray-50);
+    border-radius: var(--mia-radius-md, 0.5rem);
+    font-size: 0.75rem;
+    font-weight: 450;
+    box-shadow: var(--mia-shadow-md);
+}
+
+.dark .fi-body .tippy-box {
+    background-color: var(--gray-800);
+}

@@ -1,0 +1,120 @@
+/*
+ * Empty states.
+ *
+ * Filament shows a generic outline icon in a grey circle. This replaces it
+ * with the theme's own botanical illustration, echoing the motif in the brand
+ * mark, drawn as a CSS mask so it takes its colour from the accent gradient
+ * and follows whatever palette the application configures.
+ *
+ * The source of the illustration lives at `resources/images/sprig.svg`; the
+ * copy below is inlined so the theme needs no image assets published.
+ */
+
+.fi-body .fi-empty-state:not(.fi-empty-state-not-contained) {
+    background-color: var(--mia-surface);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-2xl, 1.25rem);
+    box-shadow: var(--mia-shadow-md);
+    padding-block: calc(4rem * var(--mia-density, 1));
+}
+
+/*
+ * A soft warm halo rather than a flat grey disc. Sized generously, because at
+ * the framework's 3rem the illustration reads as a smudge.
+ */
+.fi-body .fi-empty-state:not(.fi-compact) .fi-empty-state-icon-bg {
+    position: relative;
+    width: 6.5rem;
+    height: 6.5rem;
+    padding: 0;
+    margin-bottom: calc(1.5rem * var(--mia-density, 1));
+    background: radial-gradient(
+        circle at 50% 42%,
+        color-mix(in oklab, var(--primary-200) 62%, transparent) 0%,
+        color-mix(in oklab, var(--primary-100) 38%, transparent) 58%,
+        transparent 72%
+    );
+}
+
+.dark .fi-body .fi-empty-state:not(.fi-compact) .fi-empty-state-icon-bg {
+    background: radial-gradient(
+        circle at 50% 42%,
+        color-mix(in oklab, var(--primary-500) 20%, transparent) 0%,
+        color-mix(in oklab, var(--primary-500) 9%, transparent) 58%,
+        transparent 72%
+    );
+}
+
+/* The framework's icon steps aside for the illustration. */
+.fi-body .fi-empty-state:not(.fi-compact) .fi-empty-state-icon-bg > .fi-icon {
+    display: none;
+}
+
+.fi-body .fi-empty-state:not(.fi-compact) .fi-empty-state-icon-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0.875rem;
+    background: linear-gradient(
+        152deg,
+        var(--primary-500) 0%,
+        var(--primary-600) 46%,
+        var(--secondary-400) 100%
+    );
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none'%3E%3Cpath d='M26 106C44 92 62 70 78 38' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3Cg fill='black'%3E%3Cellipse cx='28' cy='88' rx='13' ry='6.4' transform='rotate(-35 28 88)'/%3E%3Cellipse cx='57' cy='91' rx='13' ry='6.4' transform='rotate(30 57 91)'/%3E%3Cellipse cx='41' cy='72' rx='12' ry='6' transform='rotate(-38 41 72)'/%3E%3Cellipse cx='69' cy='74' rx='12' ry='6' transform='rotate(26 69 74)'/%3E%3Cellipse cx='56' cy='52' rx='10.5' ry='5.2' transform='rotate(-42 56 52)'/%3E%3Cellipse cx='80' cy='53' rx='10.5' ry='5.2' transform='rotate(22 80 53)'/%3E%3Ccircle cx='79' cy='35' r='4.4'/%3E%3C/g%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none'%3E%3Cpath d='M26 106C44 92 62 70 78 38' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3Cg fill='black'%3E%3Cellipse cx='28' cy='88' rx='13' ry='6.4' transform='rotate(-35 28 88)'/%3E%3Cellipse cx='57' cy='91' rx='13' ry='6.4' transform='rotate(30 57 91)'/%3E%3Cellipse cx='41' cy='72' rx='12' ry='6' transform='rotate(-38 41 72)'/%3E%3Cellipse cx='69' cy='74' rx='12' ry='6' transform='rotate(26 69 74)'/%3E%3Cellipse cx='56' cy='52' rx='10.5' ry='5.2' transform='rotate(-42 56 52)'/%3E%3Cellipse cx='80' cy='53' rx='10.5' ry='5.2' transform='rotate(22 80 53)'/%3E%3Ccircle cx='79' cy='35' r='4.4'/%3E%3C/g%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+    animation: mia-sprig-in var(--mia-anim-duration, 520ms) var(--mia-ease, ease) both;
+}
+
+@keyframes mia-sprig-in {
+    from {
+        opacity: 0;
+        transform: scale(0.94) rotate(-3deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* The heading takes the display serif: an empty table is still a page. */
+.fi-body .fi-empty-state-heading {
+    font-family: var(--mia-heading-font, ui-serif, Georgia, serif);
+    font-size: 1.375rem;
+    font-weight: var(--mia-heading-weight, 500);
+    letter-spacing: var(--mia-heading-tracking, -0.011em);
+    color: var(--mia-ink);
+}
+
+.fi-body .fi-empty-state.fi-compact .fi-empty-state-heading {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.fi-body .fi-empty-state-description {
+    margin-top: calc(0.5rem * var(--mia-density, 1));
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: 26rem;
+    color: var(--mia-ink-muted);
+}
+
+/* The compact variant keeps a small tinted disc, which suits an inline row. */
+.fi-body .fi-empty-state.fi-compact .fi-empty-state-icon-bg {
+    background-color: var(--mia-accent-wash);
+}
+
+.fi-body .fi-empty-state.fi-compact .fi-empty-state-icon-bg > .fi-icon {
+    color: var(--primary-600);
+}
+
+.dark .fi-body .fi-empty-state.fi-compact .fi-empty-state-icon-bg > .fi-icon {
+    color: var(--primary-400);
+}

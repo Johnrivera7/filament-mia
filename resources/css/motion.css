@@ -1,0 +1,73 @@
+/*
+ * Motion.
+ *
+ * Two things happen here: content settles in on navigation, and every
+ * animation in the theme is neutralised when the visitor has asked for less
+ * motion.
+ */
+
+/*
+ * Page content fades and rises very slightly on entry. Applied to the content
+ * container, never to lists or table rows: Livewire re-renders those on every
+ * keystroke, filter and poll, and animating them makes the page appear to
+ * rebuild itself while the user is working.
+ */
+.fi-body .fi-main > .fi-page {
+    animation: mia-rise var(--mia-anim-duration, 520ms) var(--mia-ease, ease) both;
+}
+
+.fi-body .fi-simple-main {
+    animation: mia-rise var(--mia-anim-duration, 520ms) var(--mia-ease, ease) both;
+}
+
+@keyframes mia-rise {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*
+ * Honour the operating system's reduced-motion setting for everything this
+ * theme adds.
+ *
+ * Durations are collapsed to `0.01ms` rather than to zero so that
+ * `transitionend` and `animationend` still fire and Alpine's `x-transition`
+ * and `x-collapse` continue to resolve. Transforms are reset as well, since a
+ * cancelled entry animation would otherwise leave content offset.
+ */
+@media (prefers-reduced-motion: reduce) {
+    .fi-body,
+    .fi-body *,
+    .fi-body *::before,
+    .fi-body *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .fi-body .fi-main > .fi-page,
+    .fi-body .fi-simple-main,
+    .fi-body .fi-empty-state-icon-bg::after {
+        animation: none !important;
+        opacity: 1;
+        transform: none;
+    }
+
+    .fi-body .fi-btn:hover,
+    .fi-body .fi-wi-stats-overview-stat:hover {
+        transform: none !important;
+    }
+
+    .fi-body .fi-loading-section::after,
+    .fi-body .fi-skeleton::after {
+        animation: none !important;
+        opacity: 0;
+    }
+}

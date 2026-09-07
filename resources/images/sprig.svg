@@ -1,0 +1,25 @@
+<!--
+  The theme's empty-state illustration: a botanical sprig echoing the motif in
+  the brand mark.
+
+  Used as a CSS mask rather than an image, so it takes its colour from the
+  theme's accent gradient and follows any palette the application configures.
+  Keep this file and the inlined copy in `components/empty-state.css` in sync.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+    <path
+        d="M26 106C44 92 62 70 78 38"
+        stroke="black"
+        stroke-width="2.4"
+        stroke-linecap="round"
+    />
+    <g fill="black">
+        <ellipse cx="28" cy="88" rx="13" ry="6.4" transform="rotate(-35 28 88)" />
+        <ellipse cx="57" cy="91" rx="13" ry="6.4" transform="rotate(30 57 91)" />
+        <ellipse cx="41" cy="72" rx="12" ry="6" transform="rotate(-38 41 72)" />
+        <ellipse cx="69" cy="74" rx="12" ry="6" transform="rotate(26 69 74)" />
+        <ellipse cx="56" cy="52" rx="10.5" ry="5.2" transform="rotate(-42 56 52)" />
+        <ellipse cx="80" cy="53" rx="10.5" ry="5.2" transform="rotate(22 80 53)" />
+        <circle cx="79" cy="35" r="4.4" />
+    </g>
+</svg>
