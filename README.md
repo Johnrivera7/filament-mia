@@ -4,11 +4,12 @@
 
 # Mía
 
-### A warm editorial theme for Filament
+### A warm editorial theme for Filament v5
 
-Cream and champagne in the light, espresso in the dark, with a high-contrast<br />
-serif for headings. An admin panel that reads like a printed page.
+For panels that are part of the product rather than an afterthought behind a<br />
+login. Cream and champagne in the light, espresso in the dark, serif headings.
 
+[![Status](https://img.shields.io/badge/status-v0.x%20%C2%B7%20active%20development-D9A14E?style=flat-square&labelColor=3C3227)](#project-status)
 [![License](https://img.shields.io/badge/license-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
 [![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%C2%B7%2012%20%C2%B7%2013-FF2D20?style=flat-square&labelColor=3C3227)](https://laravel.com)
@@ -16,15 +17,15 @@ serif for headings. An admin panel that reads like a printed page.
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
 [![WCAG](https://img.shields.io/badge/contrast-WCAG%20AA-8A9A6B?style=flat-square&labelColor=3C3227)](#accessibility)
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/cover.jpg" alt="Mía in light and dark mode" width="100%" />
-
 </div>
 
 ## What this is
 
-Most admin themes are a palette swap. Mía is an attempt at a different
-*register*: warm, quiet and typographic, where a panel feels considered rather
-than utilitarian. Three things carry it.
+Mía is not a palette swap. Feeding an accent colour into Filament's defaults
+changes the hue and leaves the rest of the design intact. Here every surface is
+set by hand — type scale, spacing, hierarchy, borders, shadows, motion, focus
+rings, empty states — and the stylesheet rewrites Filament's component layer
+rather than tinting it. Three things carry the result.
 
 **A real editorial voice.** Headings are set in a high-contrast display serif
 and content in a geometric humanist sans. Column headings, group labels and
@@ -44,47 +45,23 @@ It ships pre-compiled. There is no Node, Tailwind or build step to install.
 
 ## Screenshots
 
-### Light
+_Being retaken from the bundled demo application. See [Roadmap](#where-this-is-going)._
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-table.png" alt="A table listing in light mode" width="100%" />
+## Project status
 
-<details open>
-<summary><b>More light mode</b></summary>
-<br />
+Mía is a young project in active development, currently in the `0.x` series.
 
-|  |  |
-|---|---|
-| <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-login.png" alt="The sign-in screen in light mode" /> | <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-form.png" alt="A form in light mode" /> |
-| **Sign in** — a washed canvas, serif heading and accent rule | **Forms** — flat fields with hairline borders, no rings |
-| <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-empty.png" alt="An illustrated empty state in light mode" /> | <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-detail.png" alt="A detail page in light mode" /> |
-| **Empty states** — an illustration drawn for the theme | **Detail pages** — caps labels over tabular figures |
+What that means in practice. The theme is complete and usable: light and dark
+mode are both finished, the configuration API is stable enough to build on, the
+stylesheet ships pre-compiled and the suite runs against PHP 8.2 through 8.5.
+What it does not mean is a frozen surface. Until `1.0` the option names, the
+CSS custom properties and the set of restyled components may still change, and
+minor releases can carry breaking changes. Each one is listed in the
+[changelog](CHANGELOG.md).
 
-</details>
-
-### Dark
-
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-dark-table.png" alt="A table listing in dark mode" width="100%" />
-
-<details open>
-<summary><b>More dark mode</b></summary>
-<br />
-
-|  |  |
-|---|---|
-| <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-dark-login.png" alt="The sign-in screen in dark mode" /> | <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-dark-form.png" alt="A form in dark mode" /> |
-| **Sign in** | **Forms** |
-| <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-dark-empty.png" alt="An illustrated empty state in dark mode" /> | <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-dark-detail.png" alt="A detail page in dark mode" /> |
-| **Empty states** | **Detail pages** |
-
-</details>
-
-### Tablet and mobile
-
-<div align="center">
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-tablet.png" alt="Mía on a tablet" width="40%" />
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-mobile-nav.png" alt="The navigation drawer on mobile" width="19%" />
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-mobile.png" alt="A table on mobile" width="19%" />
-</div>
+Iteration is frequent and feedback shapes it. If a component looks wrong in
+your panel, or a token you need is not exposed, open an issue — that is the
+fastest way to influence what lands next.
 
 ## Requirements
 
@@ -422,7 +399,7 @@ MiaTheme::make()
     ->serifHeadings(false)
 ```
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/screenshot-light-variant.png" alt="The same panel reconfigured with a violet accent, sharp corners, compact density and no shadows" width="100%" />
+
 
 ### Custom properties
 
@@ -606,7 +583,7 @@ The test suite runs with `error_reporting=-1` and fails on any deprecation,
 notice or warning raised by the package, with those from Laravel and Filament
 ignored — a dependency's deprecation says nothing about this package.
 
-Two conventions keep the repository honest:
+Three conventions keep the repository honest:
 
 - **`resources/dist/mia.css` is rebuilt and committed on its own.** It is
   committed so the package installs without a build step, and marked as
@@ -618,6 +595,34 @@ Two conventions keep the repository honest:
   introduces it. This README is the product page, and documenting afterwards
   reliably leaves options undocumented and examples that no longer match the
   code.
+- **Every image comes from the demo application.** Captures are named `art/demo-*`
+  and are produced against invented data. `.gitignore` blocks the other
+  filenames screenshots tend to get, because an image of a real system can
+  carry personal data and a blob pushed to a public repository stays reachable
+  by SHA long after the file is deleted.
+
+## Where this is going
+
+Mía starts as a theme. The direction is a design system for Filament: the
+stylesheet is the first layer, not the whole of it.
+
+Concretely, what is in and what is not.
+
+**Today.** A pre-compiled stylesheet, a configuration API for colour,
+typography, roundness, density and elevation, warm light and dark modes,
+illustrated empty states, loading states and measured contrast.
+
+**Next.** An in-panel settings page for editing those tokens live and
+persisting the result, so the theme can be tuned without touching code. A demo
+application in the repository that doubles as the source of every screenshot.
+
+**Later, and deliberately vaguer because it is not built.** Presets shipped as
+named palettes. Blade components that use the tokens directly, for building
+custom pages that match the panel. Coverage for the Filament plugins that carry
+their own UI.
+
+Dates are not promised. The `0.x` series is where this gets worked out in the
+open; see [Project status](#project-status).
 
 ## Changelog
 

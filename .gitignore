@@ -1,3 +1,13 @@
+# Every image in this repository must come from the bundled demo application,
+# which runs on invented data, and is named `art/demo-*`. Captures of any real
+# system are ignored on principle: they can carry personal or otherwise
+# sensitive data, and once pushed to a public repository the blobs stay
+# reachable by SHA even after the file is deleted in a later commit.
+/art/screenshot-*
+/art/cover.*
+/art/*-shot.*
+/art/capture-*
+
 /vendor
 /node_modules
 composer.lock

@@ -1,6 +1,6 @@
 {
     "name": "johnrivera7/filament-mia",
-    "description": "Mía — a warm editorial theme for Filament. Cream and champagne light mode, espresso dark mode, serif headings, hairline borders and slow, gentle motion. Ships pre-compiled: no build step required.",
+    "description": "A warm editorial theme for Filament v5, for panels that are part of the product. Cream and champagne in the light, espresso in the dark, serif headings and hairline borders. Every surface set by hand rather than derived from an accent colour. Ships pre-compiled: no build step.",
     "keywords": [
         "johnrivera7",
         "laravel",

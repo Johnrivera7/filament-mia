@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Project status` and `Where this is going` sections in the README, stating
+  the maturity of the `0.x` series and the direction of the project.
+
+### Changed
+
+- Reworked the README positioning and the `composer.json` description so both
+  say what the theme is and who it is for, and recorded the plugin directory
+  copy in the repository so the three stay consistent.
+
+### Removed
+
+- Every screenshot, and the 16:9 cover, along with their history. They were
+  captured against a real application. Images are being retaken against a demo
+  application running on invented data, and `.gitignore` now blocks the
+  filenames screenshots tend to get so this cannot recur.
+
 ## [0.1.0] - 2026-09-07
 
 First release: a warm editorial theme for Filament, shipped pre-compiled.

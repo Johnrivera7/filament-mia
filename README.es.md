@@ -4,18 +4,17 @@
 
 # Mía
 
-### Un tema editorial y cálido para Filament
+### Un tema editorial y cálido para Filament v5
 
-Crema y champán en claro, espresso en oscuro, con una serif de alto contraste<br />
-para los titulares. Un panel que se lee como una página impresa.
+Para paneles que forman parte del producto y no un añadido detrás de un<br />
+login. Crema y champán en claro, espresso en oscuro, titulares en serif.
 
+[![Estado](https://img.shields.io/badge/estado-v0.x%20%C2%B7%20desarrollo%20activo-D9A14E?style=flat-square&labelColor=3C3227)](#estado-del-proyecto)
 [![Licencia](https://img.shields.io/badge/licencia-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
 [![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%C2%B7%2012%20%C2%B7%2013-FF2D20?style=flat-square&labelColor=3C3227)](https://laravel.com)
 [![Filament](https://img.shields.io/badge/Filament-v5.7%2B-F59E0B?style=flat-square&labelColor=3C3227)](https://filamentphp.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
-
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/cover.jpg" alt="Mía en modo claro y oscuro" width="100%" />
 
 **English version: [README.md](README.md)**
 
@@ -23,9 +22,12 @@ para los titulares. Un panel que se lee como una página impresa.
 
 ## Qué es
 
-La mayoría de los temas de administración son un cambio de paleta. Mía intenta
-otro *registro*: cálido, silencioso y tipográfico, donde el panel se siente
-cuidado en lugar de utilitario. Tres cosas lo sostienen.
+Mía no es un cambio de paleta. Pasarle un color de acento a los estilos por
+defecto de Filament cambia el tono y deja intacto el resto del diseño. Aquí
+cada superficie está ajustada a mano —escala tipográfica, espaciado, jerarquía,
+bordes, sombras, movimiento, anillos de foco, estados vacíos— y la hoja de
+estilos reescribe la capa de componentes en lugar de teñirla. Tres cosas
+sostienen el resultado.
 
 **Una voz editorial de verdad.** Los titulares van en una serif de display de
 alto contraste y el contenido en una sans humanista geométrica. Los
@@ -44,6 +46,23 @@ ilustración dibujada para el tema, no un icono de contorno genérico.
 
 Se distribuye precompilado. No hay que instalar Node, Tailwind ni ningún paso
 de compilación.
+
+## Estado del proyecto
+
+Mía es un proyecto joven en desarrollo activo, hoy en la serie `0.x`.
+
+Qué significa eso en la práctica. El tema está completo y es utilizable: los
+modos claro y oscuro están terminados, la API de configuración es lo bastante
+estable como para construir sobre ella, la hoja de estilos se distribuye
+precompilada y la batería de pruebas corre contra PHP 8.2 a 8.5. Lo que no
+significa es que la superficie esté congelada. Hasta la `1.0`, los nombres de
+las opciones, las propiedades CSS y el conjunto de componentes reestilizados
+pueden cambiar, y una versión menor puede traer cambios incompatibles. Cada uno
+queda anotado en el [registro de cambios](CHANGELOG.md).
+
+La iteración es frecuente y la retroalimentación la orienta. Si un componente
+se ve mal en tu panel, o falta una variable que necesitas, abre una incidencia:
+es la vía más rápida para influir en lo que entra a continuación.
 
 ## Requisitos
 
@@ -179,6 +198,30 @@ hook (`PanelsRenderHook::STYLES_AFTER`, para emitir las propiedades
 personalizadas en tiempo de ejecución). No se publica ni se reemplaza ninguna
 vista Blade, así que una actualización de Filament no puede revertir en
 silencio a una copia antigua de una plantilla del framework.
+
+## Hacia dónde va
+
+Mía empieza como tema. La dirección es un sistema de diseño para Filament: la
+hoja de estilos es la primera capa, no el conjunto.
+
+En concreto, qué hay y qué no.
+
+**Hoy.** Hoja de estilos precompilada, API de configuración para color,
+tipografía, redondez, densidad y elevación, modos claro y oscuro cálidos,
+estados vacíos ilustrados, estados de carga y contraste medido.
+
+**A continuación.** Una página de ajustes dentro del panel para editar esas
+variables en vivo y persistir el resultado, de modo que el tema pueda afinarse
+sin tocar código. Una aplicación de demostración en el repositorio que sirva
+además como origen de todas las capturas.
+
+**Más adelante, y deliberadamente más vago porque no está construido.**
+Preajustes distribuidos como paletas con nombre. Componentes Blade que usen las
+variables directamente, para construir páginas propias que encajen con el
+panel. Cobertura para los plugins de Filament que traen su propia interfaz.
+
+No se prometen fechas. La serie `0.x` es donde esto se resuelve a la vista de
+todos; ver [Estado del proyecto](#estado-del-proyecto).
 
 ## Licencia
 
