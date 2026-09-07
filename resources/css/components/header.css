@@ -1,0 +1,109 @@
+/*
+ * Page headers and breadcrumbs.
+ *
+ * The heading is the one place the theme allows itself a flourish: a short
+ * accent rule above it, then the display serif at a size that gives the serif
+ * room to show its stroke contrast.
+ */
+
+.fi-header {
+    position: relative;
+    padding-top: calc(0.875rem * var(--mia-density, 1));
+    gap: calc(1rem * var(--mia-density, 1));
+}
+
+.fi-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    width: 2.25rem;
+    height: 2px;
+    border-radius: 9999px;
+    background-color: var(--primary-500);
+}
+
+.fi-header-actions-ctn {
+    gap: calc(0.625rem * var(--mia-density, 1));
+}
+
+.fi-breadcrumbs {
+    margin-bottom: calc(0.25rem * var(--mia-density, 1));
+}
+
+.fi-breadcrumbs-item-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--mia-ink-muted);
+    transition: color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.fi-breadcrumbs-item-label:hover {
+    color: var(--primary-600);
+}
+
+.dark .fi-breadcrumbs-item-label:hover {
+    color: var(--primary-400);
+}
+
+/* Section headings stay in the sans: structural, not editorial. */
+.fi-section-header-heading {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.008em;
+    color: var(--mia-ink);
+}
+
+.fi-section-header-description {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--mia-ink-muted);
+}
+
+.fi-tabs {
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 1px solid var(--mia-hairline);
+    border-radius: 0;
+    padding: 0;
+    gap: calc(0.25rem * var(--mia-density, 1));
+}
+
+.fi-tabs-item {
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    position: relative;
+    padding-block: calc(0.75rem * var(--mia-density, 1));
+    font-weight: 450;
+    color: var(--mia-ink-muted);
+    transition: color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.fi-tabs-item:hover {
+    color: var(--mia-ink);
+    background-color: transparent;
+}
+
+.fi-tabs-item.fi-active {
+    background-color: transparent;
+    color: var(--primary-700);
+    font-weight: 550;
+}
+
+.dark .fi-tabs-item.fi-active {
+    color: var(--primary-300);
+}
+
+/* Underline rather than a filled pill, positioned over the container's rule. */
+.fi-tabs-item.fi-active::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 9999px;
+    background-color: var(--primary-500);
+}

@@ -1,0 +1,116 @@
+/*
+ * Topbar.
+ *
+ * Filament's is an opaque white bar with a ring and a shadow. This one is a
+ * translucent warm veil over the canvas, held down by a single hairline, so
+ * content appears to pass beneath it as the page scrolls.
+ */
+
+.fi-topbar > nav,
+.fi-topbar-ctn {
+    background-color: color-mix(in oklab, var(--mia-canvas) 78%, transparent);
+    box-shadow: none;
+    border-bottom: 1px solid var(--mia-hairline);
+    min-height: 4.5rem;
+}
+
+/*
+ * Blur is limited to the topbar, dropdowns and modals. Applied to scrolling
+ * content it forces a repaint on every frame.
+ */
+@supports (backdrop-filter: blur(1px)) {
+    .fi-topbar > nav,
+    .fi-topbar-ctn {
+        backdrop-filter: blur(12px) saturate(140%);
+    }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+    .fi-topbar > nav,
+    .fi-topbar-ctn {
+        background-color: var(--mia-canvas);
+    }
+}
+
+.fi-topbar-start,
+.fi-topbar-end {
+    gap: calc(0.625rem * var(--mia-density, 1));
+}
+
+.fi-topbar-item-btn {
+    border-radius: var(--mia-radius-lg, 0.75rem);
+    color: var(--gray-700);
+    font-weight: 450;
+    transition:
+        background-color var(--mia-duration, 260ms) var(--mia-ease, ease),
+        color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.dark .fi-topbar-item-btn {
+    color: var(--gray-300);
+}
+
+.fi-topbar-item-btn:hover {
+    background-color: color-mix(in oklab, var(--gray-400) 12%, transparent);
+    color: var(--mia-ink);
+}
+
+/* Top navigation, when a panel uses it instead of the sidebar. */
+.fi-topbar-item.fi-active > .fi-topbar-item-btn {
+    background-color: var(--mia-accent-wash);
+    color: var(--primary-700);
+}
+
+.dark .fi-topbar-item.fi-active > .fi-topbar-item-btn {
+    color: var(--primary-200);
+}
+
+/*
+ * Global search reads as a quiet field rather than a control: no ring, a
+ * hairline border, and the accent only on focus.
+ */
+.fi-global-search-field .fi-input-wrp {
+    background-color: color-mix(in oklab, var(--gray-400) 9%, transparent);
+    box-shadow: none;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    transition:
+        background-color var(--mia-duration, 260ms) var(--mia-ease, ease),
+        border-color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.dark .fi-global-search-field .fi-input-wrp {
+    background-color: color-mix(in oklab, var(--gray-50) 6%, transparent);
+}
+
+.fi-global-search-field .fi-input-wrp:hover {
+    border-color: var(--mia-hairline-strong);
+}
+
+.fi-global-search-field .fi-input-wrp:focus-within {
+    background-color: var(--mia-surface);
+    border-color: var(--mia-accent-line);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary-500) 14%, transparent);
+}
+
+/* The brand mark carries the display serif. */
+.fi-logo {
+    font-family: var(--mia-heading-font, ui-serif, Georgia, serif);
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: -0.015em;
+    color: var(--mia-ink);
+}
+
+.fi-theme-switcher-btn {
+    border-radius: 9999px;
+    transition: color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.fi-theme-switcher-btn.fi-active {
+    color: var(--primary-600);
+}
+
+.dark .fi-theme-switcher-btn.fi-active {
+    color: var(--primary-400);
+}

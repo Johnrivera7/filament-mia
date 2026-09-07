@@ -1,0 +1,60 @@
+/*
+ * Sections and cards.
+ *
+ * Filament separates surfaces from the page with a ring and a shadow. Here the
+ * separation is a hairline and a very wide, very faint shadow, so a card looks
+ * like a sheet resting on the page rather than a box drawn on it.
+ */
+
+.fi-section {
+    background-color: var(--mia-surface);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-2xl, 1.25rem);
+    box-shadow: var(--mia-shadow-md);
+    transition: box-shadow var(--mia-duration-slow, 420ms) var(--mia-ease, ease);
+}
+
+.fi-section.fi-section-not-contained {
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.fi-section-header {
+    padding: calc(1.375rem * var(--mia-density, 1)) calc(1.5rem * var(--mia-density, 1));
+    gap: calc(0.875rem * var(--mia-density, 1));
+}
+
+.fi-section-content {
+    padding: calc(1.5rem * var(--mia-density, 1));
+}
+
+/* A header directly above content is divided by a hairline, not by whitespace. */
+.fi-section-header + .fi-section-content-ctn .fi-section-content,
+.fi-section-header + .fi-section-content {
+    border-top: 1px solid var(--mia-hairline);
+}
+
+.fi-section-header-icon-ctn {
+    border-radius: var(--mia-radius-lg, 0.75rem);
+    background-color: var(--mia-accent-wash);
+    color: var(--primary-700);
+}
+
+.dark .fi-section-header-icon-ctn {
+    color: var(--primary-300);
+}
+
+.fi-fieldset {
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    padding: calc(1.25rem * var(--mia-density, 1));
+    background-color: var(--mia-surface-sunken);
+}
+
+.fi-fieldset-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--mia-ink-muted);
+}

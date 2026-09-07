@@ -1,0 +1,66 @@
+/*
+ * The shell: canvas, content column and page rhythm.
+ */
+
+.fi-layout {
+    background-color: var(--mia-canvas);
+}
+
+/*
+ * A very faint warm bloom behind the content, brightest at the top. It gives
+ * the page a sense of light falling on it instead of a flat fill, and is far
+ * too subtle to read as a gradient.
+ */
+.fi-layout::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            120% 60% at 50% -10%,
+            color-mix(in oklab, var(--primary-200) 26%, transparent) 0%,
+            transparent 70%
+        );
+}
+
+.dark .fi-layout::before {
+    background:
+        radial-gradient(
+            120% 60% at 50% -10%,
+            color-mix(in oklab, var(--primary-500) 8%, transparent) 0%,
+            transparent 70%
+        );
+}
+
+.fi-main-ctn,
+.fi-sidebar,
+.fi-topbar {
+    position: relative;
+    z-index: 1;
+}
+
+/* Wider gutters and a taller first fold than the framework default. */
+.fi-main {
+    padding-inline: calc(1.5rem * var(--mia-density, 1));
+    padding-block: calc(2rem * var(--mia-density, 1));
+    row-gap: var(--mia-section-gap, 2rem);
+}
+
+@media (min-width: 768px) {
+    .fi-main {
+        padding-inline: calc(2.25rem * var(--mia-density, 1));
+        padding-block: calc(2.5rem * var(--mia-density, 1));
+    }
+}
+
+@media (min-width: 1280px) {
+    .fi-main {
+        padding-inline: calc(3rem * var(--mia-density, 1));
+    }
+}
+
+.fi-page {
+    row-gap: var(--mia-section-gap, 2rem);
+}

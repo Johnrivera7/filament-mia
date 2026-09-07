@@ -1,0 +1,154 @@
+/*
+ * Sidebar.
+ *
+ * Filament's sidebar is an opaque white panel with a shadow. Here it sits
+ * directly on the canvas, separated by nothing but a hairline, so navigation
+ * reads as part of the page rather than as a docked window.
+ */
+
+.fi-sidebar {
+    background-color: transparent;
+    box-shadow: none;
+    border-inline-end: 1px solid var(--mia-hairline);
+}
+
+/* Off-canvas on small screens, where it does need to be a solid surface. */
+@media (max-width: 1023px) {
+    .fi-sidebar {
+        background-color: var(--mia-surface);
+        box-shadow: var(--mia-shadow-xl);
+        border-inline-end: 1px solid var(--mia-hairline);
+    }
+}
+
+.fi-sidebar-header {
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 1px solid var(--mia-hairline);
+    height: auto;
+    min-height: 4.5rem;
+    padding-inline: calc(1.25rem * var(--mia-density, 1));
+}
+
+.fi-sidebar-nav {
+    padding: calc(1rem * var(--mia-density, 1)) calc(0.75rem * var(--mia-density, 1));
+    gap: calc(0.375rem * var(--mia-density, 1));
+    scrollbar-gutter: stable;
+}
+
+/*
+ * Group labels are the quietest thing in the sidebar on purpose: small, in
+ * caps, widely tracked, and set off by a hairline rule that runs to the edge
+ * of the column.
+ */
+.fi-sidebar-group-label {
+    color: var(--mia-ink-muted);
+    padding-inline: calc(0.75rem * var(--mia-density, 1));
+    padding-block: calc(0.875rem * var(--mia-density, 1)) calc(0.5rem * var(--mia-density, 1));
+}
+
+.fi-sidebar-group + .fi-sidebar-group {
+    margin-top: calc(0.5rem * var(--mia-density, 1));
+    border-top: 1px solid var(--mia-hairline);
+}
+
+.fi-sidebar-group-items {
+    gap: calc(0.125rem * var(--mia-density, 1));
+}
+
+.fi-sidebar-item-btn {
+    position: relative;
+    border-radius: var(--mia-radius-lg, 0.75rem);
+    padding: calc(0.5625rem * var(--mia-density, 1)) calc(0.75rem * var(--mia-density, 1));
+    gap: calc(0.75rem * var(--mia-density, 1));
+    color: var(--gray-700);
+    font-weight: 450;
+    letter-spacing: -0.005em;
+    transition:
+        background-color var(--mia-duration, 260ms) var(--mia-ease, ease),
+        color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.dark .fi-sidebar-item-btn {
+    color: var(--gray-300);
+}
+
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn:hover {
+    background-color: color-mix(in oklab, var(--gray-400) 12%, transparent);
+    color: var(--mia-ink);
+}
+
+.dark .fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn:hover {
+    background-color: color-mix(in oklab, var(--gray-50) 7%, transparent);
+    color: var(--mia-ink);
+}
+
+/*
+ * The active item gets a warm accent wash and a short accent rule on the
+ * leading edge. The rule is absolutely positioned rather than a border, so
+ * activating an item never shifts its label.
+ */
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background-color: var(--mia-accent-wash);
+    color: var(--primary-700);
+    font-weight: 550;
+}
+
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    color: var(--primary-200);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block: 22%;
+    width: 2px;
+    border-radius: 9999px;
+    background-color: var(--primary-500);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: var(--primary-600);
+}
+
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: var(--primary-400);
+}
+
+.fi-sidebar-item-btn > .fi-icon {
+    color: var(--gray-400);
+    transition: color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.dark .fi-sidebar-item-btn > .fi-icon {
+    color: var(--gray-500);
+}
+
+.fi-sidebar-item-label {
+    font-size: 0.875rem;
+}
+
+.fi-sidebar-footer {
+    border-top: 1px solid var(--mia-hairline);
+    padding: calc(0.75rem * var(--mia-density, 1));
+}
+
+/*
+ * Filament disables the sidebar transition on desktop (`lg:transition-none`).
+ * With the slow easing this theme uses, collapsing benefits from it, so it is
+ * put back — and taken away again under `prefers-reduced-motion`, which is
+ * handled globally in `motion.css`.
+ */
+@media (min-width: 1024px) {
+    .fi-sidebar {
+        transition:
+            width var(--mia-duration-slow, 420ms) var(--mia-ease, ease),
+            transform var(--mia-duration-slow, 420ms) var(--mia-ease, ease);
+    }
+}
+
+/* Collapsed rail: centre the icons and hide the accent rule, which would clip. */
+.fi-sidebar.fi-collapsed .fi-sidebar-item.fi-active > .fi-sidebar-item-btn::before {
+    display: none;
+}
