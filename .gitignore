@@ -11,12 +11,16 @@
 
 /vendor
 /node_modules
-composer.lock
-# `package-lock.json` is committed on purpose, unusual though that is for a
-# package that publishes no JavaScript. `resources/dist/mia.css` is committed
-# too, and CI fails the build when a rebuild does not reproduce it byte for
-# byte. That check is only worth running if the compiler is fixed; otherwise a
-# new Tailwind patch reports a difference that says nothing about the source.
+# `package-lock.json` and `composer.lock` are both committed on purpose,
+# unusual though the latter is for a library. `resources/dist/mia.css` is
+# committed too, and CI fails the build when a rebuild does not reproduce it
+# byte for byte. That check is only worth running if every input to the build is
+# fixed, and there are two: Tailwind, held by `package-lock.json`, and Filament,
+# held by `composer.lock` — the stylesheet compiles the framework's core and
+# scans its Blade views, so its output moves with the installed version.
+# Without both locks an upstream release reports a difference that says nothing
+# about the source. Applications installing the package ignore this lock, as
+# they do any library's.
 .DS_Store
 .idea
 .phpunit.result.cache

@@ -64,8 +64,13 @@ jobs:
           php-version: '8.4'
           coverage: none
 
+      # Deliberately not the committed lock: a Pint release that changes what it
+      # considers well-formed is worth hearing about, and the fix belongs in the
+      # source rather than in a pin.
       - name: Install dependencies
         uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: highest
 
       - name: Check code style
         run: vendor/bin/pint --test
@@ -84,10 +89,17 @@ jobs:
           php-version: '8.4'
           coverage: none
 
-      # The theme compiles Filament's core stylesheet, so the framework has to
-      # be installed before Tailwind can resolve the import.
+      # The theme compiles Filament's core stylesheet and scans its Blade views
+      # for utilities, so the framework has to be installed before Tailwind can
+      # resolve the import — and *which* version is installed changes the bytes
+      # this job then compares. `locked` is what makes the comparison mean
+      # something: without it every Filament patch release fails this job on a
+      # repository nobody has touched. A framework upgrade instead arrives as a
+      # commit that moves `composer.lock` and `resources/dist/mia.css` together.
       - name: Install PHP dependencies
         uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: locked
 
       - name: Set up Node
         uses: actions/setup-node@v4
