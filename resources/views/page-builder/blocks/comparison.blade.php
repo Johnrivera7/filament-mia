@@ -29,9 +29,11 @@
     ];
 @endphp
 
-@include('filament-mia::page-builder.parts.heading', ['data' => $data, 'align' => 'start'])
-
+{{-- The rows are the section. A heading with nothing under it is a band of
+     empty space, so the whole thing waits until there is something to compare. --}}
 @if ($items !== [])
+    @include('filament-mia::page-builder.parts.heading', ['data' => $data, 'align' => 'start'])
+
     <div class="mia-page-grid mia-page-grid--2 mia-page-stack">
         @foreach ($columns as $column)
             @continue (blank($column['title']))
