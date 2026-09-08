@@ -28,4 +28,8 @@ build
 # with and without a validation error — and only the frames the README uses
 # are committed.
 /art/verification
+# The rejected listing compositions, kept beside the two that shipped as the
+# record of what was tried. Same reasoning as `verification`: worth having on
+# disk, not worth nine megabytes in a public repository.
+/art/listing-candidates
 /workbench/storage
