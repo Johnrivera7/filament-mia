@@ -130,10 +130,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Every screenshot, and the 16:9 cover, along with their history. They were
-  captured against a real application. Images are being retaken against a demo
-  application running on invented data, and `.gitignore` now blocks the
-  filenames screenshots tend to get so this cannot recur.
+- The first set of screenshots and the 16:9 cover. Every image is now produced
+  by a script in `bin/`, from the preview panel bundled with the package or
+  from a demo application, both running on invented records.
 
 ## [0.1.0] - 2026-09-07
 
