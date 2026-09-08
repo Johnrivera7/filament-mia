@@ -1627,10 +1627,13 @@ Three conventions keep the repository honest:
   `npm run build` and commit it in a change of its own, never mixed with the
   source CSS that produced it. Because `->theme()` replaces Filament's
   stylesheet outright, that file contains Filament's own compiled core, and is
-  built against the newest release in the supported range — currently Filament
-  5.8. CI rebuilds it on every push and fails if the result differs from what
-  is committed, which is also how a Filament release that changes the core
-  stylesheet announces itself.
+  built against the version in `composer.lock` — currently Filament 5.8. CI
+  rebuilds it on every push and fails if the result differs from what is
+  committed.
+- **Raising the Filament version and rebuilding the stylesheet are one
+  commit.** See [Upgrading Filament](#upgrading-filament) below. This is the
+  one rule that is easy to miss, because nothing in a local checkout goes wrong
+  when it is broken.
 - **A change to the public surface updates the README and the changelog in the
   same commit.** Any new or altered option, chainable method, published custom
   property, overridden view, requirement or command belongs in the diff that
@@ -1642,6 +1645,39 @@ Three conventions keep the repository honest:
   screenshots tend to get by default, because an image of a real system can
   carry personal data and a blob pushed to a public repository stays reachable
   by SHA long after the file is deleted.
+
+### Upgrading Filament
+
+`composer.lock` is committed, which is unusual for a library and deliberate
+here. The theme's stylesheet imports Filament's core CSS and scans Filament's
+Blade views for the utilities they use, so the compiled output moves with the
+installed version of the framework — a patch release that adds a class to one
+view makes `resources/dist/mia.css` a few hundred bytes bigger with no change
+to this repository at all. The lock is what makes "rebuild and compare" a
+statement about the source instead of about what Filament published that
+morning.
+
+So raising the version is one commit, with both halves in it:
+
+```bash
+composer update filament/filament --with-all-dependencies
+npm run build
+
+vendor/bin/phpunit
+vendor/bin/pint --test
+
+git add composer.lock resources/dist/mia.css
+```
+
+Leaving out the rebuild is the failure this is arranged to catch: the
+`Compiled stylesheet is current` job installs from the lock, so it will
+recompile against the Filament you just locked and report the stylesheet as out
+of date. Applications installing the package ignore this lock, as they do any
+library's, and `composer.json` still allows the whole `^5.7` range.
+
+The rest of CI is not held to the lock. The test matrix resolves `lowest` and
+`highest`, so a Filament release that genuinely breaks the package is still
+caught on the next push whether or not anyone has run `composer update` here.
 
 ## Where this is going
 

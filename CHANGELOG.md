@@ -26,6 +26,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     theme's resources rather than its distribution, and moving them would
     orphan published overrides and saved appearance settings for no gain.
 
+- The shipped `resources/dist/mia.css` is rebuilt against Filament 5.8.1.
+  Nothing in the theme changed; Filament's own views did, and the compiled
+  stylesheet carries the framework's core. `composer.json` still allows the
+  whole `^5.7` range, so nobody's constraint moves.
+  - `composer.lock` is now committed, and the CI job that recompiles the
+    stylesheet and compares it byte for byte installs from it. Without a lock
+    that job was measuring the version of Filament that Packagist had resolved
+    that minute, and failed on every upstream release with the repository
+    untouched. The test matrix is unaffected and still resolves the lowest and
+    highest supported dependencies. Applications installing the package ignore
+    this lock, as they do any library's.
+
 ### Added
 
 - A page builder for the public page in front of the panel, off by default and

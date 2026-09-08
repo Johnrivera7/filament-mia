@@ -970,6 +970,58 @@ Cada sección es una parcial de Blade en
 que leen la inserta `Support\PageSheet` en el documento en vez de compilarla,
 así que puedes editar una parcial sin tener Node en ninguna parte del proyecto.
 
+## Desarrollo
+
+```bash
+composer install
+npm install
+
+npm run build     # compila resources/dist/mia.css
+npm run dev       # recompila al cambiar
+composer test     # ejecuta la suite
+composer lint     # aplica el estilo de código
+```
+
+El resto del flujo de trabajo —el panel de vista previa, las capturas, las
+convenciones del repositorio— está en
+[Development](README.md#development), en el README en inglés, para que no haya
+dos versiones de lo mismo separándose. Lo que sigue es la única parte que se
+olvida con facilidad, porque nada falla en local cuando se hace mal.
+
+### Subir la versión de Filament
+
+`composer.lock` está versionado, que es raro en una librería y aquí es a
+propósito. La hoja de estilos del tema importa el CSS del núcleo de Filament y
+recorre sus vistas Blade en busca de las utilidades que usan, así que el
+compilado se mueve con la versión instalada del framework: una versión de
+parche que añada una clase a una vista engorda `resources/dist/mia.css` unos
+cientos de bytes sin que en este repositorio cambie nada. El lock es lo que
+hace que «recompilar y comparar» hable del código y no de lo que Filament
+publicó esa mañana.
+
+Así que subir de versión es un solo commit, con las dos mitades dentro:
+
+```bash
+composer update filament/filament --with-all-dependencies
+npm run build
+
+vendor/bin/phpunit
+vendor/bin/pint --test
+
+git add composer.lock resources/dist/mia.css
+```
+
+Dejarse la recompilación es justo el olvido que esto está montado para
+detectar: el job `Compiled stylesheet is current` instala desde el lock, así
+que recompila contra el Filament que acabas de fijar y avisa de que el
+compilado está atrasado. Quien instala el paquete ignora este lock, como el de
+cualquier librería, y `composer.json` sigue admitiendo todo el rango `^5.7`.
+
+El resto de CI no está atado al lock: la matriz de tests resuelve `lowest` y
+`highest`, de modo que una versión de Filament que rompa el paquete de verdad
+se sigue detectando en el envío siguiente, haya pasado alguien por
+`composer update` o no.
+
 ## Hacia dónde va
 
 Mía empieza como tema. La dirección es un sistema de diseño para Filament: la
