@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * Storage for the page builder.
+ *
+ * Published rather than loaded from the package, because a theme has no
+ * business adding a table to an application that never asked for one. Nothing
+ * in the theme touches this table until `pageBuilder()` is switched on.
+ *
+ * One row per page. `draft` is what the builder writes on every save;
+ * `published` is what a visitor is served. Keeping both in one row means
+ * publishing is a copy, and the preview never needs a second source of truth
+ * or a shadow set of records.
+ *
+ * Both payloads hold the same shape: `['blocks' => [...]]`.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('mia_pages', function (Blueprint $table): void {
+            $table->id();
+
+            // Which page this row holds. The builder uses `home`; the column
+            // is here so a second page can be added later without a migration.
+            $table->string('key', 64)->unique();
+
+            $table->json('draft')->nullable();
+            $table->json('published')->nullable();
+            $table->timestamp('published_at')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('mia_pages');
+    }
+};
