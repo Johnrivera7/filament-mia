@@ -23,6 +23,25 @@ shipped pre-compiled with no build step.
 
 </div>
 
+<!--
+  The two images the plugin directory's submission form asks for, kept here so
+  a change to them is reviewable in the pull request that makes it.
+
+  `filament-hidden` is the class the directory honours when it renders this
+  file as the plugin's documentation. There the cover is already the listing
+  card at the top of the page, so printing it again as the first thing in the
+  docs would be the same picture twice. On GitHub the class does nothing, and
+  the cover opens the page — which is what it was composed to do.
+-->
+
+<div class="filament-hidden" align="center">
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-cover.jpg" alt="A warm cream canvas reading A Filament theme that keeps a panel calm, beside the panel itself, a quarterly targets card and the sign-in screen arranged in perspective" width="100%" />
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-thumbnail.jpg" alt="The same composition cropped closer for the directory's grid, with the lede and three of the claims dropped so the rest stays legible" width="52%" />
+
+</div>
+
 ## What this is
 
 Mía is not a palette swap. Feeding an accent colour into Filament's defaults

@@ -60,10 +60,11 @@ Themes
 - No superlatives about the author or the project.
 - Do not add the personal narrative behind the name. Design terms only.
 - The images the form asks for are under `art/`, both produced by
-  `bin/cover-shots.mjs` from the preview panel bundled with the package, in
-  light mode as the form requires. Never from a real system.
+  `bin/listing-shots.mjs` from the demo panel, in light mode as the form
+  requires. Never from a real system.
   - **Main image** — `art/listing-cover.jpg`, 2560×1440.
   - **Thumbnail** — `art/listing-thumbnail.jpg`, 1280×720. Worth uploading
     because it is a different picture rather than the same one scaled: a whole
-    panel shrunk to that size is a grey rectangle, so it is cropped to the
-    brand mark, the heading and the first figures, which still read small.
+    panel shrunk to that size is a grey rectangle, so the thumbnail drops the
+    lede, three of the pills and one of the screens, and draws what is left
+    larger.
