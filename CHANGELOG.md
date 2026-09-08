@@ -92,6 +92,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On a phone, the `split` composition centred the form in the space under its
+  brand banner, which opened a gap about as tall as the banner between the two.
+  The form now starts below it.
+
 - The configured font families were silently dropped whenever the stylesheet
   passed to `viteStylesheets()` imported Tailwind's theme layer. That layer
   redeclares `--font-sans` and `--font-serif` on `:root` without Filament's

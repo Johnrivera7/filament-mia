@@ -409,6 +409,23 @@
     max-width: 26rem;
 }
 
+/*
+ * On a phone the banner and the form are one composition, so the form starts
+ * under the banner instead of centring in the row below it — centred, it left
+ * a gap about as tall as the banner between the two.
+ */
+@media (max-width: 1023px) {
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-main-ctn {
+        align-items: flex-start;
+    }
+
+    .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split'])
+        .fi-simple-main {
+        margin-block: calc(2.5rem * var(--mia-density, 1)) 3rem;
+    }
+}
+
 @media (min-width: 1024px) {
     .fi-simple-layout:has(> .fi-mia-login[data-mia-login='split']) {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
