@@ -65,8 +65,17 @@ class TokenSheet
         return '.fi-panel-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $this->panelId);
     }
 
-    /** @return array<string, string> */
-    protected function lightTokens(): array
+    /**
+     * Public because the standalone pages — the error pages and the
+     * maintenance page — need the same token set under different selectors.
+     * They render outside any panel, so `.fi-panel-{id}` means nothing to
+     * them; `StandaloneSheet` takes these maps and emits them on `:root`
+     * instead. Sharing the maps rather than the rendered CSS is what keeps a
+     * 404 looking like the panel it was reached from.
+     *
+     * @return array<string, string>
+     */
+    public function lightTokens(): array
     {
         $duration = $this->motion ? '260ms' : '1ms';
 
@@ -144,7 +153,7 @@ class TokenSheet
      *
      * @return array<string, string>
      */
-    protected function darkTokens(): array
+    public function darkTokens(): array
     {
         return [
             'mia-canvas' => 'var(--gray-950)',

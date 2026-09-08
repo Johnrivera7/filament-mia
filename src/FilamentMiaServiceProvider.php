@@ -72,6 +72,26 @@ class FilamentMiaServiceProvider extends PackageServiceProvider
         ], 'johnrivera7/filament-mia-theme');
 
         $this->registerLocaleRoute();
+        $this->registerErrorPages();
+
+        /*
+         * A copy of the four error views in the place Laravel looks first, for
+         * an application that wants to edit the wording or the markup rather
+         * than take them as they come. Published to `resources/views/errors`,
+         * which is the first hint path in the `errors` namespace, so the copies
+         * win over the originals without any further configuration.
+         *
+         * Separate from the `filament-mia-views` tag that `hasViews()`
+         * registers: that one publishes into `resources/views/vendor`, which is
+         * where a namespaced override belongs and is not somewhere Laravel
+         * resolves `errors::404` from.
+         *
+         * The published copies still include the layout from the package, so
+         * editing the copy does not freeze the shell around it.
+         */
+        $this->publishes([
+            __DIR__ . '/../resources/views/http/errors' => resource_path('views/errors'),
+        ], 'filament-mia-errors');
     }
 
     /**
@@ -95,5 +115,44 @@ class FilamentMiaServiceProvider extends PackageServiceProvider
         Route::middleware('web')
             ->get('filament-mia/locale/{panel}/{locale}', SwitchLocale::class)
             ->name('filament-mia.locale');
+    }
+
+    /**
+     * Offer the theme's error pages to Laravel's `errors` view namespace.
+     *
+     * Off unless `filament-mia.error_pages` says otherwise. Error views are
+     * application-wide, not panel-scoped: every 404 in the application would
+     * start arriving in the theme, including the ones from routes that have
+     * nothing to do with a panel. That is a decision for the application to
+     * make, not for a theme to make on its behalf by being installed.
+     *
+     * The mechanism is `view.paths` rather than `View::addNamespace('errors')`,
+     * and it has to be. Laravel's exception handler calls
+     * `RegisterErrorViewPaths` immediately before it renders, and that helper
+     * *replaces* the whole `errors` namespace with `config('view.paths')`
+     * mapped through `{path}/errors`, plus the framework's own views last.
+     * Anything registered against the namespace directly is discarded at that
+     * moment; a path added here is picked up by it instead.
+     *
+     * Appended, never prepended. The application's own `view.paths` stay in
+     * front, so `resources/views/errors/404.blade.php` — whether hand-written
+     * or published from Laravel — still wins. The theme only ever answers for
+     * a status nobody else has claimed, and the four it answers for are the
+     * only ones it ships.
+     */
+    protected function registerErrorPages(): void
+    {
+        if (! config('filament-mia.error_pages', false)) {
+            return;
+        }
+
+        $paths = config('view.paths', []);
+        $path = realpath(__DIR__ . '/../resources/views/http');
+
+        if ($path === false || in_array($path, $paths, true)) {
+            return;
+        }
+
+        config()->set('view.paths', [...$paths, $path]);
     }
 }

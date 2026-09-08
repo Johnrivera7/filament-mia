@@ -255,6 +255,39 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Error pages
+    |--------------------------------------------------------------------------
+    |
+    | Hand Laravel the theme's own 404, 403, 419 and 500 pages: a card on the
+    | warm field, the illustration from the empty state, and a way back to the
+    | panel. They are self-contained — the stylesheet is inlined, because the
+    | compiled theme reads colour properties that only a panel render emits.
+    |
+    | Off by default, and on purpose. Error views are application-wide, not
+    | panel-scoped, so turning this on restyles every error in the application,
+    | including the ones from routes that have nothing to do with a panel. That
+    | is your decision to make, not something a theme should take over by being
+    | installed.
+    |
+    | Your own views always win. The theme's path is appended to view.paths, so
+    | a file at resources/views/errors/404.blade.php — hand-written or published
+    | from Laravel — takes precedence, and the theme only answers for the four
+    | statuses it ships and nobody else has claimed.
+    |
+    | To edit the wording or the markup, take a copy:
+    |
+    |     php artisan vendor:publish --tag=filament-mia-errors
+    |
+    | Colours, type and shape come from this file rather than from anything the
+    | appearance page saved, since an error page belongs to the application and
+    | not to one panel.
+    |
+    */
+
+    'error_pages' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Application stylesheets
     |--------------------------------------------------------------------------
     |
