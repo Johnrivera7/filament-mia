@@ -83,6 +83,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The package now requires PHP 8.4. The badge, the requirements table and the
+  CI matrix say so; nothing claims a version that is not tested.
+
 - `--mia-ink-muted` is one step darker in light mode, `--gray-600` rather than
   `--gray-500`. Measured against the rendered page it sat at 4.1:1, which
   passes against the flat background the palette-level report assumes and

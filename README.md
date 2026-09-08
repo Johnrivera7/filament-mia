@@ -11,7 +11,7 @@ login. Cream and champagne in the light, espresso in the dark, serif headings.
 
 [![Status](https://img.shields.io/badge/status-v0.x%20%C2%B7%20active%20development-D9A14E?style=flat-square&labelColor=3C3227)](#project-status)
 [![License](https://img.shields.io/badge/license-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
-[![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.4%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%C2%B7%2012%20%C2%B7%2013-FF2D20?style=flat-square&labelColor=3C3227)](https://laravel.com)
 [![Filament](https://img.shields.io/badge/Filament-v5.7%2B-F59E0B?style=flat-square&labelColor=3C3227)](https://filamentphp.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
@@ -157,7 +157,7 @@ Mía is a young project in active development, currently in the `0.x` series.
 
 What that means in practice. The theme is complete and usable: light and dark
 mode are both finished, the configuration API is stable enough to build on, the
-stylesheet ships pre-compiled and the suite runs against PHP 8.2 through 8.5.
+stylesheet ships pre-compiled and the suite runs against PHP 8.4 and 8.5.
 What it does not mean is a frozen surface. Until `1.0` the option names, the
 CSS custom properties and the set of restyled components may still change, and
 minor releases can carry breaking changes. Each one is listed in the
@@ -171,20 +171,19 @@ fastest way to influence what lands next.
 
 | | |
 |---|---|
-| PHP | 8.2 – 8.5 |
+| PHP | 8.4 or 8.5 |
 | Laravel | 11.28, 12 or 13 |
 | Filament | 5.7 or later |
 
-PHP 8.5 is supported, not required. The constraint is `^8.2`, the lowest
-version Filament v5 itself accepts, so the package installs on the PHP most
-Laravel projects are still running. Note that Laravel 13 requires PHP 8.3 or
-later independently of this package.
+The constraint is `^8.4`. Both versions in that range are tested rather than
+assumed: every push runs the suite against 8.4 and 8.5, on the oldest and the
+newest resolvable dependencies, with `error_reporting=-1` so a deprecation,
+notice or warning raised in the package fails the build. Deprecations from
+inside Laravel or Filament are ignored, since they say nothing about this
+package.
 
-PHP 8.5 support is verified rather than assumed: the full test suite and a
-live panel render were both exercised under PHP 8.5.8 with
-`error_reporting=-1`, failing on any deprecation, notice or warning originating
-in the package. Deprecations raised inside Laravel or Filament are ignored,
-since they say nothing about this package.
+A live panel render was also exercised under PHP 8.5.8 under the same error
+reporting, which the suite alone does not cover.
 
 The stylesheet is compiled with Tailwind CSS v4.3 and committed to the
 repository. Tailwind is a development dependency of this package only — your

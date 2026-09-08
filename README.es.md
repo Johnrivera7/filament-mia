@@ -11,7 +11,7 @@ login. Crema y champán en claro, espresso en oscuro, titulares en serif.
 
 [![Estado](https://img.shields.io/badge/estado-v0.x%20%C2%B7%20desarrollo%20activo-D9A14E?style=flat-square&labelColor=3C3227)](#estado-del-proyecto)
 [![Licencia](https://img.shields.io/badge/licencia-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
-[![PHP](https://img.shields.io/badge/PHP-8.2%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.4%20%E2%80%93%208.5-777BB4?style=flat-square&labelColor=3C3227)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%C2%B7%2012%20%C2%B7%2013-FF2D20?style=flat-square&labelColor=3C3227)](https://laravel.com)
 [![Filament](https://img.shields.io/badge/Filament-v5.7%2B-F59E0B?style=flat-square&labelColor=3C3227)](https://filamentphp.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
@@ -162,7 +162,7 @@ Mía es un proyecto joven en desarrollo activo, hoy en la serie `0.x`.
 Qué significa eso en la práctica. El tema está completo y es utilizable: los
 modos claro y oscuro están terminados, la API de configuración es lo bastante
 estable como para construir sobre ella, la hoja de estilos se distribuye
-precompilada y la batería de pruebas corre contra PHP 8.2 a 8.5. Lo que no
+precompilada y la batería de pruebas corre contra PHP 8.4 y 8.5. Lo que no
 significa es que la superficie esté congelada. Hasta la `1.0`, los nombres de
 las opciones, las propiedades CSS y el conjunto de componentes reestilizados
 pueden cambiar, y una versión menor puede traer cambios incompatibles. Cada uno
@@ -176,20 +176,19 @@ es la vía más rápida para influir en lo que entra a continuación.
 
 | | |
 |---|---|
-| PHP | 8.2 – 8.5 |
+| PHP | 8.4 u 8.5 |
 | Laravel | 11.28, 12 o 13 |
 | Filament | 5.7 o superior |
 
-PHP 8.5 es compatible, no obligatorio. La restricción es `^8.2`, el mínimo que
-acepta Filament v5, para que el paquete instale en el PHP que todavía usan la
-mayoría de los proyectos Laravel. Ten en cuenta que Laravel 13 exige PHP 8.3 o
-superior por su cuenta.
+La restricción es `^8.4`. Las dos versiones del rango están probadas, no
+supuestas: cada envío ejecuta la suite en 8.4 y 8.5, con las dependencias más
+antiguas y las más nuevas que se puedan resolver, y con `error_reporting=-1`,
+de modo que una deprecación, aviso o advertencia originada en el paquete
+detiene la construcción. Las de Laravel o Filament se ignoran, porque no dicen
+nada sobre este paquete.
 
-La compatibilidad con 8.5 está verificada, no supuesta: la suite completa y el
-renderizado de un panel real se ejercitaron bajo PHP 8.5.8 con
-`error_reporting=-1`, fallando ante cualquier deprecación, aviso o advertencia
-originada en el paquete. Las deprecaciones de Laravel o Filament se ignoran,
-porque no dicen nada sobre este paquete.
+El renderizado de un panel real también se ejercitó bajo PHP 8.5.8 con el mismo
+nivel de errores, que la suite por sí sola no cubre.
 
 ## Instalación
 

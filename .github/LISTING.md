@@ -44,7 +44,7 @@ runtime through a fluent API and resolved as CSS custom properties, so
 reconfiguring the theme never requires recompiling it.
 
 Contrast is measured, not assumed: every text and UI pair meets WCAG AA. The
-suite runs against PHP 8.2 through 8.5.
+suite runs against PHP 8.4 and 8.5.
 
 Mía is a young project in active development, currently in the `0.x` series.
 The theme is complete and usable; the public surface may still change before
