@@ -315,6 +315,12 @@ fallbacks.
 MiaTheme::make()->font('Outfit', 'Fraunces')
 ```
 
+Only the configured families are downloaded. Filament links its own Inter
+stylesheet on every page and there is no supported way for a theme to withdraw
+it, so that request remains — but nothing in the theme references Inter, so the
+browser fetches no Inter binary. On a page set to the defaults that is three
+files: two weights of Jost and one of Cormorant Garamond.
+
 #### `monoFont()`
 
 ```php
