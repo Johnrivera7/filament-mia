@@ -3,8 +3,18 @@
 namespace Workbench\App\Providers;
 
 use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\AuthenticateSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use JohnRivera7\FilamentMia\MiaTheme;
 
 /**
@@ -18,6 +28,12 @@ use JohnRivera7\FilamentMia\MiaTheme;
  * It exists so that the screenshots in the README come from the package
  * itself rather than from whatever application happened to be at hand, and so
  * that a change to the sign-in compositions can be checked in one command.
+ *
+ * The middleware stack below is the one Filament writes into a generated
+ * panel provider. It is spelled out here because a panel starts with none,
+ * and without a session the panel can show the sign-in screen but never hold
+ * a sign-in — which is also what the language switcher needs, since the
+ * choice has to outlive the request that made it.
  */
 class PreviewPanelProvider extends PanelProvider
 {
@@ -36,9 +52,24 @@ class PreviewPanelProvider extends PanelProvider
                 AppAuthentication::make(),
             ])
             ->authGuard('web')
+            ->middleware([
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                VerifyCsrfToken::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
+            ])
+            ->authMiddleware([
+                Authenticate::class,
+            ])
             ->plugin(
                 MiaTheme::make()
                     ->customizer()
+                    ->localeSwitcher()
                     ->loginTagline('Client work, kept in one place.'),
             );
     }
