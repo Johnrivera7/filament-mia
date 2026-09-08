@@ -109,6 +109,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The projects list carries two empty states, one for a list with nothing in
     it and one for a list narrowed to nothing by a search or filter, the second
     offering a way back rather than a way to start.
+- `bin/responsive-shots.mjs`, which walks a phone in both orientations, a
+  tablet, a narrow desktop and a wide one, collapses and expands the sidebar at
+  each, and captures both states in both colour modes. It reports every element
+  inside the sidebar whose box ends past the rail's edge, and the centre line
+  each of the rail's targets sits on — more than one centre line means part of
+  the rail is still being laid out for the expanded column. A media query sweep
+  alone never reaches that state, because the sidebar's width changes without
+  the viewport changing. Development only.
+  - The bundled preview panel is now registered with
+    `sidebarCollapsibleOnDesktop()`, so the rail can be looked at in the
+    package itself rather than only in an application that happens to enable it.
 
 ### Changed
 
@@ -144,6 +155,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   5.7 are unaffected: the two rules they gain address markup they already ship.
 
 ### Fixed
+
+- The collapsed sidebar was styled as a narrower version of the expanded
+  column rather than as its own layout, so it ran two width criteria at once:
+  the navigation reduced to icons while everything else in it kept being laid
+  out at the sidebar's full width.
+  - Icons sat left of the rail's centre. The theme padded the navigation on
+    both sides while Filament zeroes the end side of it in the rail, and a
+    column padded on one side only cannot centre what it holds. The user menu
+    and the notification bell landed on a second centre line of their own,
+    24px from the first, and overhung the rail's edge.
+  - The expand control in the sidebar header, which is the only way back out of
+    the rail on a panel with no topbar, was held inside 1.25rem gutters that
+    left it less room than it needed.
+  - Content an application adds through `SIDEBAR_START`, `SIDEBAR_NAV_START`,
+    `SIDEBAR_NAV_END` or `SIDEBAR_FOOTER` was laid out at the expanded width
+    inside the rail: text wrapped into a column one word wide and the remainder
+    painted over the canvas, 50px past the rail's edge in the case that was
+    reported. Those blocks are no longer shown in the rail, which is the answer
+    Filament already gives the logo, the tenant menu and sidebar global search.
+    `fi-mia-rail-only` and `fi-mia-rail-hidden` are there for supplying a
+    compact form instead.
+  - A reserved scrollbar gutter no longer applies in the rail, where it is a
+    fifth of the width and lands on one side only.
+  - The rule meant to drop the active item's accent mark in the rail never
+    matched anything: it was written against `.fi-sidebar.fi-collapsed`, while
+    `fi-collapsed` is the class Filament puts on a collapsed navigation *group*.
+  - The expanded sidebar is pixel-identical to before at every width and in
+    both colour modes; only the rail changed.
 
 - On a phone, the `split` composition centred the form in the space under its
   brand banner, which opened a gap about as tall as the banner between the two.

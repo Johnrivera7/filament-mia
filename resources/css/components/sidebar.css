@@ -148,7 +148,167 @@
     }
 }
 
-/* Collapsed rail: centre the icons and hide the accent rule, which would clip. */
-.fi-sidebar.fi-collapsed .fi-sidebar-item.fi-active > .fi-sidebar-item-btn::before {
+/*
+ * The collapsed rail.
+ *
+ * A rail is a second layout rather than a narrower version of the first one.
+ * At 4.5rem there is room for one centred target per row and for nothing
+ * else, so the question each piece of sidebar content has to answer is not
+ * whether it fits but whether it is a target.
+ *
+ * Filament already answers that for the chrome it owns: the logo, the tenant
+ * menu, sidebar global search, every item label, badge and group rule
+ * disappear when the sidebar closes. What it leaves is the rail's inline
+ * spacing — handed to the theme as `pe-0` on the nav and `w-max` on the group
+ * list — and whatever an application adds through the sidebar render hooks,
+ * which keeps the width it was laid out with because nothing tells it not to.
+ *
+ * That is how one rail ends up running two criteria at once: navigation
+ * reduced to icons, and beside it a block still trying to be a column, laid
+ * out at 17rem inside 4.5rem and painting the difference over the canvas.
+ * Everything below applies the one criterion to the whole rail.
+ *
+ * Scoped to the collapsible-on-desktop layout on purpose. `:not(fi-sidebar-open)`
+ * is also true of the mobile drawer, where the sidebar is full width and
+ * off-canvas, and of a panel with a plain sidebar, where Filament keeps the
+ * closed sidebar at its full width.
+ */
+@media (min-width: 1024px) {
+    /*
+     * One centre line for everything in the rail.
+     *
+     * The theme's own inline padding comes off: Filament has already zeroed
+     * the end side, and a rail padded on the start side only puts every icon
+     * left of centre — which is the misalignment between the rail's own
+     * targets that reads as the rail being half-converted.
+     *
+     * The inset then moves onto the group list, which Filament sizes to
+     * `max-content`. `min-width` beats that without the theme having to
+     * outrank the declaration, and padding rather than margin keeps the
+     * active wash and the group rules inside the rail.
+     */
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-sidebar-nav {
+        padding-inline: 0;
+
+        /*
+         * A reserved scrollbar gutter is only ever on the end side, which on
+         * a platform with classic scrollbars is a fifth of the rail and moves
+         * every icon permanently off centre. Worth it in a 17rem column, not
+         * in a 4.5rem one.
+         */
+        scrollbar-gutter: auto;
+    }
+
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-sidebar-nav-groups {
+        margin-inline: 0;
+        min-width: 100%;
+        padding-inline: calc(0.5rem * var(--mia-density, 1));
+    }
+
+    /*
+     * The header only exists on desktop when the panel has no topbar, and it
+     * then holds the expand control on its own. The theme's 1.25rem gutters
+     * leave that control less room than it needs.
+     */
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-sidebar-header {
+        padding-inline: 0;
+    }
+
+    /*
+     * The footer holds the user menu and the notification bell, both of which
+     * Filament reduces to their icon. Filament's own 1rem margins plus the
+     * theme's 0.75rem padding leave those icons a 1rem slot, so the spacing
+     * comes off and the grid centres what is left.
+     */
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-sidebar-footer {
+        margin-inline: 0;
+        padding-inline: 0;
+        justify-items: center;
+        overflow-x: clip;
+    }
+
+    /*
+     * Content an application puts in the sidebar through `SIDEBAR_START`,
+     * `SIDEBAR_NAV_START`, `SIDEBAR_NAV_END` or `SIDEBAR_FOOTER` is not shown
+     * in the rail.
+     *
+     * It is the same answer Filament gives its own non-target chrome, and it
+     * is the honest one: a credit meter, a workspace switcher or a search box
+     * has a label, a figure and a control in it, and none of the three survive
+     * being squeezed to 4.5rem — they wrap into a column one word wide and
+     * spill the remainder over the canvas. Reducing them by guesswork is
+     * worse, because the theme cannot know which part of an arbitrary block is
+     * the part worth keeping.
+     *
+     * Nothing is stranded by this: the rail's expand control sits in the
+     * topbar, in the sidebar header when there is no topbar, and the whole
+     * block is back one click later. For the cases where a compact form does
+     * make sense, `.fi-mia-rail-only` below is the way to supply one.
+     */
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        > :not(.fi-sidebar-header-ctn):not(.fi-sidebar-nav):not(.fi-sidebar-footer):not(.fi-tenant-menu):not(.fi-mia-rail-only):not(script):not(style),
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-sidebar-nav
+        > :not(.fi-sidebar-nav-groups):not(.fi-mia-rail-only):not(script):not(style),
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-mia-rail-hidden {
+        display: none;
+    }
+
+    /*
+     * A rail form is a single centred thing by definition, so it is laid out
+     * as one and clipped to the rail, which keeps a mistake in an
+     * application's markup inside the sidebar instead of on the canvas.
+     *
+     * Clipped here rather than on `.fi-sidebar`: the sidebar is sticky, which
+     * makes it the containing block for the dropdowns a collapsed navigation
+     * group opens beside the rail, and clipping it would clip those away.
+     */
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-mia-rail-only {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: clip;
+    }
+
+    /*
+     * The accent rule on the active item, dropped in the rail: the wash alone
+     * says which item is current, and a 2px mark on one edge of it only pulls
+     * the eye off the centre line.
+     *
+     * This was written against `.fi-sidebar.fi-collapsed`, which matches
+     * nothing — `fi-collapsed` is the class Filament puts on a collapsed
+     * navigation *group*, while the sidebar's own state is the absence of
+     * `fi-sidebar-open`.
+     */
+    .fi-body-has-sidebar-collapsible-on-desktop:not(.fi-body-has-top-navigation)
+        .fi-sidebar:not(.fi-sidebar-open)
+        .fi-sidebar-item.fi-active
+        > .fi-sidebar-item-btn::before {
+        display: none;
+    }
+}
+
+/*
+ * The other half of the contract above. An application marks a compact
+ * substitute `.fi-mia-rail-only` and the full form `.fi-mia-rail-hidden` — the
+ * second only if it is nested too deep for the rule above to reach it — and
+ * the rail then shows the substitute while the expanded column shows the full
+ * form.
+ */
+.fi-mia-rail-only {
     display: none;
 }

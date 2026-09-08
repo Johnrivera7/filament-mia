@@ -602,6 +602,70 @@ MiaTheme::make()->localeSwitcher(['en', 'es', 'pt_BR'])
 MiaTheme::make()->localeSwitcher(['en' => 'English (US)', 'es'])
 ```
 
+## The collapsed sidebar
+
+A panel registered with `sidebarCollapsibleOnDesktop()` has a second
+navigation layout, not a narrower version of the first one. At the collapsed
+width there is room for one centred target per row and for nothing else, so
+the question each piece of sidebar content has to answer is not whether it
+fits but whether it is a target.
+
+The theme answers it the same way for everything in the rail:
+
+- **Navigation** reduces to icons, all on the rail's centre line — including
+  the expand control in the header, the user menu and the notification bell,
+  which are laid out from the same centre rather than from their own.
+- **A navigation group with an icon** keeps its items, in the dropdown
+  Filament opens beside the rail.
+- **Anything an application adds** through `SIDEBAR_START`,
+  `SIDEBAR_NAV_START`, `SIDEBAR_NAV_END` or `SIDEBAR_FOOTER` is not shown.
+
+The last one is the deliberate part. A credit meter, a workspace switcher or a
+search field has a label, a figure and a control in it, and none of the three
+survive being squeezed into the rail: they wrap into a column one word wide
+and paint the remainder over the canvas. It is also the answer Filament
+already gives its own non-target chrome — the logo, the tenant menu and
+sidebar global search all disappear when the sidebar closes — so the rail ends
+up with one criterion instead of two.
+
+Nothing becomes unreachable. The expand control is in the topbar, or in the
+sidebar header itself when the panel has no topbar, and the block is back one
+click later.
+
+### Giving a block a rail form
+
+Where a compact form does make sense, supply one. The theme reads two classes:
+
+| Class | In the rail | Expanded |
+|---|---|---|
+| `fi-mia-rail-only` | Shown, centred and clipped to the rail | Hidden |
+| `fi-mia-rail-hidden` | Hidden | Shown |
+
+```blade
+{{-- Both live in the same SIDEBAR_FOOTER hook. --}}
+<div class="px-4 pb-4 pt-2">
+    {{-- The full meter: label, figures, progress bar. --}}
+</div>
+
+<div class="fi-mia-rail-only">
+    <span class="mia-kicker">64%</span>
+</div>
+```
+
+The full block needs no class of its own if it is what the render hook
+returns, since it is hidden by the rule above. `fi-mia-rail-hidden` is for the
+case where it sits nested inside a wrapper that has to stay.
+
+Both classes are plain CSS in the theme's stylesheet, so they work in a
+pre-compiled theme without a build step of your own.
+
+`bin/responsive-shots.mjs` is what checks this. It walks a phone in both
+orientations, a tablet, a narrow desktop and a wide one, collapses and expands
+the sidebar at each, and reports every element inside the sidebar whose box
+ends past the rail's edge along with the centre line each of its targets sits
+on — a rail with more than one centre line is the symptom that some of its
+content is still being laid out for the expanded column.
+
 ## Sign-in compositions
 
 The sign-in screen is the only part of a panel a visitor sees without an

@@ -456,6 +456,70 @@ El [conmutador de idioma](#idiomas) es el mismo argumento por el otro lado:
 aparece en el menú del usuario a través de `Panel::userMenuItems()`, el punto de
 extensión que Filament ofrece para ese menú, y no publicando su vista.
 
+## La barra lateral colapsada
+
+Un panel registrado con `sidebarCollapsibleOnDesktop()` tiene un segundo layout
+de navegación, no una versión más estrecha del primero. En el ancho colapsado
+cabe un destino centrado por fila y nada más, así que la pregunta que tiene que
+responder cada cosa que hay en la barra no es si entra, sino si es un destino.
+
+El tema la responde igual para todo lo que vive en el carril:
+
+- **La navegación** se reduce a iconos, todos sobre la línea central del
+  carril, incluidos el control de expandir de la cabecera, el menú del usuario
+  y la campana de notificaciones, que se centran desde ahí y no desde su propia
+  caja.
+- **Un grupo de navegación con icono** conserva sus elementos, en el desplegable
+  que Filament abre al lado del carril.
+- **Lo que añada una aplicación** por `SIDEBAR_START`, `SIDEBAR_NAV_START`,
+  `SIDEBAR_NAV_END` o `SIDEBAR_FOOTER` no se muestra.
+
+Lo último es la parte deliberada. Un medidor de créditos, un selector de espacio
+de trabajo o un buscador llevan dentro una etiqueta, una cifra y un control, y
+ninguno de los tres sobrevive al apretón: se parten en una columna de una
+palabra de ancho y pintan el resto sobre el lienzo. Es además la respuesta que
+Filament ya da a su propio contenido que no es un destino —el logotipo, el menú
+de inquilino y la búsqueda global de la barra desaparecen al cerrarla—, así que
+el carril acaba con un criterio en lugar de dos.
+
+Nada queda fuera de alcance. El control de expandir está en la barra superior,
+o en la cabecera de la propia barra lateral cuando el panel no tiene barra
+superior, y el bloque vuelve un clic después.
+
+### Darle a un bloque su forma de carril
+
+Cuando una forma compacta sí tiene sentido, dásela. El tema lee dos clases:
+
+| Clase | En el carril | Expandida |
+|---|---|---|
+| `fi-mia-rail-only` | Se muestra, centrada y recortada al carril | Oculta |
+| `fi-mia-rail-hidden` | Oculta | Se muestra |
+
+```blade
+{{-- Las dos viven en el mismo hook SIDEBAR_FOOTER. --}}
+<div class="px-4 pb-4 pt-2">
+    {{-- El medidor completo: etiqueta, cifras, barra de progreso. --}}
+</div>
+
+<div class="fi-mia-rail-only">
+    <span class="mia-kicker">64%</span>
+</div>
+```
+
+El bloque completo no necesita clase propia si es lo que devuelve el render
+hook, porque la regla de arriba ya lo oculta. `fi-mia-rail-hidden` es para
+cuando queda anidado dentro de un contenedor que sí tiene que quedarse.
+
+Las dos clases son CSS plano de la hoja del tema, así que funcionan en un tema
+precompilado sin que tengas que compilar nada.
+
+`bin/responsive-shots.mjs` es lo que comprueba todo esto. Recorre un teléfono en
+las dos orientaciones, una tablet, un escritorio estrecho y uno ancho, colapsa y
+expande la barra en cada uno, y reporta cada elemento de la barra cuya caja
+termina más allá del borde del carril, junto con la línea central sobre la que
+se apoya cada destino: un carril con más de una línea central es la señal de que
+parte de su contenido se sigue maquetando para la columna expandida.
+
 ## Composiciones de la pantalla de acceso
 
 La pantalla de acceso es lo único de un panel que ve alguien sin cuenta, así
