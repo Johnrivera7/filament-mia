@@ -15,6 +15,7 @@ login. Crema y champán en claro, espresso en oscuro, titulares en serif.
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%C2%B7%2012%20%C2%B7%2013-FF2D20?style=flat-square&labelColor=3C3227)](https://laravel.com)
 [![Filament](https://img.shields.io/badge/Filament-v5.7%2B-F59E0B?style=flat-square&labelColor=3C3227)](https://filamentphp.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
+[![Idiomas](https://img.shields.io/badge/idiomas-en%20%C2%B7%20es-8B9FB0?style=flat-square&labelColor=3C3227)](#idiomas)
 
 **English version: [README.md](README.md)**
 
@@ -280,6 +281,133 @@ completo volvería a aplicar Preflight sobre la capa base del tema. La hoja se
 emite después del tema y junto a él. No uses `Panel::viteTheme()` para esto,
 porque reemplazaría el tema por completo.
 
+## Idiomas
+
+El tema trae inglés y español, y puede poner un conmutador de idioma en el menú
+del usuario, debajo del interruptor de claro y oscuro.
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-menu-en.jpg" alt="El menú del usuario abierto, con el interruptor de claro y oscuro sobre English y Español, y English marcado como el actual" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-menu-es.jpg" alt="El mismo panel tras elegir Español, con la página, la navegación y los elementos propios de Filament en español" /></td>
+</tr>
+<tr>
+<td><b>El conmutador</b><br />Un elemento por idioma, en el nombre del propio idioma, junto al de claro y oscuro.</td>
+<td><b>Elegido</b><br />El panel entero sigue la elección, incluido el texto propio de Filament.</td>
+</tr>
+</table>
+
+### Qué está traducido
+
+El tema solo rotula una superficie: la [página de
+apariencia](#la-página-de-apariencia), con los nombres y las descripciones de
+los preajustes incluidos. Está traducida por completo a los dos idiomas, y la
+paridad de claves entre los dos archivos se comprueba en la suite de tests. El
+resto del tema no
+lleva texto: las composiciones de acceso muestran tu marca y tu propia frase, y
+el conmutador nombra cada idioma en ese idioma, algo que a propósito no se
+traduce.
+
+Todo lo demás de un panel viene de otra parte, y el conmutador también lo
+cambia:
+
+- **El texto propio de Filament** —titulares, botones, mensajes de tablas y
+  formularios— existe en más de sesenta idiomas, español entre ellos.
+- **Tus recursos, páginas y campos** los traduces tú. Un conmutador sobre texto
+  sin traducir deja el panel a medias, que se lee peor que un solo idioma en
+  todo. Compruébalo antes de activarlo.
+
+### Cómo se activa
+
+```php
+->plugin(
+    MiaTheme::make()->localeSwitcher(['en', 'es']),
+)
+```
+
+Los códigos deben coincidir con los directorios de tu carpeta `lang`. Cada
+idioma se rotula con su propio nombre; pasa una etiqueta para cambiar alguno:
+
+```php
+MiaTheme::make()->localeSwitcher(['en' => 'English (US)', 'es', 'pt_BR'])
+```
+
+Es una lista y no un botón que alterna, para que el nombre de cada opción esté
+siempre a la vista —que es justo lo que hace falta cuando alguien no puede leer
+el idioma en el que está la interfaz— y para que añadir un tercer idioma no
+cambie nada de cómo funciona.
+
+La elección se guarda en una cookie de larga duración, `filament_mia_locale`,
+escrita por el gestor de cookies de Laravel como cualquier otra. Ahí vive
+también la elección de claro y oscuro, y por el mismo motivo: pertenece al
+navegador, no a la sesión. Sobrevive a una recarga, a otra página, a una sesión
+caducada y a cerrar sesión, así que quien eligió español ayer se encuentra hoy
+la pantalla de acceso en español.
+
+Un límite que conviene decir: el conmutador vive en el menú del usuario, que no
+existe antes de entrar. Quien llega por primera vez ve la pantalla de acceso en
+el idioma por defecto de la aplicación. Un panel que necesite elegir el idioma
+desde la propia pantalla de acceso debería fijar el locale desde la URL o la
+petición, que es trabajo de la aplicación y no del tema.
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-login-es.jpg" alt="La pantalla de acceso en español, con las etiquetas propias de Filament traducidas, después de descartar la sesión" width="720" />
+</div>
+
+### Añadir un idioma
+
+No hay que contribuir nada al paquete. Las traducciones de paquete se pueden
+sobreescribir por aplicación, así que un cuarto o un cuadragésimo idioma es una
+carpeta en tu proyecto:
+
+```
+lang/vendor/filament-mia/fr/customizer.php
+```
+
+Copia `vendor/johnrivera7/filament-mia/resources/lang/en/customizer.php` como
+punto de partida, o publica primero los dos idiomas incluidos:
+
+```bash
+php artisan vendor:publish --tag=filament-mia-translations
+```
+
+Y luego ofrécelo:
+
+```php
+MiaTheme::make()->localeSwitcher(['en', 'es', 'fr'])
+```
+
+También querrás las traducciones propias de Filament para ese idioma, que se
+publican con `php artisan vendor:publish --tag=filament-translations`.
+
+### Cómo se desactiva
+
+Está desactivado hasta que lo pides, y `localeSwitcher(false)` vuelve a
+apagarlo, lo que sirve para desactivarlo en un panel cuando el archivo de
+configuración lo activa en todos.
+
+Desactivado por defecto a propósito. Fijar el locale no es una decisión visual:
+cambia el texto de Filament, el de tu aplicación y cualquier otra cosa que lea
+`app()->getLocale()` durante la petición. Muchas aplicaciones ya deciden el
+idioma desde el registro del usuario, el subdominio o la cabecera
+`Accept-Language`, e instalar un tema no debería apropiarse de eso en silencio.
+
+Cuando sí lo activas, esto es lo que el tema toca y lo que no:
+
+- El locale lo aplica un middleware **registrado solo en ese panel**. El resto
+  de las rutas de tu aplicación, y cualquier panel con el conmutador apagado,
+  quedan intactos.
+- El middleware se añade *después* de los que registra tu panel, así que dentro
+  de ese panel gana la elección de quien lo usa por encima de un `setLocale()`
+  anterior. Es justo el sentido de activarlo. Si tu propia lógica debe ganar,
+  deja el conmutador apagado o registra tu middleware en el panel después del
+  plugin.
+- No se aplica nada hasta que alguien elige un idioma. Sin la cookie, el tema
+  no llama a `setLocale()` en absoluto, y un panel al que no se le ha tocado
+  nada se comporta igual que antes.
+- La cookie se valida contra los idiomas que ofrece ese panel, así que un valor
+  escrito por otro panel se ignora en lugar de darse por bueno.
+
 ## Accesibilidad
 
 El contraste se calcula con la propia aritmética de color de Filament y se
@@ -313,6 +441,10 @@ Filament no puede revertir en silencio a una copia antigua de una plantilla del
 framework. El layout simple es, además, uno de los archivos que más cambia
 entre versiones, y una copia publicada dejaría de seguir a la original sin
 avisar.
+
+El [conmutador de idioma](#idiomas) es el mismo argumento por el otro lado:
+aparece en el menú del usuario a través de `Panel::userMenuItems()`, el punto de
+extensión que Filament ofrece para ese menú, y no publicando su vista.
 
 ## Composiciones de la pantalla de acceso
 
@@ -456,11 +588,13 @@ En concreto, qué hay y qué no.
 
 **Hoy.** Hoja de estilos precompilada, API de configuración para color,
 tipografía, redondez, densidad y elevación, modos claro y oscuro cálidos,
-estados vacíos ilustrados, estados de carga, contraste medido y una página de
-apariencia dentro del panel que edita y persiste todo lo anterior.
+estados vacíos ilustrados, estados de carga, contraste medido, una página de
+apariencia dentro del panel que edita y persiste todo lo anterior, e inglés y
+español con un conmutador opcional.
 
 **A continuación.** Una aplicación de demostración que sirva además como origen
-de todas las capturas. Más preajustes distribuidos como paletas con nombre.
+de todas las capturas. Más preajustes distribuidos como paletas con nombre. Más
+idiomas incluidos, según lo que se pida.
 
 **Más adelante, y deliberadamente más vago porque no está construido.**
 Componentes Blade que usen las variables directamente, para construir páginas

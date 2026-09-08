@@ -225,6 +225,36 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Language switcher
+    |--------------------------------------------------------------------------
+    |
+    | Languages to offer in the user menu, next to the light/dark switch. The
+    | choice is stored in a long-lived cookie and applied to the panel through
+    | middleware, so it survives a reload, a new session and a sign-out — the
+    | same way the light/dark choice does.
+    |
+    | Empty means no switcher, which is the default. Setting the locale is not
+    | a visual decision: it changes Filament's copy, your application's copy,
+    | and anything else reading app()->getLocale(). If your application already
+    | decides the language, leave this empty and keep deciding it yourself.
+    |
+    | Give codes that match the directories in your lang folder. Languages are
+    | labelled with their own name; pass a label to override one:
+    |
+    |     'locales' => ['en', 'es'],
+    |     'locales' => ['en' => 'English (US)', 'es', 'pt_BR'],
+    |
+    | The theme ships translations for `en` and `es`. Filament itself ships
+    | more than sixty. Your own resources, pages and fields are yours to
+    | translate — a switcher over untranslated copy leaves a panel half in one
+    | language, which reads worse than one language throughout.
+    |
+    */
+
+    'locales' => [],
+
+    /*
+    |--------------------------------------------------------------------------
     | Application stylesheets
     |--------------------------------------------------------------------------
     |

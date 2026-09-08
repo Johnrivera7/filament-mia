@@ -6,6 +6,8 @@ use Filament\Support\Assets\Theme;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Route;
+use JohnRivera7\FilamentMia\Http\Controllers\SwitchLocale;
 use JohnRivera7\FilamentMia\Settings\Contracts\SettingsRepository;
 use JohnRivera7\FilamentMia\Settings\FileSettingsRepository;
 use Spatie\LaravelPackageTools\Package;
@@ -59,5 +61,30 @@ class FilamentMiaServiceProvider extends PackageServiceProvider
         FilamentAsset::register([
             Theme::make('mia', __DIR__ . '/../resources/dist/mia.css'),
         ], 'johnrivera7/filament-mia');
+
+        $this->registerLocaleRoute();
+    }
+
+    /**
+     * The endpoint behind the language switcher.
+     *
+     * Registered unconditionally, because panels are built lazily and this
+     * runs before any of them exists. It is inert on its own: the controller
+     * only accepts a panel that runs the theme *and* a language that panel
+     * offers, so a panel with the switcher off has nothing to reach.
+     *
+     * `web` middleware for the session and the cookie jar, nothing more. No
+     * authentication, because the sign-in screen is exactly where a visitor
+     * most needs to change the language.
+     */
+    protected function registerLocaleRoute(): void
+    {
+        if ($this->app->routesAreCached()) {
+            return;
+        }
+
+        Route::middleware('web')
+            ->get('filament-mia/locale/{panel}/{locale}', SwitchLocale::class)
+            ->name('filament-mia.locale');
     }
 }

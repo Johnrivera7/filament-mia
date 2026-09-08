@@ -16,6 +16,7 @@ login. Cream and champagne in the light, espresso in the dark, serif headings.
 [![Filament](https://img.shields.io/badge/Filament-v5.7%2B-F59E0B?style=flat-square&labelColor=3C3227)](https://filamentphp.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4.3-06B6D4?style=flat-square&labelColor=3C3227)](https://tailwindcss.com)
 [![WCAG](https://img.shields.io/badge/contrast-WCAG%20AA-8A9A6B?style=flat-square&labelColor=3C3227)](#accessibility)
+[![Languages](https://img.shields.io/badge/languages-en%20%C2%B7%20es-8B9FB0?style=flat-square&labelColor=3C3227)](#languages)
 
 </div>
 
@@ -45,9 +46,9 @@ It ships pre-compiled. There is no Node, Tailwind or build step to install.
 
 ## Screenshots
 
-Every image on this page is taken from software you can run: the sign-in frames
-from the [preview panel](#looking-at-it-locally) bundled with the package, the
-rest from a demo application. Both run on invented records.
+Every image on this page is taken from software you can run: the sign-in and
+language frames from the [preview panel](#looking-at-it-locally) bundled with
+the package, the rest from a demo application. Both run on invented records.
 
 ### Before signing in
 
@@ -286,6 +287,7 @@ php artisan vendor:publish --tag=filament-mia-config
 | [`customizer()`](#customizer) | `false` | `customizer.enabled` |
 | [`customizerAuthorization()`](#customizerauthorization) | `null` — anyone who can reach the panel | — |
 | [`customizerNavigation()`](#customizernavigation) | ungrouped | `customizer.navigation_group` `customizer.navigation_sort` |
+| [`localeSwitcher()`](#localeswitcher) | `false` — no switcher | `locales` |
 
 ### Reference
 
@@ -572,6 +574,22 @@ Where the page sits in the navigation. The icon defaults to a swatch.
 MiaTheme::make()
     ->customizer()
     ->customizerNavigation(group: 'Settings', sort: 90)
+```
+
+#### `localeSwitcher()`
+
+```php
+public function localeSwitcher(array|bool $locales = ['en', 'es']): static
+```
+
+Offers a language switcher in the user menu and applies the choice to the
+panel. Off by default. See [Languages](#languages) for what it changes and when
+to leave it off.
+
+```php
+MiaTheme::make()->localeSwitcher()                          // English, Español
+MiaTheme::make()->localeSwitcher(['en', 'es', 'pt_BR'])
+MiaTheme::make()->localeSwitcher(['en' => 'English (US)', 'es'])
 ```
 
 ## Sign-in compositions
@@ -879,6 +897,132 @@ Only the theme and utility layers are imported: pulling in the whole of
 stylesheet is emitted after the theme and alongside it — do not use
 `Panel::viteTheme()` for this, as it would replace the theme outright.
 
+## Languages
+
+The theme ships English and Spanish, and it can put a language switcher in the
+user menu, below the light/dark switch.
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-menu-en.jpg" alt="The user menu open, showing the light/dark switch above English and Español, with English marked as current" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-menu-es.jpg" alt="The same panel after choosing Español, with the page, the navigation and Filament's own menu items in Spanish" /></td>
+</tr>
+<tr>
+<td><b>The switcher</b><br />One item per language, in the language's own name, next to the light/dark switch.</td>
+<td><b>Chosen</b><br />The whole panel follows, including Filament's own copy.</td>
+</tr>
+</table>
+
+### What is translated
+
+The theme itself only labels one surface: the [appearance
+page](#the-appearance-page), including the names and descriptions of the
+presets. That is fully translated into both languages, and the two files are
+checked for key parity in the test suite. Nothing else in the theme carries
+copy: the sign-in
+compositions render your brand name and your own tagline, and the switcher
+labels languages with their own name, which is not translated by design.
+
+Everything else in a panel comes from elsewhere, and the switcher changes it
+too:
+
+- **Filament's own copy** — headings, buttons, table and form messages — ships
+  in more than sixty languages, Spanish among them.
+- **Your resources, pages and fields** are yours to translate. A switcher over
+  untranslated copy leaves a panel half in one language, which reads worse than
+  one language throughout. Check this before turning it on.
+
+### Turning the switcher on
+
+```php
+->plugin(
+    MiaTheme::make()->localeSwitcher(['en', 'es']),
+)
+```
+
+Codes must match the directories in your `lang` folder. Languages are labelled
+with their own name; pass a label to override one:
+
+```php
+MiaTheme::make()->localeSwitcher(['en' => 'English (US)', 'es', 'pt_BR'])
+```
+
+It is a list rather than a button that cycles, so the name of every option
+stays on screen — which is the point when the visitor cannot read the language
+the interface is currently in — and so that adding a third language changes
+nothing about how it works.
+
+The choice is stored in a long-lived cookie, `filament_mia_locale`, written by
+Laravel's cookie jar like any other. That is where the light/dark choice lives
+too, and for the same reason: it belongs to the browser, not to the sign-in. It
+survives a reload, a new page, an expired session and a sign-out, so a visitor
+who chose Spanish yesterday meets the sign-in screen in Spanish today.
+
+One limit worth stating: the switcher lives in the user menu, which does not
+exist before signing in. A first-time visitor gets the application's default
+language on the sign-in screen. Panels that need the language chosen from the
+sign-in screen itself should set the locale from the URL or the request, which
+is the application's job rather than the theme's.
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-login-es.jpg" alt="The sign-in screen in Spanish, with Filament's own labels translated, after the session was discarded" width="720" />
+</div>
+
+### Adding a language
+
+Nothing has to be contributed upstream. Laravel's package translations are
+overridable per application, so a fourth or a fortieth language is a folder in
+your own project:
+
+```
+lang/vendor/filament-mia/fr/customizer.php
+```
+
+Copy `vendor/johnrivera7/filament-mia/resources/lang/en/customizer.php` as a
+starting point, or publish both bundled languages first:
+
+```bash
+php artisan vendor:publish --tag=filament-mia-translations
+```
+
+Then offer it:
+
+```php
+MiaTheme::make()->localeSwitcher(['en', 'es', 'fr'])
+```
+
+You will also want Filament's own translations for that language, which are
+published with `php artisan vendor:publish --tag=filament-translations`.
+
+### Turning the switcher off
+
+It is off until you ask for it, and `localeSwitcher(false)` turns it off again
+— useful for disabling it on one panel while a config-file default enables it
+everywhere else.
+
+Off is the default on purpose. Setting the locale is not a visual decision: it
+changes Filament's copy, your application's copy, and anything else reading
+`app()->getLocale()` for the length of the request. Plenty of applications
+already decide the language from the user record, the subdomain or an
+`Accept-Language` header, and installing a theme should not quietly take that
+over.
+
+When you do turn it on, this is what the theme does and does not touch:
+
+- The locale is applied by middleware **registered on that panel only**. Every
+  other route in your application, and every panel where the switcher is off,
+  is untouched.
+- The middleware is added *after* the ones your panel provider registers, so
+  inside that panel the visitor's choice wins over an earlier `setLocale()`.
+  That is the point of enabling it. If your own locale logic must win instead,
+  leave the switcher off, or register your middleware on the panel after the
+  plugin.
+- Nothing is applied until a visitor picks a language. Without the cookie the
+  theme never calls `setLocale()` at all, so an untouched panel behaves exactly
+  as it did before.
+- The cookie is validated against the languages that panel offers, so a value
+  another panel wrote is ignored rather than trusted.
+
 ## Accessibility
 
 Contrast is computed with Filament's own colour maths and checked in the test
@@ -929,6 +1073,10 @@ No Blade view is published or replaced, so Filament upgrades cannot silently
 revert to an old copy of a framework template. The simple layout in particular
 is one of the files most likely to change between releases, and a published
 copy of it would stop tracking upstream without saying so.
+
+The [language switcher](#languages) is the same story from the other side: it
+appears in the user menu through `Panel::userMenuItems()`, Filament's own
+extension point for that menu, rather than by publishing the menu's view.
 
 ## Troubleshooting
 
@@ -1022,6 +1170,7 @@ from it:
 
 ```bash
 node bin/shots.mjs             # all five compositions, both modes, both widths
+node bin/locale-shots.mjs      # the language switcher, and the choice surviving
 node bin/contrast-login.mjs    # measured contrast for the same set
 php bin/contrast-report.php    # palette-level contrast
 ```
@@ -1060,10 +1209,12 @@ Concretely, what is in and what is not.
 **Today.** A pre-compiled stylesheet, a configuration API for colour,
 typography, roundness, density and elevation, warm light and dark modes, five
 sign-in compositions, illustrated empty states, loading states, measured
-contrast, and an in-panel appearance page that edits and persists all of it.
+contrast, an in-panel appearance page that edits and persists all of it, and
+English and Spanish with an optional switcher.
 
 **Next.** The rest of the panel rephotographed from the bundled preview panel.
 Presets shipped as named palettes beyond the five the appearance page carries.
+More bundled languages, taken from what people actually ask for.
 
 **Later, and deliberately vaguer because it is not built.** Blade components
 that use the tokens directly, for building custom pages that match the panel.

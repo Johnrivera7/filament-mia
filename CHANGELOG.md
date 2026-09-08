@@ -30,6 +30,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     page that would fix it.
 - Spanish translations for the appearance page, alongside the English ones.
   Publish or override them with the `filament-mia-translations` tag.
+- An optional language switcher in the user menu, below the light/dark switch,
+  enabled with `localeSwitcher()` or the `locales` config key. Off by default.
+  - One item per language, labelled with the language's own name, so the choice
+    stays readable to someone who cannot read the language currently on screen.
+    Added through `Panel::userMenuItems()`, so no Blade view is overridden.
+  - The choice is stored in a long-lived `filament_mia_locale` cookie and
+    applied by middleware registered on that panel alone, persistent so
+    Livewire requests resolve the same locale as the page that issued them. It
+    survives a reload, a navigation, an expired session and a sign-out, which
+    means the sign-in screen also comes back in the chosen language.
+  - It sets Laravel's locale, so Filament's own copy and the application's
+    follow, not just the theme's appearance page. Off by default because an
+    application that already decides the language should keep deciding it, and
+    because a panel whose own resources are untranslated would end up half in
+    each language.
+  - The stored value is validated against the languages that panel offers, so a
+    cookie written by another panel is ignored.
 - `Project status` and `Where this is going` sections in the README, stating
   the maturity of the `0.x` series and the direction of the project.
 

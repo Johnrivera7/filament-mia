@@ -4,10 +4,12 @@ namespace JohnRivera7\FilamentMia;
 
 use BackedEnum;
 use Closure;
+use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
 use Filament\FontProviders\BunnyFontProvider;
 use Filament\Panel;
 use Filament\Support\Facades\FilamentView;
+use Filament\Support\Icons\Heroicon;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
@@ -17,10 +19,12 @@ use JohnRivera7\FilamentMia\Enums\Density;
 use JohnRivera7\FilamentMia\Enums\LoginLayout;
 use JohnRivera7\FilamentMia\Enums\Roundness;
 use JohnRivera7\FilamentMia\Exceptions\InvalidThemeOption;
+use JohnRivera7\FilamentMia\Http\Middleware\ApplyLocale;
 use JohnRivera7\FilamentMia\Pages\ThemeCustomizer;
 use JohnRivera7\FilamentMia\Settings\Contracts\SettingsRepository;
 use JohnRivera7\FilamentMia\Settings\ThemeSettings;
 use JohnRivera7\FilamentMia\Support\ColorValidator;
+use JohnRivera7\FilamentMia\Support\LocaleLibrary;
 use JohnRivera7\FilamentMia\Support\Palette;
 use JohnRivera7\FilamentMia\Support\TokenSheet;
 use UnitEnum;
@@ -98,6 +102,9 @@ class MiaTheme implements Plugin
 
     protected string|BackedEnum|null $customizerNavigationIcon = null;
 
+    /** @var array<string, string> */
+    protected array $locales = [];
+
     public function __construct()
     {
         $config = config('filament-mia', []);
@@ -135,6 +142,8 @@ class MiaTheme implements Plugin
         $this->customizer = (bool) ($config['customizer']['enabled'] ?? false);
         $this->customizerNavigationGroup = $config['customizer']['navigation_group'] ?? null;
         $this->customizerNavigationSort = $config['customizer']['navigation_sort'] ?? null;
+
+        $this->locales = LocaleLibrary::normalise((array) ($config['locales'] ?? []));
     }
 
     public static function make(): static
@@ -161,6 +170,15 @@ class MiaTheme implements Plugin
 
         if ($this->customizer) {
             $panel->pages([ThemeCustomizer::class]);
+        }
+
+        if ($this->locales !== []) {
+            $panel
+                ->middleware([ApplyLocale::class], isPersistent: true)
+                // Registered flat rather than as their own group: a group
+                // would switch Filament to its multi-group menu layout and
+                // rearrange items the application registered itself.
+                ->userMenuItems($this->localeMenuItems($panel->getId()));
         }
 
         $panel
@@ -488,6 +506,104 @@ class MiaTheme implements Plugin
     public function getCustomizerNavigationIcon(): string|BackedEnum|null
     {
         return $this->customizerNavigationIcon;
+    }
+
+    /**
+     * Offer a language switcher in the user menu, next to the light/dark
+     * switch, and apply the visitor's choice to the panel.
+     *
+     * Off by default, and deliberately so. Setting the locale is not a visual
+     * decision: it changes Filament's own copy, the application's copy, and
+     * anything else reading `app()->getLocale()` for the length of the
+     * request. An application that already decides the language — from the
+     * user record, the subdomain, or an `Accept-Language` header — should keep
+     * deciding it, and installing a theme should not quietly take that over.
+     *
+     *     ->localeSwitcher()                              // English, Español
+     *     ->localeSwitcher(['en', 'es', 'pt_BR'])
+     *     ->localeSwitcher(['en' => 'English (US)', 'es'])
+     *     ->localeSwitcher(false)                         // off again
+     *
+     * Codes must match the directories in the application's `lang` folder.
+     * Languages are labelled with their own name unless one is given.
+     *
+     * Turning this on only affects the panel it is registered in, and only
+     * once the visitor picks something: the theme never overrides a locale
+     * that nobody asked to change.
+     *
+     * @param  array<int|string, string>|bool  $locales
+     */
+    public function localeSwitcher(array|bool $locales = ['en', 'es']): static
+    {
+        if ($locales === false) {
+            $this->locales = [];
+
+            return $this;
+        }
+
+        $locales = LocaleLibrary::normalise($locales === true ? ['en', 'es'] : $locales);
+
+        if (count($locales) === 1) {
+            throw new InvalidThemeOption(
+                'Mía theme: [localeSwitcher] needs at least two locales to switch between. Pass more '
+                . 'than one, or leave the switcher off.',
+            );
+        }
+
+        $this->locales = $locales;
+
+        return $this;
+    }
+
+    /**
+     * The languages the switcher offers, as `code => label`. Empty when the
+     * switcher is off.
+     *
+     * @return array<string, string>
+     */
+    public function getLocales(): array
+    {
+        return $this->locales;
+    }
+
+    public function hasLocale(string $locale): bool
+    {
+        return array_key_exists($locale, $this->locales);
+    }
+
+    /**
+     * One user menu item per language, which lands directly under the
+     * light/dark switch.
+     *
+     * A list rather than a button that cycles through the languages: the name
+     * of every choice stays on screen, which is the point when the visitor
+     * cannot read the language the interface is currently in, and adding a
+     * third language changes nothing about how it works.
+     *
+     * Filament's own user menu API, so the theme still overrides no views.
+     *
+     * @return array<string, Action>
+     */
+    protected function localeMenuItems(string $panelId): array
+    {
+        $items = [];
+
+        foreach ($this->locales as $code => $label) {
+            $items["mia-locale-{$code}"] = Action::make("mia-locale-{$code}")
+                ->label($label)
+                // Resolved at render time, after the middleware has applied
+                // whatever the visitor last chose.
+                ->icon(fn (): Heroicon => app()->getLocale() === $code
+                    ? Heroicon::Check
+                    : Heroicon::OutlinedLanguage)
+                ->color(fn (): string => app()->getLocale() === $code ? 'primary' : 'gray')
+                ->url(fn (): string => route('filament-mia.locale', [
+                    'panel' => $panelId,
+                    'locale' => $code,
+                ]));
+        }
+
+        return $items;
     }
 
     /**
