@@ -28,7 +28,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "filament/filament": "^5.7",
         "illuminate/contracts": "^11.28|^12.0|^13.0",
         "illuminate/support": "^11.28|^12.0|^13.0",
