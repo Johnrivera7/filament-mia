@@ -17,6 +17,28 @@ return [
     'presets' => [
         'heading' => 'Preajustes',
         'description' => 'Un punto de partida completo. Al aplicar uno se rellena el formulario de abajo, que puedes seguir ajustando.',
+        'items' => [
+            'mia' => [
+                'label' => 'Mía',
+                'description' => 'Oro miel sobre crema, compuesto en Cormorant Garamond. El tema tal como se sirve.',
+            ],
+            'atelier' => [
+                'label' => 'Atelier',
+                'description' => 'Terracota y arcilla, esquinas más cerradas y una serif suave para los titulares.',
+            ],
+            'botanica' => [
+                'label' => 'Botanica',
+                'description' => 'Salvia y trigo, más redondeada y más amplia, con una serif de estilo antiguo.',
+            ],
+            'papier' => [
+                'label' => 'Papier',
+                'description' => 'Plano y de imprenta: sin sombras, esquinas rectas, filas compactas y titulares en Playfair.',
+            ],
+            'plain' => [
+                'label' => 'Plain',
+                'description' => 'La paleta y las formas cálidas, pero toda la interfaz en la sans. Sin serif.',
+            ],
+        ],
     ],
 
     'colour' => [

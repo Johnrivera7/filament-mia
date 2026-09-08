@@ -74,6 +74,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `--mia-chart-tooltip-radius` and `--mia-chart-legend-swatch-radius` are
     published alongside the rest.
 
+- Preset names and descriptions on the appearance page are translatable, and
+  ship in Spanish alongside the rest of the page. A preset registered by an
+  application keeps the text it was given.
+- Screenshots of a working panel in the README: dashboard, tables, forms,
+  charts and the appearance page, in both colour modes and on a phone.
+  `bin/demo-shots.mjs` produces them.
+
 ### Changed
 
 - `--mia-ink-muted` is one step darker in light mode, `--gray-600` rather than

@@ -17,6 +17,28 @@ return [
     'presets' => [
         'heading' => 'Presets',
         'description' => 'A complete starting point. Applying one fills the form below, which you can then adjust.',
+        'items' => [
+            'mia' => [
+                'label' => 'Mía',
+                'description' => 'Honey gold on cream, set in Cormorant Garamond. The theme as shipped.',
+            ],
+            'atelier' => [
+                'label' => 'Atelier',
+                'description' => 'Terracotta and clay, tighter corners, a soft serif for headings.',
+            ],
+            'botanica' => [
+                'label' => 'Botanica',
+                'description' => 'Sage and wheat, rounder and more spacious, with an old-style serif.',
+            ],
+            'papier' => [
+                'label' => 'Papier',
+                'description' => 'Flat and printed: no shadows, crisp corners, compact rows, Playfair headings.',
+            ],
+            'plain' => [
+                'label' => 'Plain',
+                'description' => 'The warm palette and shapes, but the whole interface in the sans. No serif.',
+            ],
+        ],
     ],
 
     'colour' => [

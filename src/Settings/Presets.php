@@ -121,10 +121,7 @@ class Presets
      */
     public static function options(): array
     {
-        return array_map(
-            fn (array $preset): string => $preset['label'],
-            static::all(),
-        );
+        return static::translated('label');
     }
 
     /**
@@ -132,10 +129,31 @@ class Presets
      */
     public static function descriptions(): array
     {
-        return array_map(
-            fn (array $preset): string => $preset['description'],
-            static::all(),
-        );
+        return static::translated('description');
+    }
+
+    /**
+     * A preset's name and description in the panel's language.
+     *
+     * The English text above is the fallback rather than the value: it is what
+     * a preset added by an application carries, and what any locale without a
+     * published translation falls back to.
+     *
+     * @return array<string, string>
+     */
+    protected static function translated(string $key): array
+    {
+        $translated = [];
+
+        foreach (static::all() as $name => $preset) {
+            $line = "filament-mia::customizer.presets.items.{$name}.{$key}";
+
+            $translated[$name] = trans()->has($line)
+                ? __($line)
+                : $preset[$key];
+        }
+
+        return $translated;
     }
 
     /**
