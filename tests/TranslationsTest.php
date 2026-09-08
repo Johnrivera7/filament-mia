@@ -3,19 +3,33 @@
 namespace JohnRivera7\FilamentMia\Tests;
 
 use JohnRivera7\FilamentMia\Settings\Presets;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TranslationsTest extends TestCase
 {
-    public function test_both_bundled_languages_carry_the_same_keys(): void
+    #[DataProvider('files')]
+    public function test_both_bundled_languages_carry_the_same_keys(string $file): void
     {
         // A missing key does not fail at runtime: Laravel renders the key
         // itself, so a half-translated page looks like a typo rather than a
         // bug. The parity check is what makes it visible.
-        $en = $this->flatten(require __DIR__ . '/../resources/lang/en/customizer.php');
-        $es = $this->flatten(require __DIR__ . '/../resources/lang/es/customizer.php');
+        $en = $this->flatten(require __DIR__ . "/../resources/lang/en/{$file}.php");
+        $es = $this->flatten(require __DIR__ . "/../resources/lang/es/{$file}.php");
 
-        $this->assertSame([], array_values(array_diff($en, $es)), 'Keys missing from the Spanish file.');
-        $this->assertSame([], array_values(array_diff($es, $en)), 'Keys missing from the English file.');
+        $this->assertSame([], array_values(array_diff($en, $es)), "Keys missing from the Spanish {$file} file.");
+        $this->assertSame([], array_values(array_diff($es, $en)), "Keys missing from the English {$file} file.");
+    }
+
+    /**
+     * Named rather than globbed, so that adding a file to one language and not
+     * the other is caught by this test failing to find it rather than by the
+     * test quietly having nothing to compare.
+     *
+     * @return array<array<string>>
+     */
+    public static function files(): array
+    {
+        return [['customizer'], ['http']];
     }
 
     public function test_the_preset_labels_come_from_the_language_files(): void

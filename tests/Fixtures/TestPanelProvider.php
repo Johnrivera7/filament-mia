@@ -18,6 +18,13 @@ class TestPanelProvider extends PanelProvider
             ->default()
             ->id('testing')
             ->path('testing')
+            // Named, so the assertions about the way back off an error page
+            // are about the theme's wording rather than about Filament's
+            // fallback to the application name.
+            ->brandName('Studio')
+            // A sign-in screen, so the 419 page has somewhere to send a
+            // visitor whose session has expired.
+            ->login()
             ->plugin(MiaTheme::make()->customizer());
     }
 }
