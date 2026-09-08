@@ -20,6 +20,7 @@ use JohnRivera7\FilamentMia\Enums\LoginLayout;
 use JohnRivera7\FilamentMia\Enums\Roundness;
 use JohnRivera7\FilamentMia\Exceptions\InvalidThemeOption;
 use JohnRivera7\FilamentMia\Http\Middleware\ApplyLocale;
+use JohnRivera7\FilamentMia\Pages\PageBuilder;
 use JohnRivera7\FilamentMia\Pages\ThemeCustomizer;
 use JohnRivera7\FilamentMia\Settings\Contracts\SettingsRepository;
 use JohnRivera7\FilamentMia\Settings\ThemeSettings;
@@ -102,6 +103,19 @@ class MiaTheme implements Plugin
 
     protected string|BackedEnum|null $customizerNavigationIcon = null;
 
+    protected bool $pageBuilder = false;
+
+    /** @var (Closure(): bool)|null */
+    protected ?Closure $pageBuilderAuthorization = null;
+
+    protected string|UnitEnum|null $pageBuilderNavigationGroup = null;
+
+    protected ?int $pageBuilderNavigationSort = null;
+
+    protected string|BackedEnum|null $pageBuilderNavigationIcon = null;
+
+    protected string $pageBuilderPath = '/';
+
     /** @var array<string, string> */
     protected array $locales = [];
 
@@ -143,6 +157,11 @@ class MiaTheme implements Plugin
         $this->customizerNavigationGroup = $config['customizer']['navigation_group'] ?? null;
         $this->customizerNavigationSort = $config['customizer']['navigation_sort'] ?? null;
 
+        $this->pageBuilder = (bool) ($config['page_builder']['enabled'] ?? false);
+        $this->pageBuilderNavigationGroup = $config['page_builder']['navigation_group'] ?? null;
+        $this->pageBuilderNavigationSort = $config['page_builder']['navigation_sort'] ?? null;
+        $this->pageBuilderPath = $config['page_builder']['path'] ?? '/';
+
         $this->locales = LocaleLibrary::normalise((array) ($config['locales'] ?? []));
     }
 
@@ -170,6 +189,10 @@ class MiaTheme implements Plugin
 
         if ($this->customizer) {
             $panel->pages([ThemeCustomizer::class]);
+        }
+
+        if ($this->pageBuilder) {
+            $panel->pages([PageBuilder::class]);
         }
 
         if ($this->locales !== []) {
@@ -506,6 +529,118 @@ class MiaTheme implements Plugin
     public function getCustomizerNavigationIcon(): string|BackedEnum|null
     {
         return $this->customizerNavigationIcon;
+    }
+
+    /**
+     * Add the page builder to the panel: a block editor for a public page, and
+     * the page itself, drawn in the theme.
+     *
+     * Off by default, and more emphatically so than the appearance page. This
+     * one owns an address on the public site and a table in the database, and
+     * neither is something a theme should acquire by being installed. Nothing
+     * is registered until this is called — no route, no page in the
+     * navigation, no query.
+     *
+     * The table is a migration the package publishes rather than loads, so
+     * switching this on is two steps:
+     *
+     *     ->pageBuilder()
+     *
+     *     php artisan vendor:publish --tag=filament-mia-migrations
+     *     php artisan migrate
+     *
+     * `$path` is where the published page answers, and defaults to the site
+     * root. The route is registered after the application's own, so a `/`
+     * the application already claimed keeps it and the theme's page simply
+     * does not appear — change the path rather than fighting over it.
+     *
+     * Restrict who may open the builder with `pageBuilderAuthorization()`.
+     */
+    public function pageBuilder(bool $condition = true, ?string $path = null): static
+    {
+        $this->pageBuilder = $condition;
+
+        if ($path !== null) {
+            $this->pageBuilderPath = $path;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Decide who may open the page builder.
+     *
+     * Without this, anyone who can reach the panel can edit the public page.
+     * The callback runs on every navigation build, so keep it cheap.
+     *
+     *     ->pageBuilderAuthorization(fn (): bool => auth()->user()?->isEditor())
+     *
+     * It also guards the draft preview, which is served outside the panel and
+     * would otherwise be readable by anyone signed in.
+     *
+     * @param  Closure(): bool  $callback
+     */
+    public function pageBuilderAuthorization(Closure $callback): static
+    {
+        $this->pageBuilderAuthorization = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Place the page builder in the navigation.
+     */
+    public function pageBuilderNavigation(
+        string|UnitEnum|null $group = null,
+        ?int $sort = null,
+        string|BackedEnum|null $icon = null,
+    ): static {
+        $this->pageBuilderNavigationGroup = $group;
+        $this->pageBuilderNavigationSort = $sort;
+        $this->pageBuilderNavigationIcon = $icon;
+
+        return $this;
+    }
+
+    public function hasPageBuilder(): bool
+    {
+        return $this->pageBuilder;
+    }
+
+    public function isPageBuilderAuthorized(): bool
+    {
+        if (! $this->pageBuilder) {
+            return false;
+        }
+
+        return ($this->pageBuilderAuthorization === null)
+            || (bool) ($this->pageBuilderAuthorization)();
+    }
+
+    /**
+     * The path the published page answers on, without a leading slash unless
+     * it is the site root.
+     */
+    public function getPageBuilderPath(): string
+    {
+        $path = trim($this->pageBuilderPath, '/');
+
+        return $path === '' ? '/' : $path;
+    }
+
+    public function getPageBuilderNavigationGroup(): string|UnitEnum|null
+    {
+        return $this->pageBuilderNavigationGroup;
+    }
+
+    public function getPageBuilderNavigationSort(): ?int
+    {
+        return $this->pageBuilderNavigationSort;
+    }
+
+    public function getPageBuilderNavigationIcon(): string|BackedEnum|null
+    {
+        return $this->pageBuilderNavigationIcon;
     }
 
     /**

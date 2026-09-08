@@ -225,6 +225,52 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Page builder
+    |--------------------------------------------------------------------------
+    |
+    | Adds a block editor to the panel for a public page — hero, features,
+    | steps, comparison, metrics, testimonials, pricing, questions, a call to
+    | action, a navigation bar and a footer — and serves the result in the
+    | theme, outside the panel.
+    |
+    | Off by default, and more emphatically than the appearance page: this one
+    | owns an address on the public site and a table in the database. Nothing
+    | is registered until it is switched on — no route, no page, no query.
+    |
+    | The table is a migration the package publishes rather than loads:
+    |
+    |     php artisan vendor:publish --tag=filament-mia-migrations
+    |     php artisan migrate
+    |
+    | Restrict who can open the builder with ->pageBuilderAuthorization(),
+    | which takes a closure and has no config equivalent:
+    |
+    |     ->plugin(
+    |         MiaTheme::make()
+    |             ->pageBuilder()
+    |             ->pageBuilderAuthorization(fn (): bool => auth()->user()?->isEditor())
+    |     )
+    |
+    */
+
+    'page_builder' => [
+
+        'enabled' => false,
+
+        // Where the published page answers. The route is registered after your
+        // application's own, so a path you already serve keeps its route and
+        // the theme's page does not appear — move this rather than fight it.
+        'path' => '/',
+
+        // Navigation group for the builder. Null leaves it ungrouped.
+        'navigation_group' => null,
+
+        'navigation_sort' => null,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Language switcher
     |--------------------------------------------------------------------------
     |

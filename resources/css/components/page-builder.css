@@ -1,0 +1,90 @@
+/*
+ * The page builder, inside the panel.
+ *
+ * Only the two-column shell and the preview pane live here. Everything in the
+ * form itself is a Filament component the theme already styles.
+ *
+ * The public page the builder composes is styled by `page.css`, which is not
+ * part of this build: it has no panel around it and no Tailwind pass of its
+ * own. See `Support\PageSheet`.
+ */
+
+.fi-mia-builder {
+    display: grid;
+    align-items: start;
+    gap: calc(var(--spacing) * 6 * var(--mia-density, 1));
+}
+
+/* `min-width: 0` on both columns, or a long field name in the form stretches
+   the grid track and pushes the preview off the side. */
+.fi-mia-builder-form,
+.fi-mia-builder-preview {
+    min-width: 0;
+}
+
+.fi-mia-builder-save {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--spacing) * 3);
+    margin-top: calc(var(--spacing) * 6);
+}
+
+.fi-mia-builder-hint {
+    font-size: 0.8125rem;
+    color: var(--mia-ink-muted);
+}
+
+.fi-mia-builder-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--spacing) * 3);
+}
+
+.fi-mia-builder-widths {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+}
+
+.fi-mia-builder-frame {
+    overflow: hidden;
+    margin-top: calc(var(--spacing) * 4);
+    border: 1px solid var(--mia-hairline);
+    border-radius: var(--mia-radius-xl, 0.9375rem);
+    background-color: var(--mia-surface);
+}
+
+/* Only the width animates. Animating the frame itself would reflow the page
+   inside it on every frame of the transition. */
+.fi-mia-builder-viewport {
+    margin-inline: auto;
+    transition: max-width var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.fi-mia-builder-frame iframe {
+    display: block;
+    width: 100%;
+    height: 38rem;
+    border: 0;
+}
+
+@media (min-width: 1280px) {
+    .fi-mia-builder {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* The pane follows the form down a long page, which is most of the value
+       of having it beside the form rather than under it. */
+    .fi-mia-builder-preview {
+        position: sticky;
+        top: calc(var(--spacing) * 6);
+    }
+
+    .fi-mia-builder-frame iframe {
+        height: calc(100vh - 22rem);
+        min-height: 32rem;
+    }
+}

@@ -44,6 +44,7 @@
 @import './components/widget.css' layer(components);
 @import './components/chart.css' layer(components);
 @import './components/customizer.css' layer(components);
+@import './components/page-builder.css' layer(components);
 
 @import './motion.css' layer(components);
 
