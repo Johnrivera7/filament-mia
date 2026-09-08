@@ -127,7 +127,7 @@ validación, un teléfono, un desafío en dos pasos.
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-form-light.jpg" alt="Un formulario de edición con secciones, desplegables, selector de fecha y campos con borde de un pelo" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-charts-dark.jpg" alt="Tarjetas de cifras y dos gráficos en modo oscuro, con rejilla, ejes y etiquetas en la paleta cálida del tema" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-charts-dark.jpg" alt="Dos widgets de gráfico en modo oscuro, con rejilla, ejes y etiquetas en la paleta cálida del tema" /></td>
 </tr>
 <tr>
 <td><b>Formularios</b><br />Los campos llevan un borde de un pelo y un halo suave al enfocarse, en lugar del anillo de Filament.</td>

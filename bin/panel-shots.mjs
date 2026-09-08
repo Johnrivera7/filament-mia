@@ -133,8 +133,36 @@ for (const [viewport, modes] of [
             await shoot(page, '/admin/theme-customizer', 'panel-appearance-light')
         }
 
+        // Cropped to the two chart cards rather than the whole dashboard,
+        // which the frame above already shows. Close up is also where the
+        // grid, the axes and the tick labels are legible enough to see that
+        // they took the palette.
         if (viewport === 'desktop' && mode === 'dark') {
-            await shoot(page, '/admin', 'panel-charts-dark')
+            await page.goto(`${BASE}/admin`, { waitUntil: 'networkidle' })
+            await settle(page)
+
+            const box = await page.evaluate(() => {
+                const cards = [...document.querySelectorAll('.fi-wi-chart')].map(
+                    (chart) => chart.getBoundingClientRect(),
+                )
+
+                const left = Math.min(...cards.map((r) => r.left))
+                const top = Math.min(...cards.map((r) => r.top))
+                const pad = 20
+
+                return {
+                    x: left + window.scrollX - pad,
+                    y: top + window.scrollY - pad,
+                    width: Math.max(...cards.map((r) => r.right)) - left + pad * 2,
+                    height: Math.max(...cards.map((r) => r.bottom)) - top + pad * 2,
+                }
+            })
+
+            await page.screenshot({
+                path: `${OUT}/panel-charts-dark.png`,
+                fullPage: true,
+                clip: box,
+            })
         }
 
         await page.context().close()

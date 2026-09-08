@@ -123,7 +123,7 @@ validation error, a phone, a two-step challenge:
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-form-light.jpg" alt="An edit form with sections, selects, a date picker and hairline-bordered inputs" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-charts-dark.jpg" alt="Stat cards and two charts in dark mode, with grid, axes and labels in the theme's warm palette" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-charts-dark.jpg" alt="Two chart widgets in dark mode, with grid lines, axes and tick labels in the theme's warm palette" /></td>
 </tr>
 <tr>
 <td><b>Forms</b><br />Inputs carry a hairline and a soft halo on focus, in place of Filament's ring.</td>
