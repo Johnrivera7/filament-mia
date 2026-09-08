@@ -4,10 +4,14 @@
 
 # Mía
 
-### Un tema editorial y cálido para Filament v5
+### Un tema cálido para Filament v5
 
-Para paneles que forman parte del producto y no un añadido detrás de un<br />
-login. Crema y champán en claro, espresso en oscuro, titulares en serif.
+Se ocupa de lo que otros temas dejan a medias: estados vacíos que dicen por qué<br />
+una lista está vacía, páginas de error y mantenimiento que siguen pareciendo tu<br />
+panel, cinco composiciones de acceso, una página de apariencia dentro del panel<br />
+y un constructor opcional para la página pública que lo precede, sobre<br />
+superficies crema y titulares en serif, distribuido precompilado y sin paso de<br />
+compilación.
 
 [![Estado](https://img.shields.io/badge/estado-v0.x%20%C2%B7%20desarrollo%20activo-D9A14E?style=flat-square&labelColor=3C3227)](#estado-del-proyecto)
 [![Licencia](https://img.shields.io/badge/licencia-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
@@ -155,6 +159,46 @@ versión que necesita una vuelta atrás y no un punto de partida.
 <div align="center">
 <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-table-empty-light.jpg" alt="Una tabla de proyectos con una búsqueda que no encuentra nada: una marca ilustrada en un halo cálido, un titular que dice Nothing matches y una acción para volver a verlo todo" width="860" />
 </div>
+
+### Cuando algo va mal
+
+Las pantallas que un panel solo enseña en su peor día. Cada una dice qué ha
+pasado, si se ha perdido algo y qué hacer a continuación, y cada una lleva su
+propia salida: una página de error es el único sitio de una aplicación Filament
+que no tiene navegación alrededor. [Cómo se activan](#páginas-de-error-y-mantenimiento).
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-404-light.jpg" alt="Una página 404: la marca botánica en un halo cálido, un titular en serif y un botón que dice Back to Mía" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-419-dark.jpg" alt="Una página 419 en modo oscuro, con un botón que dice Sign in again" /></td>
+</tr>
+<tr>
+<td><b>404</b><br />Una dirección que no existe. La vuelta atrás lleva el nombre de marca del propio panel.</td>
+<td><b>419, oscuro</b><br />La sesión ya no está, así que esta apunta a la pantalla de acceso y no al panel.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-403-light.jpg" alt="Una página 403 que muestra el motivo del rechazo en lugar de la línea genérica" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-500-dark.jpg" alt="Una página 500 en modo oscuro" /></td>
+</tr>
+<tr>
+<td><b>403</b><br />Cuando una <code>AuthorizationException</code> trae un mensaje escrito para quien fue rechazado, sustituye a la línea genérica.</td>
+<td><b>500, oscuro</b><br />Nada del fallo llega a quien lo lee. Sí llega un identificador de petición, cuando la infraestructura lo puso.</td>
+</tr>
+</table>
+
+La de mantenimiento es la misma tarjeta, servida por una aplicación que no está
+en pie:
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-maintenance-light.jpg" alt="Una página de mantenimiento que dice Back shortly, con el antetítulo MAINTENANCE y una línea que pide volver en unos 15 minutos" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-maintenance-dark.jpg" alt="La misma página de mantenimiento en modo oscuro, resuelto desde el esquema de color del sistema" /></td>
+</tr>
+<tr>
+<td><b>Mantenimiento</b><br /><code>--retry</code> en segundos se convierte en una frase, no en una cabecera que nadie lee.</td>
+<td><b>La misma, oscura</b><br />Desde <code>prefers-color-scheme</code>: a esas alturas no hay preferencia guardada que leer.</td>
+</tr>
+</table>
 
 ### La página de apariencia
 
@@ -441,6 +485,99 @@ Cuando sí lo activas, esto es lo que el tema toca y lo que no:
 - La cookie se valida contra los idiomas que ofrece ese panel, así que un valor
   escrito por otro panel se ignora en lugar de darse por bueno.
 
+## Páginas de error y mantenimiento
+
+Cinco pantallas para el peor día de un panel: `404`, `403`, `419`, `500` y la
+de mantenimiento. Se dibujan sin panel alrededor, así que llevan su propia hoja
+de estilos incrustada en el documento: nada que compilar, nada que publicar,
+ningún recurso que servir.
+
+### Cómo se activan las de error
+
+Vienen **desactivadas**, y es a propósito. Las vistas de error de Laravel son
+de toda la aplicación, no de un panel, así que activarlas reestiliza todos los
+errores de la aplicación, incluidos los de rutas que no tienen nada que ver con
+un panel. Esa es tu decisión, no algo que un tema deba tomar por ti por el
+hecho de estar instalado.
+
+```php
+// config/filament-mia.php
+'error_pages' => true,
+```
+
+Es una opción de archivo de configuración y no tiene equivalente fluido, por lo
+mismo: no hay nada de ámbito de panel en ella que colgar del plugin de un panel.
+
+Tus vistas siguen ganando. El tema **añade** su directorio de vistas al final
+de `config('view.paths')`, y el manejador de excepciones de Laravel reconstruye
+el espacio de nombres `errors` a partir de esa lista —las rutas de la aplicación
+primero— justo antes de renderizar. Así que un archivo en
+`resources/views/errors/404.blade.php`, escrito a mano o publicado desde
+Laravel, tiene precedencia, y el tema solo responde por un estado que nadie más
+haya reclamado. Trae cuatro; un `418` sigue cayendo en lo que ya hicieran el
+framework o tu aplicación.
+
+Para cambiar el texto o el marcado, llévate una copia:
+
+```sh
+php artisan vendor:publish --tag=filament-mia-errors
+```
+
+Eso escribe en `resources/views/errors`, que es el primer sitio donde Laravel
+mira. Las copias siguen incluyendo el layout del paquete, así que editar una no
+congela la carcasa que la rodea.
+
+El texto de cada página está traducido en las líneas `filament-mia::http`, en
+los dos idiomas del paquete. La del `403` es la única que prefiere el mensaje de
+la excepción cuando lo hay: una `AuthorizationException` que dice «las facturas
+ya enviadas no se pueden editar» aporta más que la línea genérica, mientras que
+el marcador de posición de Laravel no aporta nada y se ignora.
+
+Dos avisos sobre lo que estas páginas te van a enseñar y lo que no:
+
+- Con `APP_DEBUG=true` un `500` nunca llega a una vista de error: Laravel
+  muestra su página de traza. Las otras tres sí llegan al tema.
+- En Laravel 13 un token CSRF caducado ya **no** produce un `419` en un
+  formulario normal del mismo origen. `PreventRequestForgery` comprueba el
+  origen de la petición *antes* que el token y deja pasar un `POST` del mismo
+  origen sin compararlos. La página del `419` sigue teniendo trabajo —los envíos
+  de origen cruzado y los clientes que no mandan la cabecera `Sec-Fetch-Site`
+  sí llegan a la comprobación del token, y Laravel levanta ese estado desde
+  otros sitios— pero es una pantalla más rara que antes.
+
+### La página de mantenimiento
+
+```sh
+php artisan down --render="filament-mia::maintenance" --retry=900
+php artisan up
+```
+
+`--retry` en segundos se convierte en una frase —«try again in about 15
+minutes»— además de en la cabecera `Retry-After`. Si no lo pones, la página lo
+dice en términos generales.
+
+Por qué está construida así: Laravel la renderiza **una vez**, en el momento en
+que se ejecuta ese comando, y guarda el HTML como una cadena en
+`storage/framework/down`. Cada petición que llega después la responde
+`storage/framework/maintenance.php`, que `public/index.php` requiere *antes* del
+autoloader de Composer. En el momento en que esta página se sirve no hay
+contenedor, ni configuración, ni sesión, ni base de datos, ni fábrica de
+vistas: hay un servidor web, un archivo JSON y un `echo`.
+
+Por eso la página no puede enlazar una hoja de estilos: no hay helper de URL de
+recursos que la construya, y los colores del tema compilado los emite un render
+de panel Filament que aquí tampoco existe. Todo va incrustado. El claro y el
+oscuro se resuelven en el navegador: `prefers-color-scheme` en el CSS, afinado
+con la elección que Filament guarda en `localStorage`, que es de lado cliente y
+por tanto sigue siendo legible cuando el servidor no responde.
+
+La contrapartida, dicha sin adornos: paleta, tipografía y forma salen de
+`config/filament-mia.php`, leído mientras el framework aún está en pie, y **no**
+de lo que guardó la página de apariencia —esos ajustes pertenecen a un panel y
+desde aquí no se pueden alcanzar—. Vuelve a ejecutar `php artisan down` después
+de cambiar el archivo de configuración, o la página seguirá mostrando la
+anterior.
+
 ## Accesibilidad
 
 El contraste se calcula con la propia aritmética de color de Filament y se
@@ -452,6 +589,13 @@ controles superan el 3:1 que WCAG 1.4.11 exige a los componentes de interfaz.
 Los capilares decorativos quedan por debajo a propósito: no transportan
 información, y WCAG 1.4.11 exime explícitamente a los elementos que no lo
 hacen. La tabla completa está en el [README en inglés](README.md#accessibility).
+
+Las [páginas de error y de mantenimiento](#páginas-de-error-y-mantenimiento) se
+miden sobre píxeles renderizados, igual que las pantallas de acceso y por el
+mismo motivo —su tarjeta es 88% opaca sobre dos degradados—, en las cinco
+paletas que puede aplicar la página de apariencia y en ambos modos: 40 pares,
+ninguno por debajo de AA, y el más justo la etiqueta del botón con 4.65:1 bajo
+el acento de Botanica.
 
 Además: el foco siempre es visible (dos capas, para que se lea sobre
 superficies claras, oscuras y botones de color), las acciones de fila nunca se

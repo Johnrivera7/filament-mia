@@ -4,10 +4,13 @@
 
 # Mía
 
-### A warm editorial theme for Filament v5
+### A warm theme for Filament v5
 
-For panels that are part of the product rather than an afterthought behind a<br />
-login. Cream and champagne in the light, espresso in the dark, serif headings.
+It looks after the parts other themes leave bare — empty states that say why a<br />
+list is empty, error and maintenance pages that still feel like your panel,<br />
+five sign-in layouts, an in-panel appearance page and an optional builder for<br />
+the public page in front of it — over cream surfaces and serif headings,<br />
+shipped pre-compiled with no build step.
 
 [![Status](https://img.shields.io/badge/status-v0.x%20%C2%B7%20active%20development-D9A14E?style=flat-square&labelColor=3C3227)](#project-status)
 [![License](https://img.shields.io/badge/license-MIT-D9A14E?style=flat-square&labelColor=3C3227)](LICENSE.md)
@@ -151,6 +154,46 @@ that needs a way back rather than a way to start:
 <div align="center">
 <img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-table-empty-light.jpg" alt="A projects table with a search that matches nothing: an illustrated mark in a warm halo, a heading reading Nothing matches, and an action to show everything again" width="860" />
 </div>
+
+### When something goes wrong
+
+The screens a panel only shows on its worst day. Each one says what happened,
+whether anything was lost, and what to do next — and each carries its own way
+back, because an error page is the one place in a Filament application with no
+navigation around it. [How to turn these on](#error-pages-and-maintenance).
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-404-light.jpg" alt="A 404 page: the botanical mark in a warm halo, a serif heading reading There is nothing at this address, and a button labelled Back to Mía" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-419-dark.jpg" alt="A 419 page in dark mode, reading Your session has expired, with a button labelled Sign in again" /></td>
+</tr>
+<tr>
+<td><b>404</b><br />A missing address. The way back is labelled with the panel's own brand name.</td>
+<td><b>419, dark</b><br />The session is gone, so this one points at the sign-in screen rather than the panel.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-403-light.jpg" alt="A 403 page reading You do not have access to this page, with the reason from the authorization exception in place of the generic line" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-error-500-dark.jpg" alt="A 500 page in dark mode reading Something went wrong on our side" /></td>
+</tr>
+<tr>
+<td><b>403</b><br />When an <code>AuthorizationException</code> carries a message written for the person refused, it replaces the generic line.</td>
+<td><b>500, dark</b><br />Nothing about the failure reaches the reader. A request identifier does, when the infrastructure set one.</td>
+</tr>
+</table>
+
+The maintenance page is the same card, served by an application that is not
+running:
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-maintenance-light.jpg" alt="A maintenance page reading Back shortly, with the eyebrow MAINTENANCE and a line saying to try again in about 15 minutes" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-maintenance-dark.jpg" alt="The same maintenance page in dark mode, resolved from the operating system's colour scheme" /></td>
+</tr>
+<tr>
+<td><b>Maintenance</b><br /><code>--retry</code> in seconds becomes a sentence rather than a header nobody reads.</td>
+<td><b>The same, dark</b><br />From <code>prefers-color-scheme</code>: there is no saved preference to read at this point.</td>
+</tr>
+</table>
 
 ### The appearance page
 
@@ -320,6 +363,9 @@ php artisan vendor:publish --tag=filament-mia-config
 | [`customizerAuthorization()`](#customizerauthorization) | `null` — anyone who can reach the panel | — |
 | [`customizerNavigation()`](#customizernavigation) | ungrouped | `customizer.navigation_group` `customizer.navigation_sort` |
 | [`localeSwitcher()`](#localeswitcher) | `false` — no switcher | `locales` |
+| [`pageBuilder()`](#pagebuilder) | `false` | `page_builder.enabled` `page_builder.path` |
+| [`pageBuilderAuthorization()`](#pagebuilderauthorization) | `null` — anyone who can reach the panel | — |
+| [`pageBuilderNavigation()`](#pagebuildernavigation) | ungrouped | `page_builder.navigation_group` `page_builder.navigation_sort` |
 
 ### Reference
 
@@ -622,6 +668,55 @@ to leave it off.
 MiaTheme::make()->localeSwitcher()                          // English, Español
 MiaTheme::make()->localeSwitcher(['en', 'es', 'pt_BR'])
 MiaTheme::make()->localeSwitcher(['en' => 'English (US)', 'es'])
+```
+
+#### `pageBuilder()`
+
+```php
+public function pageBuilder(bool $condition = true, ?string $path = null): static
+```
+
+Adds the [page builder](#the-page-builder) to the panel and serves what it
+builds at `$path`. Off by default; see that section before switching it on,
+because this is the one option that adds a table and a public address.
+
+```php
+MiaTheme::make()->pageBuilder()                 // served at /
+MiaTheme::make()->pageBuilder(path: 'welcome')  // served at /welcome
+```
+
+#### `pageBuilderAuthorization()`
+
+```php
+public function pageBuilderAuthorization(Closure $callback): static
+```
+
+Decides who may edit the public page. Without it, anyone who can reach the
+panel can publish to the open internet, which is rarely what you want. The
+callback runs on every navigation build, so keep it cheap.
+
+```php
+MiaTheme::make()
+    ->pageBuilder()
+    ->pageBuilderAuthorization(fn (): bool => auth()->user()?->isAdmin() ?? false)
+```
+
+#### `pageBuilderNavigation()`
+
+```php
+public function pageBuilderNavigation(
+    string|UnitEnum|null $group = null,
+    ?int $sort = null,
+    string|BackedEnum|null $icon = null,
+): static
+```
+
+Where the page sits in the navigation. The icon defaults to a globe.
+
+```php
+MiaTheme::make()
+    ->pageBuilder()
+    ->pageBuilderNavigation(group: 'Settings', sort: 80)
 ```
 
 ## The collapsed sidebar
@@ -1119,6 +1214,226 @@ When you do turn it on, this is what the theme does and does not touch:
 - The cookie is validated against the languages that panel offers, so a value
   another panel wrote is ignored rather than trusted.
 
+## The page builder
+
+The public page in front of the panel, composed from the panel. Sections are
+added from a picker, reordered by dragging, hidden without losing their
+content, and published when they are ready — and because they are drawn from
+the theme's own tokens, the page uses the same palette, type and spacing as the
+panel it was built in.
+
+Off by default, and more emphatically than everything else here. This is the
+one option that adds a table to your database and answers on a public address,
+and neither is something a theme should acquire by being installed:
+
+```php
+MiaTheme::make()->pageBuilder()
+```
+
+Until that call is made there is no route, no page in the navigation, no query
+and no migration. A panel that never switches it on behaves exactly as it did
+before.
+
+### Turning it on
+
+Publish the migration and run it. It is a stub rather than a loaded migration,
+for the same reason the feature is off by default:
+
+```bash
+php artisan vendor:publish --tag=filament-mia-migrations
+php artisan migrate
+```
+
+Then switch it on in the panel:
+
+```php
+use JohnRivera7\FilamentMia\MiaTheme;
+
+$panel->plugin(
+    MiaTheme::make()
+        ->pageBuilder()
+        ->pageBuilderAuthorization(fn (): bool => auth()->user()?->isAdmin() ?? false)
+        ->pageBuilderNavigation(group: 'Settings', sort: 80)
+);
+```
+
+`pageBuilderAuthorization()` is worth setting rather than leaving to the
+default. Without it, anyone who can reach the panel can publish to the open
+internet.
+
+### Where the page is served
+
+At `/` unless you say otherwise:
+
+```php
+MiaTheme::make()->pageBuilder(path: 'welcome')
+```
+
+If your application already answers at that path, it keeps it. The theme
+registers its route after every provider has booted, and Laravel matches the
+first route that answers a path, so an application serving its own `/` is never
+displaced — the builder simply has nowhere to publish to until you give it a
+free path.
+
+The draft has an address of its own, `/filament-mia/page-preview`, which asks
+anyone who is not signed in to the panel for credentials first. Keeping it off
+a query string means a published page can be cached at the edge without a
+parameter that would bypass the cache.
+
+### The sections
+
+Eleven, and a catalogue rather than a blank canvas. A canvas has to own layout,
+and once anything can be placed anywhere, the type scale, the contrast ratios
+and the behaviour at 320px stop being the theme's problem and become the
+editor's:
+
+| Section | What it is for |
+|---|---|
+| **Navigation bar** | Brand, links, an optional light/dark switch and up to two actions. Sticky if you want it. |
+| **Hero** | The headline, a lead, actions, and either an image or a sample card built from markup. |
+| **Features** | Two to four columns of short entries, each with an optional icon from a curated list. |
+| **How it works** | Numbered steps, because the order is the meaning. |
+| **Comparison** | Two columns of the same criteria, as stacked definition lists rather than a table that would have to scroll on a phone. |
+| **Figures** | Two to four numbers with a caption each. |
+| **Testimonials** | Quotes with an attribution and an optional role. |
+| **Pricing** | Plans with a price, a benefit per line, and one plan highlighted. |
+| **Questions** | An FAQ that opens and closes without JavaScript. |
+| **Call to action** | One heading and one action. |
+| **Footer** | Brand, a line about what this is, links and a legal line. |
+
+Every section carries the same three fields: whether it is visible, an anchor
+for other sections to link to, and which of the theme's four surfaces it sits
+on — canvas, warm, raised or the deep band. Those three are what let a page's
+rhythm be composed from the panel, and because the surfaces are the theme's own
+tokens, no combination can fall outside the palette.
+
+A new page starts from a starter layout that describes a product in the
+abstract, one section per shape, with copy that says what each section is for.
+Testimonials and pricing are left out of it on purpose: inventing a quote
+nobody said or a price nobody charges is the one kind of placeholder worse than
+an empty section. `Restore the starter page` brings it back at any time.
+
+### Draft and published
+
+Saving and publishing are separate. **Save draft** writes without validating,
+because a half-finished section is a normal state to leave the builder in.
+**Publish changes** validates and copies the draft over what visitors read.
+
+The preview beside the form is an iframe of the draft at its real address, in a
+real viewport, with the real stylesheet — so what it shows is what will be
+published, including the responsive behaviour that a scaled-down component
+preview gets wrong. Three widths, a refresh, and a **Live** toggle that is off
+by default because it costs a round trip per keystroke.
+
+The published page is cached indefinitely and the cache is dropped on every
+write, so a visit costs no query once it is warm. If you clear caches from
+elsewhere, nothing breaks — the next visit refills it.
+
+### Changing how it looks
+
+The page reads `config/filament-mia.php`, so recolouring the theme recolours
+the page with it and the two never drift apart. If you need to go further than
+the tokens allow, publish the views:
+
+```bash
+php artisan vendor:publish --tag=filament-mia-views
+```
+
+Each section is one Blade partial under
+`resources/views/vendor/filament-mia/page-builder/blocks/`, and the stylesheet
+they read is inlined by `Support\PageSheet` rather than compiled, so you can
+edit a partial without a Node toolchain anywhere in the project.
+
+## Error pages and maintenance
+
+Five screens a panel shows on its worst day: `404`, `403`, `419`, `500` and the
+maintenance page. They are drawn with no panel around them, so they carry their
+own stylesheet inlined into the document — nothing to compile, nothing to
+publish, no asset to serve.
+
+### Turning the error pages on
+
+They are **off by default**, and that is deliberate. Error views in Laravel are
+application-wide rather than panel-scoped, so switching them on restyles every
+error in the application, including the ones raised by routes that have nothing
+to do with a panel. That is your decision, not something a theme should take
+over by being installed.
+
+```php
+// config/filament-mia.php
+'error_pages' => true,
+```
+
+This is a config-file option with no fluent equivalent, for the same reason:
+there is nothing panel-scoped about it to hang off a panel's plugin.
+
+Your own views still win. The theme appends its view directory to
+`config('view.paths')`, and Laravel's exception handler rebuilds the `errors`
+namespace from that list — application paths first — immediately before it
+renders. So a file at `resources/views/errors/404.blade.php`, hand-written or
+published from Laravel, takes precedence, and the theme only answers for a
+status nobody else has claimed. It ships four; a `418` keeps falling through to
+whatever the framework or your application already does.
+
+To change the wording or the markup, take a copy:
+
+```sh
+php artisan vendor:publish --tag=filament-mia-errors
+```
+
+That writes into `resources/views/errors`, which is the first place Laravel
+looks. The copies keep including the layout from the package, so editing one
+does not freeze the shell around it.
+
+The copy on each page is translated through the `filament-mia::http` lines, in
+both bundled languages. The `403` is the one page that prefers the exception's
+own message when there is one: an `AuthorizationException` carrying "invoices
+that have already been sent cannot be edited" says more than the generic line,
+while Laravel's own placeholder does not and is ignored.
+
+Two notes on what these pages will and will not show you:
+
+- With `APP_DEBUG=true` a `500` never reaches an error view at all — Laravel
+  renders its trace page instead. The other three still arrive in the theme.
+- In Laravel 13 a stale CSRF token no longer produces a `419` for an ordinary
+  same-origin form. `PreventRequestForgery` checks the request origin *before*
+  the token and lets a same-origin `POST` through without comparing them. The
+  `419` page still has work to do — cross-site posts and clients that send no
+  `Sec-Fetch-Site` header reach the token check, and Laravel raises the status
+  from other places too — but it is a rarer screen than it used to be.
+
+### The maintenance page
+
+```sh
+php artisan down --render="filament-mia::maintenance" --retry=900
+php artisan up
+```
+
+`--retry` in seconds is turned into a sentence — "try again in about 15
+minutes" — as well as the `Retry-After` header. Leave it out and the page says
+so in general terms.
+
+The reason this page is built the way it is: Laravel renders it **once**, when
+that command runs, and stores the HTML as a string in `storage/framework/down`.
+Every request that arrives afterwards is answered by
+`storage/framework/maintenance.php`, which `public/index.php` requires *before*
+the Composer autoloader. At the moment this page is served there is no
+container, no configuration, no session, no database and no view factory —
+there is a web server, a JSON file and an `echo`.
+
+So the page cannot link a stylesheet, because there is no asset URL helper to
+build one and the compiled theme's colours are emitted by a Filament panel
+render it does not have either. Everything is inlined. Light and dark are
+settled in the browser: `prefers-color-scheme` in the CSS, refined by the
+choice Filament keeps in `localStorage`, which is client-side and therefore
+still readable when the server is not answering.
+
+The trade is worth stating plainly. Palette, type and shape come from
+`config/filament-mia.php`, read while the framework is still up, and **not**
+from anything the appearance page saved — those settings belong to one panel
+and cannot be reached from here. Re-run `php artisan down` after changing the
+config file, or the page will keep showing the old one.
+
 ## Accessibility
 
 Contrast is computed with Filament's own colour maths and checked in the test
@@ -1138,7 +1453,12 @@ Text pairs clear the 4.5:1 that WCAG AA asks of body copy, and controls clear
 the 3:1 that WCAG 1.4.11 asks of user interface components. The sign-in screens
 are measured separately, from rendered pixels, because their backgrounds are
 gradients; see [Accessibility of the
-compositions](#accessibility-of-the-compositions). Decorative
+compositions](#accessibility-of-the-compositions). The [error and maintenance
+pages](#error-pages-and-maintenance) are measured the same way and for the same
+reason — their card is 88% opaque over two gradient pools — across all five
+palettes the appearance page can apply, in both modes: 40 pairs, none below AA,
+the narrowest being the button label at 4.65:1 under the Botanica accent.
+Decorative
 hairlines are deliberately below that: they carry no information, and WCAG
 1.4.11 explicitly exempts elements that do not.
 
@@ -1314,8 +1634,9 @@ Concretely, what is in and what is not.
 **Today.** A pre-compiled stylesheet, a configuration API for colour,
 typography, roundness, density and elevation, warm light and dark modes, five
 sign-in compositions, illustrated empty states, loading states, measured
-contrast, an in-panel appearance page that edits and persists all of it, and
-English and Spanish with an optional switcher.
+contrast, error and maintenance pages, an in-panel appearance page that edits
+and persists all of it, an optional builder for the public page in front of the
+panel, and English and Spanish with an optional switcher.
 
 **Next.** The rest of the panel rephotographed from the bundled preview panel.
 Presets shipped as named palettes beyond the five the appearance page carries.
