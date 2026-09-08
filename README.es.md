@@ -25,6 +25,25 @@ compilación.
 
 </div>
 
+<!--
+  Las dos imágenes que pide el formulario del directorio de plugins, aquí para
+  que un cambio en ellas se revise en el pull request que lo hace.
+
+  `filament-hidden` es la clase que el directorio respeta cuando renderiza este
+  fichero como documentación del plugin. Allí la portada ya es la tarjeta del
+  listado, arriba de la página, así que repetirla como primera imagen de la
+  documentación sería la misma foto dos veces. En GitHub la clase no hace nada
+  y la portada abre la página, que es para lo que se compuso.
+-->
+
+<div class="filament-hidden" align="center">
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-cover.jpg" alt="Un lienzo crema y cálido con el titular A Filament theme that keeps a panel calm, junto al panel, una tarjeta de objetivos del trimestre y la pantalla de acceso dispuestos en perspectiva" width="100%" />
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-thumbnail.jpg" alt="La misma composición con un encuadre más cerrado para la parrilla del directorio, sin el párrafo de apoyo ni tres de las píldoras, para que lo que queda siga siendo legible" width="52%" />
+
+</div>
+
 ## Qué es
 
 Mía no es un cambio de paleta. Pasarle un color de acento a los estilos por
@@ -820,6 +839,137 @@ apariencia en lugar de revertirla. Un registro editado a mano hasta quedar
 inválido se ignora en vez de lanzar una excepción, para que un valor erróneo no
 pueda dejarte fuera de la página que lo arreglaría.
 
+## El constructor de páginas
+
+La página pública que precede al panel, compuesta desde el panel. Las secciones
+se añaden desde un selector, se reordenan arrastrando, se ocultan sin perder su
+contenido y se publican cuando están listas. Como se dibujan con los tokens del
+propio tema, la página usa la misma paleta, la misma tipografía y el mismo
+espaciado que el panel donde se construyó.
+
+Está desactivado por defecto, y con más razón que el resto. Es la única opción
+que añade una tabla a tu base de datos y responde en una dirección pública, y
+ninguna de las dos cosas debería adquirirse por instalar un tema:
+
+```php
+MiaTheme::make()->pageBuilder()
+```
+
+Mientras no hagas esa llamada no hay ruta, ni página en el menú, ni consulta, ni
+migración. Un panel que no lo active se comporta exactamente igual que antes.
+
+### Cómo activarlo
+
+Publica la migración y ejecútala. Es un *stub* y no una migración cargada, por
+la misma razón por la que la función viene apagada:
+
+```bash
+php artisan vendor:publish --tag=filament-mia-migrations
+php artisan migrate
+```
+
+Después actívalo en el panel:
+
+```php
+->plugin(
+    MiaTheme::make()
+        ->pageBuilder()
+        ->pageBuilderAuthorization(fn (): bool => auth()->user()?->isAdmin() ?? false)
+        ->pageBuilderNavigation(group: 'Ajustes', sort: 80),
+)
+```
+
+Conviene poner `pageBuilderAuthorization()` en lugar de dejar el valor por
+defecto: sin él, cualquiera que llegue al panel puede publicar en internet
+abierto.
+
+### Dónde se sirve la página
+
+En `/`, salvo que digas otra cosa:
+
+```php
+MiaTheme::make()->pageBuilder(path: 'bienvenida')
+```
+
+Si tu aplicación ya responde en esa ruta, se queda con ella. El tema registra la
+suya después de que hayan arrancado todos los proveedores, y Laravel resuelve
+con la primera ruta que responde, así que una aplicación que sirve su propia `/`
+nunca queda desplazada: el constructor simplemente no tiene dónde publicar hasta
+que le des una ruta libre.
+
+El borrador tiene dirección propia, `/filament-mia/page-preview`, y pide
+credenciales a quien no haya entrado al panel. Mantenerlo fuera de una cadena de
+consulta permite cachear la página publicada en el borde sin un parámetro que
+saltaría esa caché.
+
+### Las secciones
+
+Once, y un catálogo en vez de un lienzo en blanco. Un lienzo tiene que
+responsabilizarse del layout, y en cuanto cualquier cosa puede ir a cualquier
+sitio, la escala tipográfica, los contrastes medidos y el comportamiento a
+320 px dejan de ser problema del tema y pasan a serlo de quien edita:
+
+| Sección | Para qué sirve |
+|---|---|
+| **Barra de navegación** | Marca, enlaces, un interruptor opcional de claro y oscuro y hasta dos acciones. Fija si la quieres así. |
+| **Portada** | El titular, una entradilla, acciones y una imagen o una tarjeta de muestra hecha con marcado. |
+| **Características** | De dos a cuatro columnas de entradas breves, con un icono opcional de una lista acotada. |
+| **Cómo funciona** | Pasos numerados, porque el orden es el mensaje. |
+| **Comparativa** | Dos columnas con los mismos criterios, como listas de definición apiladas en vez de una tabla que tendría que desplazarse en un móvil. |
+| **Cifras** | De dos a cuatro números con su leyenda. |
+| **Testimonios** | Citas con su atribución y un cargo opcional. |
+| **Precios** | Planes con precio, un beneficio por línea y uno destacado. |
+| **Preguntas** | Un desplegable de preguntas que abre y cierra sin JavaScript. |
+| **Llamada a la acción** | Un titular y una acción. |
+| **Pie** | Marca, una línea sobre qué es esto, enlaces y una línea legal. |
+
+Todas las secciones llevan los mismos tres campos: si está visible, un ancla
+para que otras enlacen a ella, y sobre cuál de las cuatro superficies del tema
+se asienta —lienzo, cálida, elevada o la banda oscura—. Esos tres campos son los
+que permiten componer el ritmo de la página desde el panel, y como las
+superficies son tokens del propio tema, ninguna combinación puede salirse de la
+paleta.
+
+Una página nueva parte de un contenido inicial que describe un producto en
+abstracto, una sección por forma, con texto que explica para qué sirve cada una.
+Testimonios y precios se quedan fuera a propósito: inventar una cita que nadie
+dijo o un precio que nadie cobra es el único marcador de posición peor que una
+sección vacía. `Restaurar la página inicial` lo devuelve cuando quieras.
+
+### Borrador y publicación
+
+Guardar y publicar son cosas distintas. **Guardar borrador** escribe sin
+validar, porque dejar una sección a medias es un estado normal en el que
+abandonar el constructor. **Publicar cambios** valida y copia el borrador sobre
+lo que leen las visitas.
+
+La previsualización que acompaña al formulario es un iframe del borrador en su
+dirección real, en un viewport real y con la hoja de estilos real, así que lo
+que muestra es lo que se publicará, incluido el comportamiento adaptable que una
+previsualización de componentes a escala reducida se equivoca en reproducir.
+Tres anchos, un botón de recarga y un interruptor **En vivo** que viene apagado
+porque cuesta una ida y vuelta por pulsación.
+
+La página publicada se cachea indefinidamente y la caché se descarta en cada
+escritura, así que una visita no cuesta ninguna consulta una vez está caliente.
+Si limpias cachés desde otro sitio no se rompe nada: la siguiente visita la
+vuelve a llenar.
+
+### Cambiar su aspecto
+
+La página lee `config/filament-mia.php`, de modo que recolorear el tema
+recolorea también la página y las dos nunca se separan. Si necesitas ir más
+lejos de lo que permiten los tokens, publica las vistas:
+
+```bash
+php artisan vendor:publish --tag=filament-mia-views
+```
+
+Cada sección es una parcial de Blade en
+`resources/views/vendor/filament-mia/page-builder/blocks/`, y la hoja de estilos
+que leen la inserta `Support\PageSheet` en el documento en vez de compilarla,
+así que puedes editar una parcial sin tener Node en ninguna parte del proyecto.
+
 ## Hacia dónde va
 
 Mía empieza como tema. La dirección es un sistema de diseño para Filament: la
@@ -829,9 +979,10 @@ En concreto, qué hay y qué no.
 
 **Hoy.** Hoja de estilos precompilada, API de configuración para color,
 tipografía, redondez, densidad y elevación, modos claro y oscuro cálidos,
-estados vacíos ilustrados, estados de carga, contraste medido, una página de
-apariencia dentro del panel que edita y persiste todo lo anterior, e inglés y
-español con un conmutador opcional.
+estados vacíos ilustrados, estados de carga, contraste medido, páginas de error
+y mantenimiento, una página de apariencia dentro del panel que edita y persiste
+todo lo anterior, un constructor opcional para la página pública que precede al
+panel, e inglés y español con un conmutador opcional.
 
 **A continuación.** Una aplicación de demostración que sirva además como origen
 de todas las capturas. Más preajustes distribuidos como paletas con nombre. Más

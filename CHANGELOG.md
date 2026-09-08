@@ -28,6 +28,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- A page builder for the public page in front of the panel, off by default and
+  enabled with `pageBuilder()`. Eleven sections — a navigation bar, a hero,
+  features, steps, a comparison, figures, testimonials, pricing, questions, a
+  call to action and a footer — added from a picker, reordered by dragging,
+  hidden without losing their content, and published when they are ready.
+  - A catalogue rather than a blank canvas. Once anything can be placed
+    anywhere, the type scale, the measured contrast and the behaviour at 320px
+    stop being the theme's problem and become the editor's; a catalogue keeps
+    them intact while still letting the page be composed.
+  - Every section carries the same three fields: whether it is visible, an
+    anchor for other sections to link to, and which of the theme's four
+    surfaces it sits on. Because the surfaces are the theme's own tokens, no
+    combination can fall outside the palette.
+  - `pageBuilder()`, `pageBuilderAuthorization()` and `pageBuilderNavigation()`
+    on the plugin, and a `page_builder` block in the config file.
+  - Saving and publishing are separate. A save writes the draft without
+    validating, because a half-finished section is a normal state to leave the
+    builder in; publishing validates and copies the draft over what visitors
+    read. The preview beside the form is an iframe of the draft at its real
+    address, so it shows the responsive behaviour a scaled-down component
+    preview would get wrong.
+  - Content is stored in a `mia_pages` table whose migration is **published,
+    not loaded** — `vendor:publish --tag=filament-mia-migrations`. A theme has
+    no business adding a table to an application that never asked for one. A
+    missing table reads as an empty page rather than an exception.
+  - The published page is cached indefinitely and the cache is dropped on every
+    write, so a visit costs no query once it is warm.
+  - Served at `/` unless `pageBuilder(path: …)` says otherwise, and never at a
+    path the application already answers: the route is registered after every
+    provider has booted, and Laravel matches the first route that answers a
+    path. The draft has its own address, guarded by the panel's sign-in.
+  - Drawn with no panel around it, so it carries its own stylesheet inlined
+    into the document. Nothing to compile. It reads `config/filament-mia.php`,
+    so recolouring the theme recolours the page with it.
+  - Spanish translations alongside the English ones, including the starter
+    page's copy.
 - An appearance page inside the panel, off by default. Edits accent, secondary
   and status colours, the interface and heading families from a checked list of
   Bunny Fonts families, roundness, density and elevation, with five presets
