@@ -283,6 +283,14 @@ class BlockCatalog
                         ->default(true)
                         ->inline(false),
                 ]),
+                // On by default like the switch beside it, and safe to be: the
+                // bar draws nothing unless the panel configured more than one
+                // language, so a site with a single language never sees it.
+                Toggle::make('locale_switch')
+                    ->label(__('filament-mia::page-builder.blocks.navigation.locale_switch'))
+                    ->helperText(__('filament-mia::page-builder.blocks.navigation.locale_switch_help'))
+                    ->default(true)
+                    ->inline(false),
                 static::links(maxItems: 5),
                 static::actions(__('filament-mia::page-builder.blocks.navigation.actions'), maxItems: 2),
             ]);

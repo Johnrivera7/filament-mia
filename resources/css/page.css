@@ -615,6 +615,69 @@
 }
 
 /*
+ * The language switcher, a `<details>` for the same reason the menu is one.
+ *
+ * Anchored to the button rather than to the bar — unlike the mobile menu,
+ * which spans the full width — so the list opens under the control that was
+ * pressed at every width. That needs a positioning context of its own, since
+ * `.mia-page-nav` is the nearest one otherwise.
+ */
+.mia-page-locale {
+    position: relative;
+}
+
+.mia-page-locale > summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.mia-page-locale > summary::-webkit-details-marker {
+    display: none;
+}
+
+.mia-page-locale-panel {
+    position: absolute;
+    inset-inline-end: 0;
+    top: calc(100% + 0.5rem);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    min-width: 10rem;
+    padding: 0.375rem;
+    border: 1px solid var(--mia-page-hairline);
+    border-radius: var(--mia-radius-lg, 0.75rem);
+    background-color: var(--mia-page-surface-raised);
+    box-shadow: var(--mia-shadow-lg);
+}
+
+.mia-page-locale-option {
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--mia-radius-md, 0.5rem);
+    font-size: 0.9375rem;
+    color: var(--mia-page-ink-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background-color var(--mia-duration, 260ms) var(--mia-ease, ease),
+        color var(--mia-duration, 260ms) var(--mia-ease, ease);
+}
+
+.mia-page-locale-option:hover {
+    background-color: var(--mia-page-accent-wash);
+    color: var(--mia-page-ink);
+}
+
+/*
+ * The language already on screen, marked rather than hidden: a list that drops
+ * the current entry changes length as you use it, and the visitor loses the
+ * one label they can be sure of.
+ */
+.mia-page-locale-option[aria-current] {
+    color: var(--mia-page-accent);
+    font-family: var(--mia-heading-font, var(--font-serif));
+}
+
+/*
  * The light/dark switch is the one element that cannot be handled by
  * re-pointing a token: the glyph itself has to change. Written out longhand
  * rather than with a `dark:` variant, because the page can end up dark two

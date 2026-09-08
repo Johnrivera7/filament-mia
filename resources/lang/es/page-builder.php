@@ -55,6 +55,7 @@ return [
         'empty_body' => 'Agrega y publica secciones desde el constructor y aparecerán aquí.',
         'switch_to_light' => 'Cambiar a modo claro',
         'switch_to_dark' => 'Cambiar a modo oscuro',
+        'language' => 'Cambiar el idioma',
     ],
 
     'surfaces' => [
@@ -106,6 +107,8 @@ return [
             'sticky' => 'Fijar arriba al hacer scroll',
             'scheme_toggle' => 'Ofrecer un cambio de modo claro/oscuro',
             'scheme_toggle_help' => 'Sigue la preferencia del sistema del visitante hasta que elija.',
+            'locale_switch' => 'Ofrecer un cambiador de idioma',
+            'locale_switch_help' => 'Solo aparece cuando el panel ofrece más de un idioma.',
             'actions' => 'Acción de la barra',
         ],
 

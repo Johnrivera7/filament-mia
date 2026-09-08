@@ -55,6 +55,7 @@ return [
         'empty_body' => 'Add and publish sections from the page builder and they will appear here.',
         'switch_to_light' => 'Switch to light mode',
         'switch_to_dark' => 'Switch to dark mode',
+        'language' => 'Change the language',
     ],
 
     'surfaces' => [
@@ -106,6 +107,8 @@ return [
             'sticky' => 'Stick to the top when scrolling',
             'scheme_toggle' => 'Offer a light/dark switch',
             'scheme_toggle_help' => 'Follows the visitor’s system preference until they choose.',
+            'locale_switch' => 'Offer a language switcher',
+            'locale_switch_help' => 'Only appears when the panel offers more than one language.',
             'actions' => 'Bar action',
         ],
 

@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Facades\Storage;
+    use JohnRivera7\FilamentMia\Support\PageLocales;
 
     /** @var array<string, mixed> $data */
 
@@ -13,6 +14,11 @@
 
     $brand = filled($data['brand'] ?? null) ? $data['brand'] : config('app.name');
     $actions = $data['actions'] ?? [];
+
+    // Nothing to switch between unless the panel was given a list, so the
+    // control disappears rather than offering a choice of one.
+    $locales = ($data['locale_switch'] ?? true) ? PageLocales::available() : [];
+    $locales = count($locales) > 1 ? $locales : [];
 @endphp
 
 <div class="mia-page-shell mia-page-nav-bar">
@@ -31,6 +37,31 @@
                     <a href="{{ $link['url'] }}" class="mia-page-nav-link">{{ $link['label'] }}</a>
                 @endforeach
             </nav>
+        @endif
+
+        @if ($locales !== [])
+            {{--
+                A native disclosure, like the mobile menu: the choice is a set
+                of links, so it needs no script to open and none to work. Every
+                language stays named on screen rather than being cycled
+                through, which is the point when the visitor cannot read the
+                one the page is currently in.
+            --}}
+            <details class="mia-page-locale">
+                <summary class="mia-page-icon-btn" aria-label="{{ __('filament-mia::page-builder.page.language') }}" title="{{ __('filament-mia::page-builder.page.language') }}">
+                    @svg('heroicon-o-language')
+                </summary>
+
+                <div class="mia-page-locale-panel">
+                    @foreach ($locales as $code => $label)
+                        <a
+                            href="{{ PageLocales::switchUrl($code) }}"
+                            class="mia-page-locale-option"
+                            @if ($code === app()->getLocale()) aria-current="true" @endif
+                        >{{ $label }}</a>
+                    @endforeach
+                </div>
+            </details>
         @endif
 
         @if ($data['scheme_toggle'] ?? true)

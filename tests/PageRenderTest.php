@@ -196,6 +196,19 @@ class PageRenderTest extends TestCase
         $this->assertStringContainsString('data-mia-scheme-toggle hidden', $html);
     }
 
+    /**
+     * The bar asks for the switcher by default, so the silence has to come
+     * from there being nothing to switch between. {@see PageLocaleSwitcherTest}
+     * covers the panel that does offer languages.
+     */
+    #[Test]
+    public function the_language_switcher_stays_away_until_a_panel_offers_languages(): void
+    {
+        $html = $this->body([$this->block('navigation', ['locale_switch' => true])]);
+
+        $this->assertStringNotContainsString('mia-page-locale-panel', $html);
+    }
+
     #[Test]
     public function the_bar_sticks_only_when_it_was_told_to(): void
     {

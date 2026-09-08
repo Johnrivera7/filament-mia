@@ -32,6 +32,7 @@ final class DefaultContent
                 'brand' => config('app.name'),
                 'sticky' => true,
                 'scheme_toggle' => true,
+                'locale_switch' => true,
                 'links' => [
                     ['label' => self::text('nav.features'), 'url' => '#features'],
                     ['label' => self::text('nav.steps'), 'url' => '#how-it-works'],

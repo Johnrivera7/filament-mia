@@ -9,6 +9,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Route;
 use JohnRivera7\FilamentMia\Http\Controllers\RenderPage;
 use JohnRivera7\FilamentMia\Http\Controllers\SwitchLocale;
+use JohnRivera7\FilamentMia\Http\Middleware\ApplyLocale;
 use JohnRivera7\FilamentMia\PageBuilder\PageBuilderPanel;
 use JohnRivera7\FilamentMia\PageBuilder\PageContent;
 use JohnRivera7\FilamentMia\Settings\Contracts\SettingsRepository;
@@ -176,7 +177,14 @@ class FilamentMiaServiceProvider extends PackageServiceProvider
 
             $path = $plugin->getPageBuilderPath();
 
-            Route::middleware('web')->group(function () use ($path): void {
+            /*
+             * `ApplyLocale` here as well as on the panel: these two routes are
+             * the theme's own pages, and without it the language switcher in
+             * the navigation bar would write a cookie that only the panel ever
+             * read. It stays inert until a visitor picks something, and reads
+             * the list from the panel that owns the builder.
+             */
+            Route::middleware(['web', ApplyLocale::class])->group(function () use ($path): void {
                 /*
                  * The draft, for whoever may open the builder. Its own address
                  * rather than a query string on the public one, so a published
