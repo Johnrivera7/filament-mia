@@ -72,8 +72,12 @@
 }
 
 @media (min-width: 1280px) {
+    /* Not two equal halves. The form is a column of fields, which stops
+       reading better past about 30rem, while the preview is standing in for a
+       browser window: split evenly, "desktop" renders at half a desktop and
+       shows a layout no visitor will ever see. */
     .fi-mia-builder {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
     }
 
     /* The pane follows the form down a long page, which is most of the value
