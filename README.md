@@ -45,9 +45,16 @@ It ships pre-compiled. There is no Node, Tailwind or build step to install.
 
 ## Screenshots
 
-The sign-in screen, in the five compositions the theme ships. Every image on
-this page comes from the preview panel bundled with the package, on invented
-data — see [Looking at it locally](#looking-at-it-locally) to run it yourself.
+Every image on this page is taken from software you can run: the sign-in frames
+from the [preview panel](#looking-at-it-locally) bundled with the package, the
+rest from a demo application. Both run on invented records.
+
+### Before signing in
+
+The sign-in screen is the only part of a panel a visitor sees without an
+account, so the theme ships five stagings of it. They differ in composition,
+not in identity — [pick one](#sign-in-compositions) in a line of configuration
+or from the appearance page.
 
 <table>
 <tr>
@@ -92,12 +99,57 @@ validation error, a phone, a two-step challenge:
 </tr>
 </table>
 
-The appearance page previews the choice before it is saved:
+### Inside the panel
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/appearance-login.jpg" alt="The sign-in section of the appearance page, with the five compositions and a live preview of the selected one" width="100%" />
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light.jpg" alt="A dashboard in light mode: cream canvas, serif headings, widgets on hairline-bordered cards" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-dark.jpg" alt="The same dashboard in dark mode, in warm espresso and umber rather than cool grey" /></td>
+</tr>
+<tr>
+<td><b>Dashboard</b><br />Widgets on barely differentiated surfaces, stat figures set in the display serif.</td>
+<td><b>The same, dark</b><br />Espresso and umber, built from the same neutral ramp as the light mode.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light.jpg" alt="A table of projects: tracked caps in the column headings, tabular figures, tinted badges" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-dark.jpg" alt="The same table in dark mode" /></td>
+</tr>
+<tr>
+<td><b>Tables</b><br />Column headings in small tracked caps, tabular figures, badges as tinted washes rather than pale pills.</td>
+<td><b>Density is a setting</b><br />Row height and padding follow <code>density()</code>, so the same table can be airy or tight.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-form-light.jpg" alt="A create form with tabs, sections and hairline-bordered inputs" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-charts-dark.jpg" alt="Four charts in dark mode, with grid, axes and labels in the theme's warm palette" /></td>
+</tr>
+<tr>
+<td><b>Forms</b><br />Inputs carry a hairline and a soft halo on focus, in place of Filament's ring.</td>
+<td><b>Charts</b><br />Grid, axes and legend take the palette too, not just the series. <a href="#charts">How that works</a>.</td>
+</tr>
+</table>
 
-The rest of the panel is being rephotographed from the same panel. See
-[Roadmap](#where-this-is-going).
+<table>
+<tr>
+<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-chart-tooltip-light.jpg" alt="A chart tooltip: a dark warm chip with rounded corners and a small legend swatch" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light-mobile.jpg" alt="The dashboard on a phone, with the sidebar collapsed" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light-mobile.jpg" alt="The projects table on a phone, scrolling horizontally" /></td>
+</tr>
+<tr>
+<td><b>Chart tooltip</b><br />The same warm chip as every other tooltip, with corners from <code>roundness()</code>.</td>
+<td><b>On a phone</b><br />The sidebar collapses; the layout keeps its air.</td>
+<td><b>Tables on a phone</b><br />Horizontal scroll, with the header treatment intact.</td>
+</tr>
+</table>
+
+### The appearance page
+
+Colour, type, roundness, density and elevation, edited in the panel with a live
+preview. The sign-in composition is chosen here too, and previewed as the real
+layout rather than a diagram of one:
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-login.jpg" alt="The sign-in section of the appearance page, with the five compositions and a live preview of the selected one" width="100%" />
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-light.jpg" alt="The appearance page: colour, typography, shape and depth controls beside a specimen of the components they affect" width="100%" />
 
 ## Project status
 

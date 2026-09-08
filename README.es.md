@@ -49,9 +49,16 @@ de compilación.
 
 ## Capturas
 
-La pantalla de acceso, en las cinco composiciones que trae el tema. Todas las
-imágenes salen del panel de previsualización que acompaña al paquete, con datos
-inventados.
+Todas las imágenes salen de software que puedes ejecutar: las de acceso, del
+panel de previsualización que acompaña al paquete; el resto, de una aplicación
+de demostración. Las dos funcionan con datos inventados.
+
+### Antes de entrar
+
+La pantalla de acceso es lo único que ve un visitante sin cuenta, así que el
+tema trae cinco puestas en escena. Se diferencian en la composición, no en la
+identidad, y se elige en una línea de configuración o desde la página de
+apariencia.
 
 <table>
 <tr>
@@ -79,6 +86,74 @@ inventados.
 <td><b>Modo oscuro</b><br />La misma composición en la paleta cálida oscura.</td>
 </tr>
 </table>
+
+Cada composición aguanta los estados que de verdad ocurren: un error de
+validación, un teléfono, un desafío en dos pasos.
+
+<table>
+<tr>
+<td width="25%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-light-mobile.jpg" alt="Composición de pantalla partida en un teléfono, con la columna de marca plegada en una franja" /></td>
+<td width="37%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-card-light-desktop-error.jpg" alt="Composición de tarjeta centrada con un error de validación" /></td>
+<td width="38%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-two-step-split-dark.jpg" alt="Desafío en dos pasos en la composición de pantalla partida, modo oscuro" /></td>
+</tr>
+<tr>
+<td><b>Plegada</b><br />La columna de marca se vuelve una franja.</td>
+<td><b>Credenciales incorrectas</b><br />El mensaje ocupa una línea; nada se recoloca.</td>
+<td><b>Dos pasos</b><br />El desafío conserva la puesta en escena.</td>
+</tr>
+</table>
+
+### Dentro del panel
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light.jpg" alt="Un panel principal en modo claro: lienzo crema, titulares en serif y widgets sobre tarjetas con borde de un pelo" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-dark.jpg" alt="El mismo panel en modo oscuro, en espresso y umbra cálidos en lugar de gris frío" /></td>
+</tr>
+<tr>
+<td><b>Panel principal</b><br />Widgets sobre superficies apenas diferenciadas y cifras compuestas en la serif de titulares.</td>
+<td><b>El mismo, oscuro</b><br />Espresso y umbra, construidos con la misma rampa neutra que el modo claro.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light.jpg" alt="Una tabla de proyectos: versalitas espaciadas en los encabezados, cifras tabulares y distintivos teñidos" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-dark.jpg" alt="La misma tabla en modo oscuro" /></td>
+</tr>
+<tr>
+<td><b>Tablas</b><br />Encabezados en versalitas espaciadas, cifras tabulares y distintivos como lavados de color.</td>
+<td><b>La densidad es un ajuste</b><br />La altura de fila y el relleno siguen a <code>density()</code>.</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-form-light.jpg" alt="Un formulario de creación con pestañas, secciones y campos con borde de un pelo" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-charts-dark.jpg" alt="Cuatro gráficos en modo oscuro, con rejilla, ejes y etiquetas en la paleta cálida del tema" /></td>
+</tr>
+<tr>
+<td><b>Formularios</b><br />Los campos llevan un borde de un pelo y un halo suave al enfocarse, en lugar del anillo de Filament.</td>
+<td><b>Gráficos</b><br />La rejilla, los ejes y la leyenda también toman la paleta, no solo las series.</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-chart-tooltip-light.jpg" alt="Un tooltip de gráfico: una pastilla cálida oscura con esquinas redondeadas" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light-mobile.jpg" alt="El panel principal en un teléfono, con la barra lateral plegada" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light-mobile.jpg" alt="La tabla de proyectos en un teléfono, con desplazamiento horizontal" /></td>
+</tr>
+<tr>
+<td><b>Tooltip de gráfico</b><br />La misma pastilla cálida que el resto, con las esquinas de <code>roundness()</code>.</td>
+<td><b>En un teléfono</b><br />La barra lateral se pliega y el diseño conserva su aire.</td>
+<td><b>Tablas en un teléfono</b><br />Desplazamiento horizontal, con el tratamiento del encabezado intacto.</td>
+</tr>
+</table>
+
+### La página de apariencia
+
+Color, tipografía, redondez, densidad y elevación, editados dentro del panel
+con previsualización en vivo. La composición de acceso se elige aquí también, y
+se previsualiza como el layout real y no como un esquema.
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
+
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-light.jpg" alt="La página de apariencia: controles de color, tipografía, forma y profundidad junto a una muestra de los componentes que afectan" width="100%" />
 
 ## Estado del proyecto
 
@@ -313,7 +388,7 @@ contra el fondo plano que asume el informe de paleta.
 
 ## La página de apariencia
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
 
 Una página opcional dentro del panel para editar el tema y guardar el
 resultado, pensada para cuando quien decide cómo se ve el panel no es quien lo

@@ -1,8 +1,9 @@
-# Every image in this repository must come from the bundled demo application,
-# which runs on invented data, and is named `art/demo-*`. Captures of any real
-# system are ignored on principle: they can carry personal or otherwise
-# sensitive data, and once pushed to a public repository the blobs stay
-# reachable by SHA even after the file is deleted in a later commit.
+# Every image in this repository comes from one of two places, both running on
+# invented data: the preview panel bundled with the package (`art/login-*`, by
+# `bin/shots.mjs`) or the demo application (`art/demo-*`, by
+# `bin/demo-shots.mjs`). Captures of any real system are ignored on principle —
+# they can carry personal or otherwise sensitive data, and a blob pushed to a
+# public repository stays reachable by SHA after the file is deleted.
 /art/screenshot-*
 /art/cover.*
 /art/*-shot.*

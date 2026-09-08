@@ -6,9 +6,10 @@ looking at closely and wrong for a repository: a single desktop frame lands at
 over a megabyte, and a full set of them at fifty.
 
 These are photographs of gradients, so PNG has nothing to work with and JPEG
-has everything. Resized to a width a README will never exceed and encoded at a
-quality where the type stays crisp, a frame comes in around a fifteenth of the
-size.
+has everything. The width is set for where these are read: GitHub renders a
+README image into a column under 900 points wide, and half that inside a
+two-column table, so 1280 still leaves more pixels than any of them can show.
+A frame comes in around a thirtieth of the size it was captured at.
 
     python3 bin/optimize.py art/login-*.png
 """
@@ -18,8 +19,8 @@ import sys
 
 from PIL import Image
 
-WIDTH = 1600
-QUALITY = 88
+WIDTH = 1280
+QUALITY = 82
 
 
 def optimize(path: str) -> tuple[int, int]:

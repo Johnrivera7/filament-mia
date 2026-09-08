@@ -113,18 +113,47 @@ async function shootChartTooltip(page, file) {
     await widget.screenshot({ path: `${OUT}/${file}.png` })
 }
 
+/*
+ * The sign-in section of the appearance page, cropped to itself: the five
+ * compositions with their descriptions and the live preview underneath.
+ */
+async function shootAppearanceLogin(page, file) {
+    await page.goto(`${BASE}/app/theme-customizer`, { waitUntil: 'networkidle' })
+    await settle(page)
+
+    const section = page
+        .locator('.fi-mia-login-preview')
+        .locator('xpath=ancestor::*[contains(@class,"fi-sc-section")][1]')
+
+    await section.scrollIntoViewIfNeeded()
+
+    // The topbar is sticky, so it lands across the top of a cropped section.
+    await page.addStyleTag({ content: '.fi-topbar { display: none !important }' })
+    await page.waitForTimeout(400)
+    await section.screenshot({ path: `${OUT}/${file}.png` })
+}
+
 for (const mode of ['light', 'dark']) {
     const { ctx, page } = await session(DESKTOP, mode)
 
     await shoot(page, '/app', `demo-panel-${mode}`)
-    await shoot(page, '/app/analitica', `demo-charts-${mode}`)
     await shoot(page, '/app/proyectos', `demo-table-${mode}`)
-    await shoot(page, '/app/theme-customizer', `demo-appearance-${mode}`)
 
-    await shootChartTooltip(page, `demo-chart-tooltip-${mode}`)
+    /*
+     * One mode each, for the three below: a frame nothing links to is weight
+     * in the repository and nothing else. Charts are shown dark, where the
+     * greys they used to inherit were most obvious; the tooltip light, where
+     * its warm chip reads against the page.
+     */
+    if (mode === 'dark') {
+        await shoot(page, '/app/analitica', 'demo-charts-dark')
+    }
 
     if (mode === 'light') {
+        await shoot(page, '/app/theme-customizer', 'demo-appearance-light')
         await shoot(page, '/app/proyectos/create', 'demo-form-light')
+        await shootAppearanceLogin(page, 'demo-appearance-login')
+        await shootChartTooltip(page, 'demo-chart-tooltip-light')
     }
 
     await ctx.close()
