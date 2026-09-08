@@ -29,7 +29,7 @@ class TranslationsTest extends TestCase
      */
     public static function files(): array
     {
-        return [['customizer'], ['http']];
+        return [['customizer'], ['http'], ['page-builder']];
     }
 
     public function test_the_preset_labels_come_from_the_language_files(): void
