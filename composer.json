@@ -1,5 +1,5 @@
 {
-    "name": "johnrivera7/filament-mia",
+    "name": "johnrivera7/filament-mia-theme",
     "description": "A warm editorial theme for Filament v5, for panels that are part of the product. Cream and champagne in the light, espresso in the dark, serif headings and hairline borders. Every surface set by hand rather than derived from an accent colour. Ships pre-compiled: no build step.",
     "keywords": [
         "johnrivera7",
@@ -14,10 +14,10 @@
         "dark-mode",
         "tailwindcss"
     ],
-    "homepage": "https://github.com/Johnrivera7/filament-mia",
+    "homepage": "https://github.com/Johnrivera7/filament-mia-theme",
     "support": {
-        "issues": "https://github.com/Johnrivera7/filament-mia/issues",
-        "source": "https://github.com/Johnrivera7/filament-mia"
+        "issues": "https://github.com/Johnrivera7/filament-mia-theme/issues",
+        "source": "https://github.com/Johnrivera7/filament-mia-theme"
     },
     "license": "MIT",
     "authors": [

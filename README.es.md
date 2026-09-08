@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/mia-avatar-512.png" alt="" width="132" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/mia-avatar-512.png" alt="" width="132" />
 
 # Mía
 
@@ -65,24 +65,24 @@ apariencia.
 
 <table>
 <tr>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-card-light-desktop.jpg" alt="Composición de tarjeta centrada en modo claro" /></td>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-light-desktop.jpg" alt="Composición de pantalla partida en modo claro" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-card-light-desktop.jpg" alt="Composición de tarjeta centrada en modo claro" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-split-light-desktop.jpg" alt="Composición de pantalla partida en modo claro" /></td>
 </tr>
 <tr>
 <td><b>Tarjeta centrada</b><br />Una tarjeta sobre el lienzo, con dos halos de luz cálida.</td>
 <td><b>Pantalla partida</b><br />Dos columnas, una de ellas territorio de marca.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-bleed-light-desktop.jpg" alt="Composición de fondo a sangre en modo claro" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-editorial-light-desktop.jpg" alt="Composición editorial en modo claro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-bleed-light-desktop.jpg" alt="Composición de fondo a sangre en modo claro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-editorial-light-desktop.jpg" alt="Composición editorial en modo claro" /></td>
 </tr>
 <tr>
 <td><b>Fondo a sangre</b><br />Campo cálido a todos los bordes, con el panel tendido a lo ancho sobre cristal.</td>
 <td><b>Editorial</b><br />Asimétrica y de imprenta, con el costado opuesto en aire.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-portal-light-desktop.jpg" alt="Composición de portal en modo claro" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-dark-desktop.jpg" alt="Composición de pantalla partida en modo oscuro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-portal-light-desktop.jpg" alt="Composición de portal en modo claro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-split-dark-desktop.jpg" alt="Composición de pantalla partida en modo oscuro" /></td>
 </tr>
 <tr>
 <td><b>Portal</b><br />Columna estrecha y alta, con medallón de marca y sin borde de tarjeta.</td>
@@ -95,9 +95,9 @@ validación, un teléfono, un desafío en dos pasos.
 
 <table>
 <tr>
-<td width="25%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-split-light-mobile.jpg" alt="Composición de pantalla partida en un teléfono, con la columna de marca plegada en una franja" /></td>
-<td width="37%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-card-light-desktop-error.jpg" alt="Composición de tarjeta centrada con un error de validación" /></td>
-<td width="38%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/login-two-step-split-dark.jpg" alt="Desafío en dos pasos en la composición de pantalla partida, modo oscuro" /></td>
+<td width="25%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-split-light-mobile.jpg" alt="Composición de pantalla partida en un teléfono, con la columna de marca plegada en una franja" /></td>
+<td width="37%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-card-light-desktop-error.jpg" alt="Composición de tarjeta centrada con un error de validación" /></td>
+<td width="38%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/login-two-step-split-dark.jpg" alt="Desafío en dos pasos en la composición de pantalla partida, modo oscuro" /></td>
 </tr>
 <tr>
 <td><b>Plegada</b><br />La columna de marca se vuelve una franja.</td>
@@ -110,24 +110,24 @@ validación, un teléfono, un desafío en dos pasos.
 
 <table>
 <tr>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-light.jpg" alt="Un panel principal en modo claro: lienzo crema, titulares en serif y widgets sobre tarjetas con borde de un pelo" /></td>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-dark.jpg" alt="El mismo panel en modo oscuro, en espresso y umbra cálidos en lugar de gris frío" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-dashboard-light.jpg" alt="Un panel principal en modo claro: lienzo crema, titulares en serif y widgets sobre tarjetas con borde de un pelo" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-dashboard-dark.jpg" alt="El mismo panel en modo oscuro, en espresso y umbra cálidos en lugar de gris frío" /></td>
 </tr>
 <tr>
 <td><b>Panel principal</b><br />Widgets sobre superficies apenas diferenciadas y cifras compuestas en la serif de titulares.</td>
 <td><b>El mismo, oscuro</b><br />Espresso y umbra, construidos con la misma rampa neutra que el modo claro.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-light.jpg" alt="Una tabla de proyectos: versalitas espaciadas en los encabezados, cifras tabulares y distintivos teñidos" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-dark.jpg" alt="La misma tabla en modo oscuro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-table-light.jpg" alt="Una tabla de proyectos: versalitas espaciadas en los encabezados, cifras tabulares y distintivos teñidos" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-table-dark.jpg" alt="La misma tabla en modo oscuro" /></td>
 </tr>
 <tr>
 <td><b>Tablas</b><br />Encabezados en versalitas espaciadas, cifras tabulares y distintivos como lavados de color.</td>
 <td><b>La densidad es un ajuste</b><br />La altura de fila y el relleno siguen a <code>density()</code>.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-form-light.jpg" alt="Un formulario de edición con secciones, desplegables, selector de fecha y campos con borde de un pelo" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-charts-dark.jpg" alt="Dos widgets de gráfico en modo oscuro, con rejilla, ejes y etiquetas en la paleta cálida del tema" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-form-light.jpg" alt="Un formulario de edición con secciones, desplegables, selector de fecha y campos con borde de un pelo" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-charts-dark.jpg" alt="Dos widgets de gráfico en modo oscuro, con rejilla, ejes y etiquetas en la paleta cálida del tema" /></td>
 </tr>
 <tr>
 <td><b>Formularios</b><br />Los campos llevan un borde de un pelo y un halo suave al enfocarse, en lugar del anillo de Filament.</td>
@@ -137,9 +137,9 @@ validación, un teléfono, un desafío en dos pasos.
 
 <table>
 <tr>
-<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-chart-tooltip-light.jpg" alt="Un tooltip de gráfico: una pastilla cálida oscura con esquinas redondeadas" /></td>
-<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-light-mobile.jpg" alt="El panel principal en un teléfono, con la barra lateral plegada" /></td>
-<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-light-mobile.jpg" alt="La tabla de proyectos en un teléfono, con desplazamiento horizontal" /></td>
+<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-chart-tooltip-light.jpg" alt="Un tooltip de gráfico: una pastilla cálida oscura con esquinas redondeadas" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-dashboard-light-mobile.jpg" alt="El panel principal en un teléfono, con la barra lateral plegada" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-table-light-mobile.jpg" alt="La tabla de proyectos en un teléfono, con desplazamiento horizontal" /></td>
 </tr>
 <tr>
 <td><b>Tooltip de gráfico</b><br />La misma pastilla cálida que el resto, con las esquinas de <code>roundness()</code>.</td>
@@ -153,7 +153,7 @@ diseña. Este es una lista vaciada por una búsqueda, no por no tener nada: la
 versión que necesita una vuelta atrás y no un punto de partida.
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-empty-light.jpg" alt="Una tabla de proyectos con una búsqueda que no encuentra nada: una marca ilustrada en un halo cálido, un titular que dice Nothing matches y una acción para volver a verlo todo" width="860" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-table-empty-light.jpg" alt="Una tabla de proyectos con una búsqueda que no encuentra nada: una marca ilustrada en un halo cálido, un titular que dice Nothing matches y una acción para volver a verlo todo" width="860" />
 </div>
 
 ### La página de apariencia
@@ -162,9 +162,9 @@ Color, tipografía, redondez, densidad y elevación, editados dentro del panel
 con previsualización en vivo. La composición de acceso se elige aquí también, y
 se previsualiza como el layout real y no como un esquema.
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-light.jpg" alt="La página de apariencia: controles de color, tipografía, forma y profundidad junto a una muestra de los componentes que afectan" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-appearance-light.jpg" alt="La página de apariencia: controles de color, tipografía, forma y profundidad junto a una muestra de los componentes que afectan" width="100%" />
 
 ## Estado del proyecto
 
@@ -204,9 +204,32 @@ nivel de errores, que la suite por sí sola no cubre.
 ## Instalación
 
 ```bash
-composer require johnrivera7/filament-mia
+composer require johnrivera7/filament-mia-theme
 php artisan filament:assets
 ```
+
+<details>
+<summary>Antes se llamaba <code>johnrivera7/filament-mia</code></summary>
+<br />
+
+El paquete se llamó `johnrivera7/filament-mia` hasta la `v0.1.0` incluida, y se
+renombró antes de tener instalaciones. Si tomaste el nombre antiguo, cámbialo
+en tu `composer.json` y vuelve a publicar la hoja de estilos, que ahora aterriza
+en el directorio del nombre nuevo:
+
+```bash
+composer remove johnrivera7/filament-mia
+composer require johnrivera7/filament-mia-theme
+php artisan filament:assets
+```
+
+No cambia nada más. El espacio de nombres de PHP sigue siendo
+`JohnRivera7\FilamentMia`, y también siguen igual el archivo de configuración,
+los espacios de nombres de vistas y traducciones (`filament-mia::`), las
+etiquetas de publicación y el identificador del plugin: las importaciones, las
+vistas publicadas y los ajustes de apariencia guardados se conservan tal cual.
+
+</details>
 
 Registra el plugin en el panel:
 
@@ -298,8 +321,8 @@ del usuario, debajo del interruptor de claro y oscuro.
 
 <table>
 <tr>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-menu-en.jpg" alt="El menú del usuario abierto, con el interruptor de claro y oscuro sobre English y Español, y English marcado como el actual" /></td>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-menu-es.jpg" alt="El mismo panel tras elegir Español, con la página, la navegación y los elementos propios de Filament en español" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/locale-menu-en.jpg" alt="El menú del usuario abierto, con el interruptor de claro y oscuro sobre English y Español, y English marcado como el actual" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/locale-menu-es.jpg" alt="El mismo panel tras elegir Español, con la página, la navegación y los elementos propios de Filament en español" /></td>
 </tr>
 <tr>
 <td><b>El conmutador</b><br />Un elemento por idioma, en el nombre del propio idioma, junto al de claro y oscuro.</td>
@@ -361,7 +384,7 @@ desde la propia pantalla de acceso debería fijar el locale desde la URL o la
 petición, que es trabajo de la aplicación y no del tema.
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/locale-login-es.jpg" alt="La pantalla de acceso en español, con las etiquetas propias de Filament traducidas, después de descartar la sesión" width="720" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/locale-login-es.jpg" alt="La pantalla de acceso en español, con las etiquetas propias de Filament traducidas, después de descartar la sesión" width="720" />
 </div>
 
 ### Añadir un idioma
@@ -374,7 +397,7 @@ carpeta en tu proyecto:
 lang/vendor/filament-mia/fr/customizer.php
 ```
 
-Copia `vendor/johnrivera7/filament-mia/resources/lang/en/customizer.php` como
+Copia `vendor/johnrivera7/filament-mia-theme/resources/lang/en/customizer.php` como
 punto de partida, o publica primero los dos idiomas incluidos:
 
 ```bash
@@ -593,7 +616,7 @@ contra el fondo plano que asume el informe de paleta.
 
 ## La página de apariencia
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/panel-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
 
 Una página opcional dentro del panel para editar el tema y guardar el
 resultado, pensada para cuando quien decide cómo se ve el panel no es quien lo

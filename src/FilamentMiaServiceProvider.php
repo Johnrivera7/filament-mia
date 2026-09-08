@@ -58,9 +58,18 @@ class FilamentMiaServiceProvider extends PackageServiceProvider
          * *before* the active theme's own `<link>`, so a `Css` asset would lose
          * the cascade to the very stylesheet it is meant to replace.
          */
+        /*
+         * The second argument is the Composer package name, which is what
+         * Filament turns into the directory it publishes into and the URL it
+         * emits — `public/css/johnrivera7/filament-mia-theme/mia.css`. It
+         * tracks the package name rather than `static::$name`, which names the
+         * theme's own resources instead: the config file, the view and
+         * translation namespaces and the publish tags all stay `filament-mia`,
+         * so an application's published overrides survive the rename.
+         */
         FilamentAsset::register([
             Theme::make('mia', __DIR__ . '/../resources/dist/mia.css'),
-        ], 'johnrivera7/filament-mia');
+        ], 'johnrivera7/filament-mia-theme');
 
         $this->registerLocaleRoute();
     }

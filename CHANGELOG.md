@@ -1,11 +1,30 @@
 # Changelog
 
-All notable changes to `johnrivera7/filament-mia` are documented in this file.
+All notable changes to `johnrivera7/filament-mia-theme` are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Changed
+
+- **The package is now `johnrivera7/filament-mia-theme`**, and the repository
+  `Johnrivera7/filament-mia-theme`. In English the qualifier goes last, so the
+  new name reads as the Mía theme for Filament and says which of the two kinds
+  of plugin it is. Done at `v0.1.0`, before the package had installations,
+  which is the only point at which a rename breaks nobody.
+  - The published stylesheet moves with it, to
+    `public/css/johnrivera7/filament-mia-theme/mia.css`, because Filament
+    derives that path from the Composer name. Anyone who installed the old
+    name runs `php artisan filament:assets` once after switching. A
+    `.gitignore` rule of `/public/css/johnrivera7` covers both.
+  - Everything else is deliberately unchanged: the PHP namespace stays
+    `JohnRivera7\FilamentMia`, and so do the config file, the view and
+    translation namespaces (`filament-mia::`), the publish tags, the settings
+    directory, the route name and the plugin's own identifier. Those name the
+    theme's resources rather than its distribution, and moving them would
+    orphan published overrides and saved appearance settings for no gain.
 
 ### Added
 
@@ -304,5 +323,5 @@ recompiling, and can differ between panels in one application.
   highest resolvable dependencies. The suite runs with `error_reporting=-1`
   and fails on any deprecation, notice or warning originating in the package.
 
-[Unreleased]: https://github.com/Johnrivera7/filament-mia/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/Johnrivera7/filament-mia/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/Johnrivera7/filament-mia-theme/releases/tag/v0.1.0
