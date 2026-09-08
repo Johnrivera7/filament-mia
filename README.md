@@ -46,9 +46,11 @@ It ships pre-compiled. There is no Node, Tailwind or build step to install.
 
 ## Screenshots
 
-Every image on this page is taken from software you can run: the sign-in and
-language frames from the [preview panel](#looking-at-it-locally) bundled with
-the package, the rest from a demo application. Both run on invented records.
+Every image on this page comes from the [preview panel](#looking-at-it-locally)
+bundled with the package, on invented records seeded from a fixed number. Clone
+the repository and two commands reproduce the lot — including this page's
+frames, which is the point: a gallery that needs a separate application to
+regenerate stops matching the code it advertises.
 
 ### Before signing in
 
@@ -104,24 +106,24 @@ validation error, a phone, a two-step challenge:
 
 <table>
 <tr>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light.jpg" alt="A dashboard in light mode: cream canvas, serif headings, widgets on hairline-bordered cards" /></td>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-dark.jpg" alt="The same dashboard in dark mode, in warm espresso and umber rather than cool grey" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-light.jpg" alt="A dashboard in light mode: cream canvas, serif headings, stat cards and charts on hairline-bordered surfaces" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-dark.jpg" alt="The same dashboard in dark mode, in warm espresso and umber rather than cool grey" /></td>
 </tr>
 <tr>
 <td><b>Dashboard</b><br />Widgets on barely differentiated surfaces, stat figures set in the display serif.</td>
 <td><b>The same, dark</b><br />Espresso and umber, built from the same neutral ramp as the light mode.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light.jpg" alt="A table of projects: tracked caps in the column headings, tabular figures, tinted badges" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-dark.jpg" alt="The same table in dark mode" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-light.jpg" alt="A table of projects: tracked caps in the column headings, tabular figures, tinted badges" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-dark.jpg" alt="The same table in dark mode" /></td>
 </tr>
 <tr>
 <td><b>Tables</b><br />Column headings in small tracked caps, tabular figures, badges as tinted washes rather than pale pills.</td>
 <td><b>Density is a setting</b><br />Row height and padding follow <code>density()</code>, so the same table can be airy or tight.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-form-light.jpg" alt="A create form with tabs, sections and hairline-bordered inputs" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-charts-dark.jpg" alt="Four charts in dark mode, with grid, axes and labels in the theme's warm palette" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-form-light.jpg" alt="An edit form with sections, selects, a date picker and hairline-bordered inputs" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-charts-dark.jpg" alt="Stat cards and two charts in dark mode, with grid, axes and labels in the theme's warm palette" /></td>
 </tr>
 <tr>
 <td><b>Forms</b><br />Inputs carry a hairline and a soft halo on focus, in place of Filament's ring.</td>
@@ -131,9 +133,9 @@ validation error, a phone, a two-step challenge:
 
 <table>
 <tr>
-<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-chart-tooltip-light.jpg" alt="A chart tooltip: a dark warm chip with rounded corners and a small legend swatch" /></td>
-<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light-mobile.jpg" alt="The dashboard on a phone, with the sidebar collapsed" /></td>
-<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light-mobile.jpg" alt="The projects table on a phone, scrolling horizontally" /></td>
+<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-chart-tooltip-light.jpg" alt="A chart tooltip: a dark warm chip with rounded corners and a small legend swatch" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-light-mobile.jpg" alt="The dashboard on a phone, with the sidebar collapsed and the widgets stacked" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-light-mobile.jpg" alt="The projects table on a phone, scrolling horizontally" /></td>
 </tr>
 <tr>
 <td><b>Chart tooltip</b><br />The same warm chip as every other tooltip, with corners from <code>roundness()</code>.</td>
@@ -142,15 +144,23 @@ validation error, a phone, a two-step challenge:
 </tr>
 </table>
 
+An empty state is a screen most panels meet and few design. This one is a list
+emptied by a search rather than by having nothing in it, which is the version
+that needs a way back rather than a way to start:
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-empty-light.jpg" alt="A projects table with a search that matches nothing: an illustrated mark in a warm halo, a heading reading Nothing matches, and an action to show everything again" width="860" />
+</div>
+
 ### The appearance page
 
 Colour, type, roundness, density and elevation, edited in the panel with a live
 preview. The sign-in composition is chosen here too, and previewed as the real
 layout rather than a diagram of one:
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-login.jpg" alt="The sign-in section of the appearance page, with the five compositions and a live preview of the selected one" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-login.jpg" alt="The sign-in section of the appearance page, with the five compositions and a live preview of the selected one" width="100%" />
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-light.jpg" alt="The appearance page: colour, typography, shape and depth controls beside a specimen of the components they affect" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-light.jpg" alt="The appearance page: colour, typography, shape and depth controls beside a specimen of the components they affect" width="100%" />
 
 ## Project status
 
@@ -1165,15 +1175,24 @@ php vendor/bin/testbench serve
 
 That serves a panel at `/admin` with sign-in, registration, password recovery
 and a multi-factor challenge, against one invented account
-(`valeria@mia.test` / `password`). Every screenshot in this README is taken
-from it:
+(`valeria@mia.test` / `password`). Behind it is a small worked example — a
+projects list, a client list, a dashboard of stats and charts, and the
+appearance page — seeded from a fixed number, so the same records come back in
+the same order on every build. Every screenshot in this README is taken from
+it:
 
 ```bash
 node bin/shots.mjs             # all five compositions, both modes, both widths
+node bin/panel-shots.mjs       # the panel interior: dashboard, lists, form, charts
 node bin/locale-shots.mjs      # the language switcher, and the choice surviving
 node bin/contrast-login.mjs    # measured contrast for the same set
 php bin/contrast-report.php    # palette-level contrast
 ```
+
+The example panel is deliberately in English, which is also how the theme's
+translation coverage gets checked: anything the theme itself labels shows up in
+those frames, so a string left in another language is visible in the picture
+rather than buried in a language file.
 
 Three conventions keep the repository honest:
 

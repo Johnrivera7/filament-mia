@@ -94,9 +94,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preset names and descriptions on the appearance page are translatable, and
   ship in Spanish alongside the rest of the page. A preset registered by an
   application keeps the text it was given.
-- Screenshots of a working panel in the README: dashboard, tables, forms,
-  charts and the appearance page, in both colour modes and on a phone.
-  `bin/demo-shots.mjs` produces them.
+- Screenshots of a working panel in the README: dashboard, lists, a form,
+  charts, a filtered empty state and the appearance page, in both colour modes
+  and on a phone.
+- A worked example inside the bundled preview panel, so the package
+  photographs itself: two resources with populated lists and forms, a
+  dashboard of stats, two charts and a table widget, and a seeder that runs
+  from a fixed number so the same records come back on every build.
+  `bin/panel-shots.mjs` captures the set. Development only — none of it ships
+  with the package.
+  - The panel is in English, which doubles as the check on the theme's own
+    translation coverage: a string the theme fails to translate is visible in
+    the frames rather than buried in a language file.
+  - The projects list carries two empty states, one for a list with nothing in
+    it and one for a list narrowed to nothing by a search or filter, the second
+    offering a way back rather than a way to start.
 
 ### Changed
 
@@ -148,8 +160,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - The first set of screenshots and the 16:9 cover. Every image is now produced
-  by a script in `bin/`, from the preview panel bundled with the package or
-  from a demo application, both running on invented records.
+  by a script in `bin/`, from the preview panel bundled with the package,
+  running on invented records.
+
+- The interim gallery taken from a separate demo application, replaced
+  one-for-one by frames from the bundled preview panel. The images were in
+  Spanish while the README is in English, and regenerating them needed a
+  project that is not in this repository.
 
 ## [0.1.0] - 2026-09-07
 

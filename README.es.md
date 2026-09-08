@@ -50,9 +50,11 @@ de compilación.
 
 ## Capturas
 
-Todas las imágenes salen de software que puedes ejecutar: las de acceso, del
-panel de previsualización que acompaña al paquete; el resto, de una aplicación
-de demostración. Las dos funcionan con datos inventados.
+Todas las imágenes salen del panel de previsualización que acompaña al paquete,
+con datos inventados sembrados a partir de una semilla fija. Al clonar el
+repositorio, dos órdenes reproducen el conjunto entero, capturas de esta página
+incluidas: una galería que necesita otra aplicación para regenerarse deja de
+corresponder al código que anuncia.
 
 ### Antes de entrar
 
@@ -108,24 +110,24 @@ validación, un teléfono, un desafío en dos pasos.
 
 <table>
 <tr>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light.jpg" alt="Un panel principal en modo claro: lienzo crema, titulares en serif y widgets sobre tarjetas con borde de un pelo" /></td>
-<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-dark.jpg" alt="El mismo panel en modo oscuro, en espresso y umbra cálidos en lugar de gris frío" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-light.jpg" alt="Un panel principal en modo claro: lienzo crema, titulares en serif y widgets sobre tarjetas con borde de un pelo" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-dark.jpg" alt="El mismo panel en modo oscuro, en espresso y umbra cálidos en lugar de gris frío" /></td>
 </tr>
 <tr>
 <td><b>Panel principal</b><br />Widgets sobre superficies apenas diferenciadas y cifras compuestas en la serif de titulares.</td>
 <td><b>El mismo, oscuro</b><br />Espresso y umbra, construidos con la misma rampa neutra que el modo claro.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light.jpg" alt="Una tabla de proyectos: versalitas espaciadas en los encabezados, cifras tabulares y distintivos teñidos" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-dark.jpg" alt="La misma tabla en modo oscuro" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-light.jpg" alt="Una tabla de proyectos: versalitas espaciadas en los encabezados, cifras tabulares y distintivos teñidos" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-dark.jpg" alt="La misma tabla en modo oscuro" /></td>
 </tr>
 <tr>
 <td><b>Tablas</b><br />Encabezados en versalitas espaciadas, cifras tabulares y distintivos como lavados de color.</td>
 <td><b>La densidad es un ajuste</b><br />La altura de fila y el relleno siguen a <code>density()</code>.</td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-form-light.jpg" alt="Un formulario de creación con pestañas, secciones y campos con borde de un pelo" /></td>
-<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-charts-dark.jpg" alt="Cuatro gráficos en modo oscuro, con rejilla, ejes y etiquetas en la paleta cálida del tema" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-form-light.jpg" alt="Un formulario de edición con secciones, desplegables, selector de fecha y campos con borde de un pelo" /></td>
+<td><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-charts-dark.jpg" alt="Tarjetas de cifras y dos gráficos en modo oscuro, con rejilla, ejes y etiquetas en la paleta cálida del tema" /></td>
 </tr>
 <tr>
 <td><b>Formularios</b><br />Los campos llevan un borde de un pelo y un halo suave al enfocarse, en lugar del anillo de Filament.</td>
@@ -135,9 +137,9 @@ validación, un teléfono, un desafío en dos pasos.
 
 <table>
 <tr>
-<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-chart-tooltip-light.jpg" alt="Un tooltip de gráfico: una pastilla cálida oscura con esquinas redondeadas" /></td>
-<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-panel-light-mobile.jpg" alt="El panel principal en un teléfono, con la barra lateral plegada" /></td>
-<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-table-light-mobile.jpg" alt="La tabla de proyectos en un teléfono, con desplazamiento horizontal" /></td>
+<td width="34%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-chart-tooltip-light.jpg" alt="Un tooltip de gráfico: una pastilla cálida oscura con esquinas redondeadas" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-dashboard-light-mobile.jpg" alt="El panel principal en un teléfono, con la barra lateral plegada" /></td>
+<td width="33%"><img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-light-mobile.jpg" alt="La tabla de proyectos en un teléfono, con desplazamiento horizontal" /></td>
 </tr>
 <tr>
 <td><b>Tooltip de gráfico</b><br />La misma pastilla cálida que el resto, con las esquinas de <code>roundness()</code>.</td>
@@ -146,15 +148,23 @@ validación, un teléfono, un desafío en dos pasos.
 </tr>
 </table>
 
+El estado vacío es una pantalla que casi todo panel encuentra y casi ninguno
+diseña. Este es una lista vaciada por una búsqueda, no por no tener nada: la
+versión que necesita una vuelta atrás y no un punto de partida.
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-table-empty-light.jpg" alt="Una tabla de proyectos con una búsqueda que no encuentra nada: una marca ilustrada en un halo cálido, un titular que dice Nothing matches y una acción para volver a verlo todo" width="860" />
+</div>
+
 ### La página de apariencia
 
 Color, tipografía, redondez, densidad y elevación, editados dentro del panel
 con previsualización en vivo. La composición de acceso se elige aquí también, y
 se previsualiza como el layout real y no como un esquema.
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-light.jpg" alt="La página de apariencia: controles de color, tipografía, forma y profundidad junto a una muestra de los componentes que afectan" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-light.jpg" alt="La página de apariencia: controles de color, tipografía, forma y profundidad junto a una muestra de los componentes que afectan" width="100%" />
 
 ## Estado del proyecto
 
@@ -519,7 +529,7 @@ contra el fondo plano que asume el informe de paleta.
 
 ## La página de apariencia
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/demo-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia/main/art/panel-appearance-login.jpg" alt="Sección de acceso de la página de apariencia, con las cinco composiciones y una previsualización en vivo" width="100%" />
 
 Una página opcional dentro del panel para editar el tema y guardar el
 resultado, pensada para cuando quien decide cómo se ve el panel no es quien lo

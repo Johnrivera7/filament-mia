@@ -1,7 +1,7 @@
-# Every image in this repository comes from one of two places, both running on
-# invented data: the preview panel bundled with the package (`art/login-*`, by
-# `bin/shots.mjs`) or the demo application (`art/demo-*`, by
-# `bin/demo-shots.mjs`). Captures of any real system are ignored on principle —
+# Every image in this repository comes from the preview panel bundled with the
+# package, on invented data: `art/login-*` by `bin/shots.mjs`, `art/panel-*` by
+# `bin/panel-shots.mjs` and `art/locale-*` by `bin/locale-shots.mjs`.
+# Captures of any real system are ignored on principle —
 # they can carry personal or otherwise sensitive data, and a blob pushed to a
 # public repository stays reachable by SHA after the file is deleted.
 /art/screenshot-*
