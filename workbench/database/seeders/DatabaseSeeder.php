@@ -50,9 +50,16 @@ class DatabaseSeeder extends Seeder
 
         $clients = Client::query()->where('tier', '!=', 'prospect')->get();
 
-        // Stages and health cycle rather than land at random, so every badge
-        // the panel can draw is on screen in the first page of the list.
-        $stages = ['discovery', 'design', 'build', 'review', 'on_hold'];
+        /*
+         * Stages are dealt out rather than left to chance: every badge the
+         * panel can draw has to appear on the first page of the list, and the
+         * counts have to be uneven or the chart of them is four equal bars.
+         */
+        $stages = [
+            'build', 'review', 'design', 'build', 'discovery', 'build', 'review',
+            'build', 'on_hold', 'design', 'build', 'review', 'build', 'design',
+        ];
+
         $health = ['on_track', 'at_risk', 'on_track', 'blocked'];
 
         Project::factory()
