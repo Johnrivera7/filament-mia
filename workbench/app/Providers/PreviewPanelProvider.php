@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -16,6 +17,12 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use JohnRivera7\FilamentMia\MiaTheme;
+use Workbench\App\Filament\Resources\ClientResource;
+use Workbench\App\Filament\Resources\ProjectResource;
+use Workbench\App\Filament\Widgets\DeliveryChart;
+use Workbench\App\Filament\Widgets\RecentWork;
+use Workbench\App\Filament\Widgets\StudioOverview;
+use Workbench\App\Filament\Widgets\WorkMixChart;
 
 /**
  * A panel for looking at the theme without an application around it.
@@ -52,6 +59,25 @@ class PreviewPanelProvider extends PanelProvider
                 AppAuthentication::make(),
             ])
             ->authGuard('web')
+            ->pages([Dashboard::class])
+            ->resources([
+                ProjectResource::class,
+                ClientResource::class,
+            ])
+            ->widgets([
+                StudioOverview::class,
+                DeliveryChart::class,
+                WorkMixChart::class,
+                RecentWork::class,
+            ])
+            ->navigationGroups(['Delivery', 'Commercial'])
+            /*
+             * The collapsed rail is a second layout, not a narrower version of
+             * the first one, and it is the layout most likely to be left
+             * unstyled. Turning it on here is what makes it possible to see the
+             * rail in the package itself rather than only in an application.
+             */
+            ->sidebarCollapsibleOnDesktop()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
