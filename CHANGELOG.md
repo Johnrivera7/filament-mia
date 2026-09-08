@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-08
+
+### Fixed
+
+- The public page no longer scrolls sideways. Its stylesheet is inlined on a
+  page with no panel and therefore no framework reset behind it, and nothing
+  was setting `box-sizing`, so every element that paired a width with padding
+  grew past the width it was given — the page scrolled by exactly the padding
+  of its shell, at every viewport.
+- Buttons in the navigation bar are sized for a bar. They were rendering as the
+  page's call-to-action button, which is deliberately large enough to own a
+  column on a phone, and stood a head taller than the icon controls beside it.
+
 ## [0.2.0] - 2026-09-08
 
 ### Changed
@@ -383,6 +396,7 @@ recompiling, and can differ between panels in one application.
   highest resolvable dependencies. The suite runs with `error_reporting=-1`
   and fails on any deprecation, notice or warning originating in the package.
 
-[Unreleased]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Johnrivera7/filament-mia-theme/releases/tag/v0.1.0
