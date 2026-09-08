@@ -29,6 +29,12 @@
     --mia-radius-2xl: 1.25rem;
     --mia-radius-3xl: 1.75rem;
 
+    /* The same corner treatment as plain numbers, for what Chart.js paints. */
+    --mia-chart-line-tension: 0.35;
+    --mia-chart-bar-radius: 4;
+    --mia-chart-tooltip-radius: 12;
+    --mia-chart-legend-swatch-radius: 3;
+
     --mia-density: 1;
     --mia-row-height: 3.5rem;
     --mia-section-gap: 2rem;

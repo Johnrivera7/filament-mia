@@ -175,6 +175,10 @@ class TokenSheet
             $tokens["mia-{$name}"] = $value;
         }
 
+        foreach ($this->roundness->chartTokens() as $name => $value) {
+            $tokens["mia-{$name}"] = $value;
+        }
+
         // Retune Tailwind's own scale so the stylesheet's existing `rounded-*`
         // utilities follow the configured roundness.
         foreach (['xs', 'sm', 'md', 'lg', 'xl'] as $step) {

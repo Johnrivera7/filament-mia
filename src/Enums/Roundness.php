@@ -67,6 +67,46 @@ enum Roundness: string
         };
     }
 
+    /**
+     * The same decision expressed for a canvas.
+     *
+     * Chart.js is handed plain numbers, not CSS lengths, so these cannot live
+     * on the radius scale above. The values track it all the same: the tooltip
+     * radius is `radius-lg` in pixels, and line curvature moves with the
+     * corners, from a polyline at `sharp` to a flowing curve at `round`.
+     *
+     * @return array<string, string>
+     */
+    public function chartTokens(): array
+    {
+        return match ($this) {
+            self::Sharp => [
+                'chart-line-tension' => '0',
+                'chart-bar-radius' => '0',
+                'chart-tooltip-radius' => '4',
+                'chart-legend-swatch-radius' => '0',
+            ],
+            self::Subtle => [
+                'chart-line-tension' => '0.2',
+                'chart-bar-radius' => '2',
+                'chart-tooltip-radius' => '8',
+                'chart-legend-swatch-radius' => '2',
+            ],
+            self::Soft => [
+                'chart-line-tension' => '0.35',
+                'chart-bar-radius' => '4',
+                'chart-tooltip-radius' => '12',
+                'chart-legend-swatch-radius' => '3',
+            ],
+            self::Round => [
+                'chart-line-tension' => '0.45',
+                'chart-bar-radius' => '8',
+                'chart-tooltip-radius' => '18',
+                'chart-legend-swatch-radius' => '5',
+            ],
+        };
+    }
+
     public static function fromValue(self|string $value): self
     {
         if ($value instanceof self) {

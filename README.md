@@ -737,6 +737,10 @@ options do not cover. All are set for both colour modes.
 | `--mia-heading-font` | The heading family, set by `serifHeadings()` |
 | `--mia-heading-weight` | Heading weight |
 | `--mia-heading-tracking` | Heading letter-spacing |
+| `--mia-chart-line-tension` | Curvature of a chart line, set by `roundness()` |
+| `--mia-chart-bar-radius` | Bar corner radius in pixels, set by `roundness()` |
+| `--mia-chart-tooltip-radius` | Chart tooltip corner radius in pixels, set by `roundness()` |
+| `--mia-chart-legend-swatch-radius` | Legend swatch corner radius in pixels, set by `roundness()` |
 
 Reference them with a fallback, as the theme's own stylesheet does, so your
 component still renders if a property is ever renamed:
@@ -750,6 +754,34 @@ component still renders if a property is ever renamed:
     transition: box-shadow var(--mia-duration, 260ms) var(--mia-ease, ease);
 }
 ```
+
+### Charts
+
+A chart is painted onto a bare canvas, so no stylesheet reaches it directly.
+Filament bridges that with a set of empty elements whose computed colour the
+chart component reads and hands to Chart.js, reapplying it when the colour mode
+changes. The theme claims them, which puts the grid, the axes, the legend and
+the tooltip in its own palette instead of Filament's greys — the difference is
+most obvious in dark mode.
+
+Two of those elements are deliberately left alone: `-bg-color` and
+`-border-color` carry the colour of each individual widget, so a theme that
+overrode them would paint every series in a panel the same.
+
+The numbers Chart.js reads are derived from `roundness()` rather than fixed, so
+bars, line curvature, legend swatches and the chart tooltip follow the corner
+treatment of everything around them — including a change made from the
+appearance page, with no rebuild.
+
+| `roundness()` | Line tension | Bar radius | Tooltip radius |
+|---|---|---|---|
+| `sharp` | `0` | `0` | `4` |
+| `subtle` | `0.2` | `2` | `8` |
+| `soft` | `0.35` | `4` | `12` |
+| `round` | `0.45` | `8` | `18` |
+
+Override any of it per widget in the usual way, from `getOptions()`, which
+takes precedence over the properties the theme sets.
 
 ### Skeleton placeholders
 

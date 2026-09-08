@@ -92,6 +92,23 @@ class TokenSheetTest extends TestCase
         $this->assertNotSame($sharp, $round);
     }
 
+    /**
+     * Chart.js reads numbers from custom properties, so charts can follow the
+     * theme's corners without a rebuild — and follow the appearance page for
+     * free, since roundness is already saved there.
+     */
+    public function test_roundness_carries_through_to_the_chart_numbers(): void
+    {
+        $sharp = $this->sheet(roundness: Roundness::Sharp);
+        $round = $this->sheet(roundness: Roundness::Round);
+
+        $this->assertStringContainsString('--mia-chart-bar-radius:0;', $sharp);
+        $this->assertStringContainsString('--mia-chart-line-tension:0;', $sharp);
+
+        $this->assertStringContainsString('--mia-chart-bar-radius:8;', $round);
+        $this->assertStringContainsString('--mia-chart-line-tension:0.45;', $round);
+    }
+
     public function test_density_changes_the_scale_and_row_height(): void
     {
         $compact = $this->sheet(density: Density::Compact);

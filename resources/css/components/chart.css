@@ -1,0 +1,74 @@
+/*
+ * Charts.
+ *
+ * Chart.js paints onto a bare canvas, which no stylesheet can reach. Filament
+ * bridges that with a set of empty elements in the chart view: the component
+ * reads their computed colour, hands it to Chart.js, and reapplies it when the
+ * colour mode changes. Giving them an ordinary `color` declaration is how a
+ * theme claims the grid, the axes and the tooltip.
+ *
+ * Two of those elements are deliberately left alone. `-bg-color` and
+ * `-border-color` carry the colour of each widget, which is why series already
+ * follow the palette; overriding them would paint every chart in the panel the
+ * same.
+ *
+ * The numbers Chart.js reads come from the roundness token rather than being
+ * fixed here, so a chart follows the corner treatment of everything around it
+ * — including when it is changed from the appearance page.
+ */
+
+.fi-body .fi-wi-chart-grid-color {
+    color: var(--mia-hairline);
+}
+
+.fi-body .fi-wi-chart-text-color {
+    color: var(--mia-ink-muted);
+}
+
+/*
+ * The chart tooltip is the same object as every other tooltip in the panel, so
+ * it takes the same treatment: a dark warm chip with light text, one step
+ * lighter in dark mode where the canvas is already deep.
+ */
+.fi-body .fi-wi-chart-tooltip-bg-color {
+    color: var(--gray-900);
+}
+
+.dark .fi-body .fi-wi-chart-tooltip-bg-color {
+    color: var(--gray-800);
+}
+
+.fi-body .fi-wi-chart-tooltip-text-color {
+    color: var(--gray-50);
+}
+
+.fi-body .fi-wi-chart-tooltip-border-color {
+    color: var(--mia-hairline-strong);
+}
+
+.fi-body .fi-wi-chart {
+    --chart-line-tension: var(--mia-chart-line-tension, 0.35);
+    --chart-bar-border-radius: var(--mia-chart-bar-radius, 4);
+    --chart-tooltip-corner-radius: var(--mia-chart-tooltip-radius, 12);
+    --chart-legend-border-radius: var(--mia-chart-legend-swatch-radius, 3);
+
+    /*
+     * Chart.js draws no tooltip border at all unless a width is set, so the
+     * hairline above would never appear without this.
+     */
+    --chart-tooltip-border-width: 1;
+
+    /* A smaller legend swatch, to sit with the tracked caps beside it. */
+    --chart-legend-box-width: 10;
+
+    /*
+     * No dots on a line. The series reads as a drawn curve, and hover still
+     * works: Filament sets a hit radius independent of the visible one.
+     */
+    --chart-point-radius: 0;
+}
+
+/* The sparkline in a stat is the same decision at a smaller size. */
+.fi-body .fi-wi-stats-overview-stat-chart {
+    --stat-chart-line-tension: var(--mia-chart-line-tension, 0.35);
+}

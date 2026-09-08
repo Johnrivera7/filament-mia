@@ -60,6 +60,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   compositions put text over a gradient and one puts it over frosted glass. 48
   pairs across five compositions and both colour modes, all clearing WCAG AA.
 
+- Charts now follow the theme. Filament's chart view renders a set of empty
+  elements whose computed colour the component reads and hands to Chart.js; the
+  theme claims them, which puts the grid, the axes, the legend and the tooltip
+  in the warm palette instead of Filament's greys. Series already followed the
+  palette, so the two elements that carry each widget's own colour are left
+  alone.
+  - The numbers Chart.js reads — line tension, bar radius, legend swatch and
+    tooltip radius — are derived from `roundness()` rather than fixed, so a
+    chart follows the corner treatment of the panel around it, including a
+    change saved from the appearance page.
+  - `--mia-chart-line-tension`, `--mia-chart-bar-radius`,
+    `--mia-chart-tooltip-radius` and `--mia-chart-legend-swatch-radius` are
+    published alongside the rest.
+
 ### Changed
 
 - `--mia-ink-muted` is one step darker in light mode, `--gray-600` rather than
