@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-08
+
 ### Changed
 
 - **The package is now `johnrivera7/filament-mia-theme`**, and the repository
@@ -61,6 +63,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     read. The preview beside the form is an iframe of the draft at its real
     address, so it shows the responsive behaviour a scaled-down component
     preview would get wrong.
+  - The preview renders at the viewport width being previewed — 390, 834 or
+    1280 CSS pixels — and scales down whatever the pane cannot fit, rather than
+    handing the draft the width the pane happens to have. Framed the other way,
+    a desktop preview on any screen narrower than a desktop showed the narrow
+    layout and called it desktop.
+  - An optional language switcher in the navigation bar, beside the light/dark
+    one, for pages whose panel offers more than one language. It writes the
+    same long-lived cookie the panel's own switcher writes, so a visitor needs
+    no session and an editor who signs in afterwards lands in the language they
+    were already reading.
   - Content is stored in a `mia_pages` table whose migration is **published,
     not loaded** — `vendor:publish --tag=filament-mia-migrations`. A theme has
     no business adding a table to an application that never asked for one. A
@@ -371,5 +383,6 @@ recompiling, and can differ between panels in one application.
   highest resolvable dependencies. The suite runs with `error_reporting=-1`
   and fails on any deprecation, notice or warning originating in the package.
 
-[Unreleased]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Johnrivera7/filament-mia-theme/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Johnrivera7/filament-mia-theme/releases/tag/v0.1.0
