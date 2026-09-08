@@ -23,13 +23,14 @@
  * the slot went to the error and maintenance pages, which shipped. Put it back
  * when there is something to point at.
  *
- * This went through eighteen covers and a couple of thumbnails before one was
- * chosen, all written side by side to be compared. They are gone now, and so
- * is the folder they were compared in: the two below are the two that ship,
- * they are written straight to `art/`, and a script that also produces twenty
- * images nobody wants is one whose output has to be sorted before it is used.
- * The frames photographed on the way are working files and land in
- * `build/listing`, which is not committed.
+ * This went through twenty-two covers and three thumbnails before a pair was
+ * chosen, written side by side under `art/listing-candidates` so they could be
+ * compared. Both the rejects and the folder are gone: the two compositions
+ * below are the two that ship, they are written straight to `art/`, and a
+ * script that also produces two dozen images nobody wants is one whose output
+ * has to be sorted through before it can be used. The frames photographed on
+ * the way are working files and land in `build/listing`, which is not
+ * committed.
  */
 
 import { execFileSync } from 'node:child_process'
@@ -47,6 +48,10 @@ const ART = 'art'
 /* The frames and the rendered sheets are working files: only the two encoded
  * JPEGs belong in `art/`. */
 const FRAMES = 'build/listing'
+
+/* The arrangements that were passed over, kept on disk beside the two that
+ * shipped. Ignored by git, like `art/verification`. */
+const CANDIDATES = 'art/listing-candidates'
 
 mkdirSync(FRAMES, { recursive: true })
 
@@ -178,6 +183,15 @@ function cropLogin() {
         shotPath('login'),
         ...LOGIN_CARD.map(String),
     ])
+
+    // The same screen untrimmed, for the rejected arrangement that shows why
+    // it is trimmed.
+    execFileSync('python3', [
+        '-c',
+        'import sys; from PIL import Image; Image.open(sys.argv[1]).save(sys.argv[2])',
+        `${ART}/login-bleed-light-desktop.jpg`,
+        shotPath('login-whole'),
+    ])
 }
 
 const FRAME_NAMES = [...PAGES.map(([name]) => name), ...DETAILS.map(([name]) => name)]
@@ -186,7 +200,7 @@ if (!REUSE || !FRAME_NAMES.every((name) => existsSync(shotPath(name)))) {
     await capture()
 }
 
-if (!REUSE || !existsSync(shotPath('login'))) {
+if (!REUSE || !existsSync(shotPath('login')) || !existsSync(shotPath('login-whole'))) {
     cropLogin()
 }
 
@@ -436,7 +450,7 @@ ${screens.map((s, i) => `      <div class="shot shot-${i}"><img src="${asset(s.s
  * laying out at 1280 wide gives fractional borders and mushy type, whereas a
  * Lanczos reduction of a 2x drawing keeps the hairlines.
  */
-const render = async (name, spec) => {
+const render = async (name, spec, out = `${ART}/${name}.jpg`) => {
     const shot = await chromium.launch()
 
     const context = await shot.newContext({
@@ -460,7 +474,7 @@ const render = async (name, spec) => {
         execFileSync('python3', [
             'bin/listing-encode.py',
             `${FRAMES}/${name}.png`,
-            `${ART}/${name}.jpg`,
+            out,
             String(spec.width),
             String(spec.height),
         ]).toString().trim(),
@@ -544,12 +558,101 @@ const VARIANTS = {
  *
  *     node bin/listing-shots.mjs listing-thumbnail
  */
+/**
+ * The arrangements that were tried and passed over, rendered with
+ * `--rejected`. They are the argument for the two above, and cheap to keep:
+ * every one of them draws from frames that are already on disk.
+ *
+ * @type {Record<string, object>}
+ */
+const REJECTED = {
+    /* The scene before the sign-in screen joined it. Three objects, and the
+     * heatmap far enough left to clip the last word off the fifth pill. */
+    'cover-no-signin': {
+        ...COVER,
+        perspective: 2500,
+        origin: '6% 46%',
+        screens: [
+            { shot: 'dashboard', width: 1400, x: 60, y: -90, z: -180, turn: 12, tip: 2, roll: -1 },
+            { shot: 'detail-pulse', width: 820, x: -120, y: 500, z: 200, turn: 7, tip: 0, roll: -1.6, lift: 1.3 },
+            { shot: 'detail-targets', width: 240, x: 250, y: 120, z: 300, turn: 5, tip: 0, roll: -2, lift: 1.45 },
+        ],
+    },
+
+    /* The sign-in screen whole instead of cropped to its card. Its gradient is
+     * within a few percent of the canvas, so with nothing to give it an edge
+     * it reads as a pale smear over the dashboard rather than as a screen.
+     * This is the variant that settled the crop. */
+    'cover-signin-uncropped': {
+        ...COVER,
+        perspective: 2500,
+        origin: '6% 46%',
+        screens: [
+            { shot: 'dashboard', width: 1400, x: 60, y: -90, z: -180, turn: 12, tip: 2, roll: -1 },
+            { shot: 'login-whole', width: 900, x: 170, y: 430, z: 260, turn: 8, tip: 0.8, roll: -1.5, lift: 1.3 },
+            { shot: 'detail-targets', width: 225, x: 200, y: 135, z: 300, turn: 5, tip: 0, roll: -2, lift: 1.45 },
+        ],
+    },
+
+    /* The card in the middle of the right edge, where the canvas cuts it. Two
+     * objects bleeding off the same edge at different depths reads as a
+     * mistake rather than as depth. */
+    'cover-signin-clipped': {
+        ...COVER,
+        perspective: 2500,
+        origin: '6% 46%',
+        screens: [
+            { shot: 'dashboard', width: 1400, x: 60, y: -90, z: -180, turn: 12, tip: 2, roll: -1 },
+            { shot: 'login', width: 470, x: 455, y: 240, z: 60, turn: 8, tip: 0.5, roll: -1.5, lift: 1.15 },
+            { shot: 'detail-pulse', width: 720, x: 10, y: 545, z: 200, turn: 7, tip: 0, roll: -1.6, lift: 1.3 },
+            { shot: 'detail-targets', width: 225, x: 200, y: 135, z: 300, turn: 5, tip: 0, roll: -2, lift: 1.45 },
+        ],
+    },
+
+    /* Card and ring stepped down the frame together, which puts them close
+     * enough to collide at the corners. */
+    'cover-signin-stepped': {
+        ...COVER,
+        perspective: 2500,
+        origin: '6% 46%',
+        screens: [
+            { shot: 'dashboard', width: 1400, x: 60, y: -80, z: -180, turn: 12, tip: 2, roll: -1 },
+            { shot: 'login', width: 450, x: 400, y: 165, z: 60, turn: 8, tip: 0.5, roll: -1.5, lift: 1.2 },
+            { shot: 'detail-pulse', width: 700, x: 20, y: 555, z: 200, turn: 7, tip: 0, roll: -1.6, lift: 1.3 },
+            { shot: 'detail-targets', width: 215, x: 105, y: 60, z: 300, turn: 5, tip: 0, roll: -2, lift: 1.45 },
+        ],
+    },
+
+    /* The thumbnail as a straight reduction of the cover's idea: one screen,
+     * no foreground. It reads, but it says less than the frame has room for. */
+    'thumb-panel-only': {
+        ...THUMB,
+        perspective: 2400,
+        origin: '6% 48%',
+        screens: [
+            { shot: 'dashboard', width: 1180, x: 40, y: 20, z: -80, turn: 11, tip: 1.5, roll: -1.2 },
+        ],
+    },
+}
+
+/* Either image on its own, or the discarded arrangements beside them:
+ *
+ *     node bin/listing-shots.mjs --rejected
+ */
 const only = process.argv.slice(2)
 
 for (const [name, spec] of Object.entries(VARIANTS)) {
-    if (only.length && !only.includes(name)) {
+    if (only.length && !only.includes(name) && !only.includes('--rejected')) {
         continue
     }
 
     await render(name, spec)
+}
+
+if (only.includes('--rejected')) {
+    mkdirSync(CANDIDATES, { recursive: true })
+
+    for (const [name, spec] of Object.entries(REJECTED)) {
+        await render(name, spec, `${CANDIDATES}/${name}.jpg`)
+    }
 }
