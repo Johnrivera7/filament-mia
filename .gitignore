@@ -27,3 +27,4 @@ build
 # with and without a validation error — and only the frames the README uses
 # are committed.
 /art/verification
+/workbench/storage

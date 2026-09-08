@@ -17,12 +17,39 @@
  */
 
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, readdirSync } from 'node:fs'
+import { copyFileSync, mkdirSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { chromium } from 'playwright'
 
 const BASE = process.env.MIA_BASE ?? 'http://127.0.0.1:8321'
-const OUT = 'art'
+/*
+ * The full set is verification material and stays out of the repository. Only
+ * the frames the README shows are copied up into `art/`, so a reader of the
+ * repository is not paging through forty near-identical images.
+ */
+const OUT = 'art/verification'
+const PUBLISHED = 'art'
+
+const README_FRAMES = [
+    'login-card-light-desktop.jpg',
+    'login-card-light-desktop-error.jpg',
+    'login-split-light-desktop.jpg',
+    'login-split-dark-desktop.jpg',
+    'login-split-light-mobile.jpg',
+    'login-bleed-light-desktop.jpg',
+    'login-editorial-light-desktop.jpg',
+    'login-portal-light-desktop.jpg',
+    'login-two-step-split-dark.jpg',
+]
+
+/*
+ * The panel serves the copy of the stylesheet under its public directory, not
+ * the one `npm run build` writes. Republishing first is what keeps a capture
+ * from quietly showing the previous build.
+ */
+execFileSync('php', ['vendor/bin/testbench', 'filament:assets'], {
+    stdio: 'inherit',
+})
 
 const LAYOUTS = ['card', 'split', 'bleed', 'editorial', 'portal']
 
@@ -180,8 +207,20 @@ await browser.close()
  */
 execFileSync(
     'python3',
-    ['bin/optimize.py', ...readdirSync(OUT).filter((f) => f.startsWith('login-')).map((f) => join(OUT, f))],
+    [
+        'bin/optimize.py',
+        ...readdirSync(OUT)
+            // Only what this run just captured. Passing the JPEGs from a
+            // previous run back in asks the optimiser to convert a file to
+            // itself, which fails on the second pass.
+            .filter((f) => f.startsWith('login-') && f.endsWith('.png'))
+            .map((f) => join(OUT, f)),
+    ],
     { stdio: 'inherit' },
 )
 
-console.log('done')
+for (const frame of README_FRAMES) {
+    copyFileSync(join(OUT, frame), join(PUBLISHED, frame))
+}
+
+console.log(`done, ${README_FRAMES.length} frames published to ${PUBLISHED}/`)
