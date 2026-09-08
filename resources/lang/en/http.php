@@ -40,9 +40,15 @@ return [
     ],
 
     'maintenance' => [
+        'eyebrow' => 'Maintenance',
         'title' => 'Down for maintenance',
         'heading' => 'Back shortly',
         'body' => 'The panel is closed for a scheduled update. Nothing has been lost — try again in a few minutes.',
+
+        // Used when `php artisan down --retry=…` gave a number of seconds.
+        'body_retry' => 'The panel is closed for a scheduled update. Nothing has been lost — try again in about :duration.',
+
+        'retry' => 'Try again',
     ],
 
     'actions' => [

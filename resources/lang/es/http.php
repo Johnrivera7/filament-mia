@@ -40,9 +40,15 @@ return [
     ],
 
     'maintenance' => [
+        'eyebrow' => 'Mantenimiento',
         'title' => 'Cerrado por mantenimiento',
         'heading' => 'Volvemos enseguida',
         'body' => 'El panel está cerrado por una actualización programada. No se ha perdido nada: inténtalo de nuevo en unos minutos.',
+
+        // Se usa cuando `php artisan down --retry=…` recibió un número de segundos.
+        'body_retry' => 'El panel está cerrado por una actualización programada. No se ha perdido nada: inténtalo de nuevo en :duration.',
+
+        'retry' => 'Reintentar',
     ],
 
     'actions' => [
