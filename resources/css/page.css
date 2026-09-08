@@ -44,6 +44,20 @@
  * Document
  * ------------------------------------------------------------------------- */
 
+/*
+ * This file carries no framework reset behind it — it is inlined on a page
+ * with no panel and no Tailwind preflight — so the one browser default that
+ * cannot be lived with is undone here. Without it, every element that pairs a
+ * width with padding grows past the width it was given, and the page scrolls
+ * sideways by exactly the padding of its shell.
+ */
+.mia-page,
+.mia-page *,
+.mia-page *::before,
+.mia-page *::after {
+    box-sizing: border-box;
+}
+
 .mia-page {
     margin: 0;
     font-family: var(--font-sans);
@@ -1147,6 +1161,17 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+    }
+
+    /* A bar is not a hero. The shared button is sized for a call to action
+       that owns a column on a phone, and at that size it dominates a bar whose
+       other controls are 40px icons — so here it shrinks to sit beside them
+       rather than tower over them. */
+    .mia-page-nav-actions .mia-page-btn {
+        min-height: 2.375rem;
+        padding: 0.4375rem 1rem;
+        border-radius: var(--mia-radius-md, 0.625rem);
+        font-size: 0.875rem;
     }
 
     /* The bar already shows them from here up. */
