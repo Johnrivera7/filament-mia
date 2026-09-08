@@ -1,8 +1,10 @@
 @php
-    $widths = [
-        'mobile' => ['icon' => 'heroicon-m-device-phone-mobile', 'width' => '390px'],
-        'tablet' => ['icon' => 'heroicon-m-device-tablet', 'width' => '834px'],
-        'desktop' => ['icon' => 'heroicon-m-computer-desktop', 'width' => '100%'],
+    use JohnRivera7\FilamentMia\Pages\PageBuilder;
+
+    $icons = [
+        'mobile' => 'heroicon-m-device-phone-mobile',
+        'tablet' => 'heroicon-m-device-tablet',
+        'desktop' => 'heroicon-m-computer-desktop',
     ];
 @endphp
 
@@ -70,9 +72,9 @@
 
                 <div class="fi-mia-builder-toolbar">
                     <div class="fi-mia-builder-widths">
-                        @foreach ($widths as $key => $option)
+                        @foreach ($icons as $key => $icon)
                             <x-filament::icon-button
-                                :icon="$option['icon']"
+                                :icon="$icon"
                                 :label="__('filament-mia::page-builder.preview.widths.' . $key)"
                                 :color="$this->previewWidth === $key ? 'primary' : 'gray'"
                                 wire:click="setPreviewWidth('{{ $key }}')"
@@ -112,8 +114,45 @@
                     </p>
                 @endif
 
-                <div class="fi-mia-builder-frame">
-                    <div class="fi-mia-builder-viewport" style="max-width: {{ $widths[$this->previewWidth]['width'] }}">
+                {{--
+                    The frame renders the draft at a real viewport width and
+                    scales whatever the pane cannot fit. Scaling rather than
+                    shrinking the viewport is the difference between a preview
+                    of the desktop layout and a preview of the narrow one.
+                --}}
+                <div
+                    class="fi-mia-builder-frame"
+                    style="--mia-preview-target: {{ $this->previewViewportWidth() }}px"
+                    x-data="{
+                        fit() {
+                            const target = parseFloat(
+                                getComputedStyle($el).getPropertyValue('--mia-preview-target'),
+                            );
+
+                            if (! target) {
+                                return;
+                            }
+
+                            const scale = Math.min(1, $el.clientWidth / target);
+
+                            $el.style.setProperty('--mia-preview-scale', scale);
+
+                            // The inner viewport is made taller by the same
+                            // factor it is shrunk by, so the scaled result
+                            // fills the pane exactly instead of leaving a gap.
+                            $el.style.setProperty(
+                                '--mia-preview-height',
+                                `${$el.clientHeight / scale}px`,
+                            );
+                        },
+                    }"
+                    x-init="
+                        fit();
+                        new ResizeObserver(() => fit()).observe($el);
+                    "
+                    x-on:mia-refit-page-preview.window="$nextTick(() => fit())"
+                >
+                    <div class="fi-mia-builder-viewport">
                         <iframe
                             x-ref="frame"
                             src="{{ $this->previewUrl() }}"
@@ -122,6 +161,12 @@
                         ></iframe>
                     </div>
                 </div>
+
+                <p class="fi-mia-builder-hint">
+                    {{ __('filament-mia::page-builder.preview.rendered_at', [
+                        'width' => $this->previewViewportWidth(),
+                    ]) }}
+                </p>
             </x-filament::section>
         </aside>
     </div>

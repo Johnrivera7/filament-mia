@@ -37,6 +37,7 @@ return [
         'refresh' => 'Refrescar',
         'live' => 'En vivo',
         'live_hint' => 'Al salir de cada campo se guarda el borrador y la previsualización se actualiza.',
+        'rendered_at' => 'Dibujada a :width px y escalada para caber.',
         'widths' => [
             'mobile' => 'Móvil',
             'tablet' => 'Tablet',

@@ -51,23 +51,35 @@
 
 .fi-mia-builder-frame {
     overflow: hidden;
+    height: 38rem;
     margin-top: calc(var(--spacing) * 4);
     border: 1px solid var(--mia-hairline);
     border-radius: var(--mia-radius-xl, 0.9375rem);
     background-color: var(--mia-surface);
 }
 
-/* Only the width animates. Animating the frame itself would reflow the page
-   inside it on every frame of the transition. */
+/* The draft is rendered at the viewport width that was asked for and then
+   scaled to whatever the pane can give it, which is what makes the desktop
+   preview a preview of the desktop layout rather than of the narrow one.
+   `--mia-preview-target` comes from the page; the scale and the height are
+   measured in the browser, since neither is knowable from PHP.
+   Scaling from the top centre keeps a viewport narrower than the pane —
+   a phone, most of the time — centred instead of pinned to one side. */
 .fi-mia-builder-viewport {
+    width: var(--mia-preview-target, 100%);
+    height: var(--mia-preview-height, 100%);
     margin-inline: auto;
-    transition: max-width var(--mia-duration, 260ms) var(--mia-ease, ease);
+    transform: scale(var(--mia-preview-scale, 1));
+    transform-origin: top center;
+    transition:
+        width var(--mia-duration, 260ms) var(--mia-ease, ease),
+        transform var(--mia-duration, 260ms) var(--mia-ease, ease);
 }
 
 .fi-mia-builder-frame iframe {
     display: block;
     width: 100%;
-    height: 38rem;
+    height: 100%;
     border: 0;
 }
 
@@ -87,7 +99,10 @@
         top: calc(var(--spacing) * 6);
     }
 
-    .fi-mia-builder-frame iframe {
+    /* The height belongs to the frame now, not to the iframe: the iframe
+       fills a viewport that is deliberately taller than the pane whenever the
+       preview is scaled down. */
+    .fi-mia-builder-frame {
         height: calc(100vh - 22rem);
         min-height: 32rem;
     }

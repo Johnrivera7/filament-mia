@@ -37,6 +37,7 @@ return [
         'refresh' => 'Refresh',
         'live' => 'Live',
         'live_hint' => 'Leaving a field saves the draft and refreshes the preview.',
+        'rendered_at' => 'Rendered at :width px and scaled to fit.',
         'widths' => [
             'mobile' => 'Mobile',
             'tablet' => 'Tablet',

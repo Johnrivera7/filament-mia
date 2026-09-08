@@ -34,8 +34,20 @@ use UnitEnum;
  */
 class PageBuilder extends Page
 {
-    /** The widths the preview can be framed at. */
-    public const WIDTHS = ['mobile', 'tablet', 'desktop'];
+    /**
+     * The viewports the preview can be framed at, in CSS pixels.
+     *
+     * Real widths rather than a fraction of the pane, which is the whole
+     * point. A preview that is only as wide as the column it sits in renders
+     * the page's narrow layout and calls it desktop; what the pane cannot fit
+     * is scaled down instead, so the layout on screen is the layout a visitor
+     * at that width would get.
+     */
+    public const WIDTHS = [
+        'mobile' => 390,
+        'tablet' => 834,
+        'desktop' => 1280,
+    ];
 
     protected static bool $isDiscovered = false;
 
@@ -225,7 +237,17 @@ class PageBuilder extends Page
 
     public function setPreviewWidth(string $width): void
     {
-        $this->previewWidth = in_array($width, self::WIDTHS, true) ? $width : 'desktop';
+        $this->previewWidth = array_key_exists($width, self::WIDTHS) ? $width : 'desktop';
+
+        // The pane refits itself rather than being re-keyed, so changing the
+        // width does not reload the iframe and lose its scroll position.
+        $this->dispatch('mia-refit-page-preview');
+    }
+
+    /** The viewport width the preview renders at, in CSS pixels. */
+    public function previewViewportWidth(): int
+    {
+        return self::WIDTHS[$this->previewWidth] ?? self::WIDTHS['desktop'];
     }
 
     public function previewUrl(): string
