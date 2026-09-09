@@ -40,7 +40,7 @@ jobs:
           ini-values: zend.assertions=1
 
       - name: Install dependencies
-        uses: ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f # 3.2.1
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
         with:
           dependency-versions: ${{ matrix.dependencies }}
 
@@ -68,7 +68,7 @@ jobs:
       # considers well-formed is worth hearing about, and the fix belongs in the
       # source rather than in a pin.
       - name: Install dependencies
-        uses: ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f # 3.2.1
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
         with:
           dependency-versions: highest
 
@@ -97,7 +97,7 @@ jobs:
       # repository nobody has touched. A framework upgrade instead arrives as a
       # commit that moves `composer.lock` and `resources/dist/mia.css` together.
       - name: Install PHP dependencies
-        uses: ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f # 3.2.1
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
         with:
           dependency-versions: locked
 
