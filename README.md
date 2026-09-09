@@ -1655,7 +1655,8 @@ installed version of the framework — a patch release that adds a class to one
 view makes `resources/dist/mia.css` a few hundred bytes bigger with no change
 to this repository at all. The lock is what makes "rebuild and compare" a
 statement about the source instead of about what Filament published that
-morning.
+morning. It is marked `export-ignore` in `.gitattributes`, so it never ships
+inside the Packagist archive — only the repository and CI see it.
 
 So raising the version is one commit, with both halves in it:
 

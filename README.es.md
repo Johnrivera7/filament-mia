@@ -997,7 +997,8 @@ compilado se mueve con la versión instalada del framework: una versión de
 parche que añada una clase a una vista engorda `resources/dist/mia.css` unos
 cientos de bytes sin que en este repositorio cambie nada. El lock es lo que
 hace que «recompilar y comparar» hable del código y no de lo que Filament
-publicó esa mañana.
+publicó esa mañana. Está marcado `export-ignore` en `.gitattributes`, así que
+no viaja dentro del archivo de Packagist: solo lo ven el repositorio y la CI.
 
 Así que subir de versión es un solo commit, con las dos mitades dentro:
 

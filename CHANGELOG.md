@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-09-09
+
+### Changed
+
+- GitHub Actions in CI are pinned to full commit SHAs (with version comments)
+  rather than floating tags, so a compromised tag cannot rewrite the pipeline.
+- Dependabot covers Composer, npm and GitHub Actions, with a seven-day cooldown
+  before proposing a new release.
+- A `SECURITY.md` documents how to report vulnerabilities privately.
+- `composer.lock` remains committed for the stylesheet rebuild job, but is
+  marked `export-ignore` so it no longer ships inside the Packagist archive.
+
 ## [0.2.1] - 2026-09-08
 
 ### Fixed

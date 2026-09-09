@@ -9,6 +9,12 @@ resources/dist/*.css linguist-generated=true -diff
 *.woff2 binary
 
 # Excluded from Composer distributions.
+# composer.lock stays in the repo so CI can rebuild the stylesheet against a
+# known Filament version, but must not ship inside the Packagist archive —
+# scanners walking vendor/ would otherwise report the library's pins as if
+# they were the consuming application's.
+/composer.lock      export-ignore
+/SECURITY.md        export-ignore
 /.github            export-ignore
 /art                export-ignore
 /bin                export-ignore
