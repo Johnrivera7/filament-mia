@@ -27,7 +27,7 @@ const BASE = process.env.MIA_BASE ?? 'http://127.0.0.1:8321'
 const OUT = process.env.MIA_OUT ?? 'art/verification/responsive'
 const TAG = process.env.MIA_TAG ?? 'after'
 
-const EMAIL = process.env.MIA_EMAIL ?? 'valeria@mia.test'
+const EMAIL = process.env.MIA_EMAIL ?? 'john@mia.test'
 const PASSWORD = process.env.MIA_PASSWORD ?? 'password'
 
 /*

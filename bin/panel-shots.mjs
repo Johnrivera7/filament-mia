@@ -36,7 +36,7 @@ const README_FRAMES = [
     'panel-appearance-login.jpg',
 ]
 
-const EMAIL = 'valeria@mia.test'
+const EMAIL = 'john@mia.test'
 const PASSWORD = 'password'
 
 const VIEWPORTS = {

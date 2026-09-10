@@ -31,7 +31,7 @@ const README_FRAMES = [
     'locale-login-es.jpg',
 ]
 
-const EMAIL = 'valeria@mia.test'
+const EMAIL = 'john@mia.test'
 const PASSWORD = 'password'
 
 const VIEWPORT = { width: 1440, height: 900 }

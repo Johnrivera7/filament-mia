@@ -60,7 +60,7 @@ const VIEWPORTS = {
 
 const MODES = ['light', 'dark']
 
-const EMAIL = 'valeria@mia.test'
+const EMAIL = 'john@mia.test'
 const PASSWORD = 'password'
 
 const TAGLINE = 'Client work, kept in one place.'

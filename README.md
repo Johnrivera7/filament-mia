@@ -1600,7 +1600,7 @@ php vendor/bin/testbench serve
 
 That serves a panel at `/admin` with sign-in, registration, password recovery
 and a multi-factor challenge, against one invented account
-(`valeria@mia.test` / `password`). Behind it is a small worked example — a
+(`john@mia.test` / `password`). Behind it is a small worked example — a
 projects list, a client list, a dashboard of stats and charts, and the
 appearance page — seeded from a fixed number, so the same records come back in
 the same order on every build. Every screenshot in this README is taken from

@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
         fake()->seed(20260907);
 
         $account = UserFactory::new()->create([
-            'name' => 'Valeria Ossa',
-            'email' => 'valeria@mia.test',
+            'name' => 'John Rivera',
+            'email' => 'john@mia.test',
             'password' => 'password',
         ]);
 

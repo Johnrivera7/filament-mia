@@ -76,7 +76,7 @@ for (const layout of LAYOUTS) {
         execFileSync('php', ['vendor/bin/testbench', 'tinker', '--execute', 'cache()->clear();'], {
             stdio: 'ignore',
         })
-        await page.fill('[wire\\:model="data.email"]', 'valeria@mia.test')
+        await page.fill('[wire\\:model="data.email"]', 'john@mia.test')
         await page.fill('[wire\\:model="data.password"]', 'not-the-password')
         await page.locator('button[type=submit]').click()
         await page.waitForSelector('.fi-fo-field-wrp-error-message')

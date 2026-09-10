@@ -38,7 +38,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { chromium } from 'playwright'
 
 const DEMO = process.env.MIA_DEMO ?? 'http://mia-demo.test'
-const EMAIL = 'valeria@mia.test'
+const EMAIL = 'john@mia.test'
 const PASSWORD = 'password'
 const REUSE = process.env.MIA_REUSE === '1'
 
@@ -448,8 +448,9 @@ const render = async (name, spec, out = `${ART}/${name}.jpg`) => {
     const sheet = await context.newPage()
 
     writeFileSync(`${FRAMES}/${name}.html`, canvas({ scale: 1.6, ...spec }))
+    // file:// with inlined data URIs never settles to networkidle.
     await sheet.goto(`file://${process.cwd()}/${FRAMES}/${name}.html`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
     })
     await sheet.evaluate(() => document.fonts.ready)
     await sheet.waitForTimeout(500)
