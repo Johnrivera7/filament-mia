@@ -38,9 +38,9 @@ compilación.
 
 <div class="filament-hidden" align="center">
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-cover.jpg" alt="Un lienzo crema y cálido con el titular A Filament theme that keeps a panel calm, junto al panel, una tarjeta de objetivos del trimestre y la pantalla de acceso dispuestos en perspectiva" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-cover.jpg?v=2" alt="Un lienzo crema y cálido con el titular A Filament theme that keeps a panel calm, junto al panel, una tarjeta de objetivos del trimestre y la pantalla de acceso dispuestos en perspectiva" width="100%" />
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-thumbnail.jpg" alt="La misma composición con un encuadre más cerrado para la parrilla del directorio, sin el párrafo de apoyo ni tres de las píldoras, para que lo que queda siga siendo legible" width="52%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-thumbnail.jpg?v=2" alt="La misma composición con un encuadre más cerrado para la parrilla del directorio, sin el párrafo de apoyo ni tres de las píldoras, para que lo que queda siga siendo legible" width="52%" />
 
 </div>
 

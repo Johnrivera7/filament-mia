@@ -36,9 +36,9 @@ shipped pre-compiled with no build step.
 
 <div class="filament-hidden" align="center">
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-cover.jpg" alt="A warm cream canvas reading A Filament theme that keeps a panel calm, beside the panel itself, a quarterly targets card and the sign-in screen arranged in perspective" width="100%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-cover.jpg?v=2" alt="A warm cream canvas reading A Filament theme that keeps a panel calm, beside the panel itself, a quarterly targets card and the sign-in screen arranged in perspective" width="100%" />
 
-<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-thumbnail.jpg" alt="The same composition cropped closer for the directory's grid, with the lede and three of the claims dropped so the rest stays legible" width="52%" />
+<img src="https://raw.githubusercontent.com/Johnrivera7/filament-mia-theme/main/art/listing-thumbnail.jpg?v=2" alt="The same composition cropped closer for the directory's grid, with the lede and three of the claims dropped so the rest stays legible" width="52%" />
 
 </div>
 
